@@ -19,3 +19,9 @@ Development Steps
 - [ ] 15. Use Kafka for log transfer
 - [ ] 16. Add to README: architecture, instructions and screenshots
 - [ ] 17. Deploy on docker container
+
+Business Rules
+- [ ] 1. Get and or Receive logs from multiple sources
+- [ ] 2. Save logs in a AWS S3 bucket
+- [ ] 3. Index/Parse the saved logs
+- [ ] 4. Be able to analyze logs through a UI
