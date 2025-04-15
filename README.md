@@ -1,5 +1,5 @@
-# H1 LogStream
-# H1 WIP - Log Aggregator
+# LogStream
+## WIP - Log Aggregator
 
 Development Steps
 - [ ] 1. Watch a directory and parse logs in real-time
