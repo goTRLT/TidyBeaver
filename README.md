@@ -1,0 +1,2 @@
+# LogStream
+WIP - Log Aggregator
