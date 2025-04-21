@@ -1,45 +1,52 @@
 package main
 
-import "fmt"
+import (
+	"os"
+	"strings"
+)
+
+const config = getEnvConfig()
 
 func main() {
-	var ebt, profit, ratio, taxRate, tax float64
+	setEnvConfig(config)
+	setupLogger(config)
+	initializeDatabase(config)
+	setupRoutes(config)
+	startServer(config)
+}
 
-	fmt.Print("Earnings Before Tax (EBT): ")
-	fmt.Scanln(&ebt)
+func getEnvConfig() []string {	
+	environment := os.Environ()
+	return environment
+}
 
-	for ebt == 0 {
-		fmt.Println("Earnings Before Tax (EBT) cannot be zero. Please enter a valid value.")
-		fmt.Scanln(&ebt)
+func setEnvConfig(config []string) []string {	
+	configName := strings.Split(config[i], "=")[1]
+
+	for configName := 0; i < len(config); i++{
+		os.Setenv(config[i], config[i])
+		environment[i] = 
 	}
+	return environment
+}
 
-	fmt.Print("Tax Rate: ")
-	fmt.Scanln(&taxRate)
+func setupLogger(config []string) {
+	logger:= config.GetEnv("LOG_LEVEL")
 
-	if taxRate == 0 {
-		taxRate = 2.5
-		fmt.Println("Tax Rate is set to default value of 2.5%")
-	}
+}
 
-	if taxRate > 0 {
-		tax = ebt * taxRate / 100
-	} else {
-		tax = 0
-	}
+// Initialize the database connection
+func initializeDatabase( []string) {
 
-	profit = ebt - tax
-	if profit < 0 {
-		fmt.Println("Profit did not occur since tax was bigger than earnings: ", profit)
-	}
+}
 
-	ratio = ebt / profit
-	if profit != 0 {
-		ratio = ebt / profit
-	}
-	if ratio < 0 {
-		fmt.Println("Ratio is negative since profit is negative: ", ratio)
-	}
+// Set up the routes
+func setupRoutes( []string) {
 
-	fmt.Println("Earnings After Tax (Profit):", profit)
-	fmt.Println("Ratio (EBT/Profit):", ratio)
+
+}
+
+// Start the server
+func startServer( []string) {
+
 }
