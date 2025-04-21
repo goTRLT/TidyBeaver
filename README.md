@@ -1,4 +1,4 @@
-# LogStream
+# TidyBeaver
 ## WIP - Log Aggregator
 
 Development Steps
