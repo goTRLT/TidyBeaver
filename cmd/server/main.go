@@ -1,52 +1,24 @@
 package main
 
 import (
-	"os"
-	"strings"
+	"encoding/json"
+	"fmt"
+	config "tidybeaver/internal/config"
 )
 
-const config = getEnvConfig()
-
 func main() {
-	setEnvConfig(config)
-	setupLogger(config)
-	initializeDatabase(config)
-	setupRoutes(config)
-	startServer(config)
-}
-
-func getEnvConfig() []string {	
-	environment := os.Environ()
-	return environment
-}
-
-func setEnvConfig(config []string) []string {	
-	configName := strings.Split(config[i], "=")[1]
-
-	for configName := 0; i < len(config); i++{
-		os.Setenv(config[i], config[i])
-		environment[i] = 
+	defaultConfig, err := config.GetDefaultConfig()
+	fmt.Println("Starting the application...")
+	if err != nil {
+		fmt.Println("Error getting defaultConfig:", err)
+		return
 	}
-	return environment
-}
 
-func setupLogger(config []string) {
-	logger:= config.GetEnv("LOG_LEVEL")
-
-}
-
-// Initialize the database connection
-func initializeDatabase( []string) {
-
-}
-
-// Set up the routes
-func setupRoutes( []string) {
-
-
-}
-
-// Start the server
-func startServer( []string) {
-
+	defaultConfigJSON, err := json.MarshalIndent(defaultConfig, "", "  ")
+	if err != nil {
+		fmt.Println("Error marshalling defaultConfig:", err)
+		return
+	}
+	fmt.Println("Default Configs: ", string(defaultConfigJSON))
+	fmt.Println("Errors: ", err)
 }
