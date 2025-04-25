@@ -7,18 +7,21 @@ import (
 )
 
 func main() {
-	defaultConfig, err := config.GetDefaultConfig()
+	configuration, err := config.GetDefaultConfig()
 	fmt.Println("Starting the application...")
 	if err != nil {
 		fmt.Println("Error getting defaultConfig:", err)
 		return
 	}
 
-	defaultConfigJSON, err := json.MarshalIndent(defaultConfig, "", "  ")
+	defaultConfigJSON, err := json.MarshalIndent(configuration, "", "  ")
 	if err != nil {
 		fmt.Println("Error marshalling defaultConfig:", err)
 		return
 	}
-	fmt.Println("Default Configs: ", string(defaultConfigJSON))
-	fmt.Println("Errors: ", err)
+	fmt.Println("Configuration set: ", string(defaultConfigJSON))
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return
+	}
 }
