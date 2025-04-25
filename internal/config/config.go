@@ -6,18 +6,18 @@ import (
 	"os"
 )
 
-var configValues Configs
+var ConfigValues Configs
 var customConfigs CustomConfig
 
 type Configs struct {
 	App struct {
 		Env      string `json:"Env"`
-		Port     int    `json:"Port"`
+		Port     string `json:"Port"`
 		LogLevel string `json:"LogLevel"`
 	} `json:"App"`
 	Database struct {
 		Host     string `json:"Host"`
-		Port     int    `json:"Port"`
+		Port     string `json:"Port"`
 		User     string `json:"User"`
 		Password string `json:"Password"`
 		Name     string `json:"Name"`
@@ -26,7 +26,7 @@ type Configs struct {
 	API struct {
 		BaseURL        string `json:"BaseURL"`
 		AuthToken      string `json:"AuthToken"`
-		TimeoutSeconds int    `json:"TimeoutSeconds"`
+		TimeoutSeconds string `json:"TimeoutSeconds"`
 	} `json:"API"`
 	LogPaths struct {
 		LocalLogFolder string `json:"LocalLogFolder"`
@@ -59,7 +59,7 @@ func GetDefaultConfig() (Configs, error) {
 
 	configFile, err := os.Open("internal/config/config.json")
 	if err != nil {
-		return configValues, err
+		return ConfigValues, err
 	}
 	defer configFile.Close()
 
@@ -67,9 +67,12 @@ func GetDefaultConfig() (Configs, error) {
 	fmt.Println(configFile)
 
 	decodedJson := json.NewDecoder(configFile)
-	decodedJson.Decode(&configValues)
+	test := decodedJson.Decode(&ConfigValues)
+	fmt.Println("test: ")
+	fmt.Println(test)
+
 	SetCustomConfig()
-	return configValues, err
+	return ConfigValues, err
 }
 
 func SetCustomConfig() {
@@ -93,7 +96,14 @@ func SetCustomConfig() {
 
 		fmt.Println("Do you want to use a mock Microservice as a source for logs? ")
 		customConfigs.useMSVC = checkResult()
+	} else {
+		customConfigs.useAPI = true
+		customConfigs.useDB = true
+		customConfigs.useFS = true
+		customConfigs.useMSVC = true
+		customConfigs.useWin = true
 	}
+
 	overwriteConfigs(&customConfigs)
 }
 
@@ -114,34 +124,34 @@ func checkResult() bool {
 
 func overwriteConfigs(customConfigs *CustomConfig) {
 	if !customConfigs.useFS {
-		configValues.LogPaths.IncludeSubDirs = false
-		configValues.LogPaths.LocalLogFolder = ""
+		ConfigValues.LogPaths.IncludeSubDirs = false
+		ConfigValues.LogPaths.LocalLogFolder = ""
 	}
 
 	if !customConfigs.useDB {
-		configValues.Database.Host = ""
-		configValues.Database.Name = ""
-		configValues.Database.Password = ""
-		configValues.Database.Port = 0
-		configValues.Database.SSLMode = ""
-		configValues.Database.User = ""
+		ConfigValues.Database.Host = ""
+		ConfigValues.Database.Name = ""
+		ConfigValues.Database.Password = ""
+		ConfigValues.Database.Port = ""
+		ConfigValues.Database.SSLMode = ""
+		ConfigValues.Database.User = ""
 	}
 
 	if !customConfigs.useWin {
-		configValues.WindowsEventLog.Channels = nil
-		configValues.WindowsEventLog.Enabled = false
-		configValues.WindowsEventLog.Query = ""
+		ConfigValues.WindowsEventLog.Channels = nil
+		ConfigValues.WindowsEventLog.Enabled = false
+		ConfigValues.WindowsEventLog.Query = ""
 	}
 
 	if !customConfigs.useAPI {
-		configValues.API.AuthToken = ""
-		configValues.API.BaseURL = ""
-		configValues.API.TimeoutSeconds = 0
+		ConfigValues.API.AuthToken = ""
+		ConfigValues.API.BaseURL = ""
+		ConfigValues.API.TimeoutSeconds = ""
 	}
 
 	if !customConfigs.useMSVC {
-		configValues.Microservices.AuthServiceURL = ""
-		configValues.Microservices.LogServiceURL = ""
-		configValues.Microservices.PaymentServiceURL = ""
+		ConfigValues.Microservices.AuthServiceURL = ""
+		ConfigValues.Microservices.LogServiceURL = ""
+		ConfigValues.Microservices.PaymentServiceURL = ""
 	}
 }
