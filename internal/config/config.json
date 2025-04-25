@@ -6,7 +6,7 @@
     },
     "Database": {
       "Host": "localhost",
-      "Port": 5432,
+      "Port": "5432",
       "User": "postgres",
       "Password": "yourpassword",
       "Name": "logdb",
@@ -15,7 +15,7 @@
     "API": {
       "BaseURL": "https://api.example.com",
       "AuthToken": "your_api_token",
-      "TimeoutSeconds": 30
+      "TimeoutSeconds": "30"
     },
     "LogPaths": {
       "LocalLogFolder": "C:/logs",
