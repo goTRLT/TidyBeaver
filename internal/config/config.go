@@ -81,33 +81,32 @@ func SetCustomConfig() {
 	fmt.Println("Please, answer the question prompted to you with the letter Y for Yes or N for No ")
 
 	fmt.Println("Do you want to use every source available? ")
-	if !checkResult() {
-		fmt.Println("Do you want to use a Local Folder as a source for logs? ")
-		customConfigs.useFS = checkResult()
-
-		fmt.Println("Do you want to use a Postgres Database as a source for logs? ")
-		customConfigs.useDB = checkResult()
-
-		fmt.Println("Do you want to use Windows Events as a source for logs? ")
-		customConfigs.useWin = checkResult()
-
-		fmt.Println("Do you want to use a mock API as a source for logs? ")
-		customConfigs.useAPI = checkResult()
-
-		fmt.Println("Do you want to use a mock Microservice as a source for logs? ")
-		customConfigs.useMSVC = checkResult()
-	} else {
+	if checkAnswer() {
 		customConfigs.useAPI = true
 		customConfigs.useDB = true
 		customConfigs.useFS = true
 		customConfigs.useMSVC = true
 		customConfigs.useWin = true
-	}
+	} else if !checkAnswer() {
+		fmt.Println("Do you want to use a Local Folder as a source for logs? ")
+		customConfigs.useFS = checkAnswer()
 
+		fmt.Println("Do you want to use a Postgres Database as a source for logs? ")
+		customConfigs.useDB = checkAnswer()
+
+		fmt.Println("Do you want to use Windows Events as a source for logs? ")
+		customConfigs.useWin = checkAnswer()
+
+		fmt.Println("Do you want to use a mock API as a source for logs? ")
+		customConfigs.useAPI = checkAnswer()
+
+		fmt.Println("Do you want to use a mock Microservice as a source for logs? ")
+		customConfigs.useMSVC = checkAnswer()
+	}
 	overwriteConfigs(&customConfigs)
 }
 
-func checkResult() bool {
+func checkAnswer() bool {
 	answer := ""
 	fmt.Scanln(&answer)
 	for answer != "Y" && answer != "N" {
