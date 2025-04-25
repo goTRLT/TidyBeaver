@@ -7,7 +7,7 @@ import (
 )
 
 var ConfigValues Configs
-var customConfigs CustomConfig
+var UserInputConfig UserInputConfigurations
 
 type Configs struct {
 	App struct {
@@ -44,66 +44,59 @@ type Configs struct {
 	} `json:"WindowsEventLog"`
 }
 
-type CustomConfig struct {
-	useFS   bool
-	useDB   bool
-	useWin  bool
-	useAPI  bool
-	useMSVC bool
+type UserInputConfigurations struct {
+	UseFS   bool
+	UseDB   bool
+	UseWin  bool
+	UseAPI  bool
+	UseMSVC bool
 }
 
-func GetDefaultConfig() (Configs, error) {
-	env := os.Environ()
-	fmt.Println("Environment Variables: ")
-	fmt.Println(env)
+func SetConfigs() (Configs, UserInputConfigurations) {
+	GetDefaultConfig()
+	SetCustomConfig()
+	overwriteConfigs(&UserInputConfig)
+	printConfigs()
+	return ConfigValues, UserInputConfig
+}
 
+func GetDefaultConfig() {
 	configFile, err := os.Open("internal/config/config.json")
 	if err != nil {
-		return ConfigValues, err
+		return
 	}
 	defer configFile.Close()
-
-	fmt.Println("jsonFile: ")
-	fmt.Println(configFile)
-
 	decodedJson := json.NewDecoder(configFile)
-	test := decodedJson.Decode(&ConfigValues)
-	fmt.Println("test: ")
-	fmt.Println(test)
-
-	SetCustomConfig()
-	return ConfigValues, err
+	decodedJson.Decode(&ConfigValues)
 }
 
 func SetCustomConfig() {
-
 	fmt.Println("On this section, you will set which sources for logs you want to use. ")
 	fmt.Println("Please, answer the question prompted to you with the letter Y for Yes or N for No ")
 
 	fmt.Println("Do you want to use every source available? ")
 	if checkAnswer() {
-		customConfigs.useAPI = true
-		customConfigs.useDB = true
-		customConfigs.useFS = true
-		customConfigs.useMSVC = true
-		customConfigs.useWin = true
+		UserInputConfig.UseAPI = true
+		UserInputConfig.UseDB = true
+		UserInputConfig.UseFS = true
+		UserInputConfig.UseMSVC = true
+		UserInputConfig.UseWin = true
 	} else if !checkAnswer() {
 		fmt.Println("Do you want to use a Local Folder as a source for logs? ")
-		customConfigs.useFS = checkAnswer()
+		UserInputConfig.UseFS = checkAnswer()
 
 		fmt.Println("Do you want to use a Postgres Database as a source for logs? ")
-		customConfigs.useDB = checkAnswer()
+		UserInputConfig.UseDB = checkAnswer()
 
 		fmt.Println("Do you want to use Windows Events as a source for logs? ")
-		customConfigs.useWin = checkAnswer()
+		UserInputConfig.UseWin = checkAnswer()
 
 		fmt.Println("Do you want to use a mock API as a source for logs? ")
-		customConfigs.useAPI = checkAnswer()
+		UserInputConfig.UseAPI = checkAnswer()
 
 		fmt.Println("Do you want to use a mock Microservice as a source for logs? ")
-		customConfigs.useMSVC = checkAnswer()
+		UserInputConfig.UseMSVC = checkAnswer()
 	}
-	overwriteConfigs(&customConfigs)
 }
 
 func checkAnswer() bool {
@@ -121,13 +114,12 @@ func checkAnswer() bool {
 	return false
 }
 
-func overwriteConfigs(customConfigs *CustomConfig) {
-	if !customConfigs.useFS {
+func overwriteConfigs(customConfigs *UserInputConfigurations) {
+	if !customConfigs.UseFS {
 		ConfigValues.LogPaths.IncludeSubDirs = false
 		ConfigValues.LogPaths.LocalLogFolder = ""
 	}
-
-	if !customConfigs.useDB {
+	if !customConfigs.UseDB {
 		ConfigValues.Database.Host = ""
 		ConfigValues.Database.Name = ""
 		ConfigValues.Database.Password = ""
@@ -135,22 +127,35 @@ func overwriteConfigs(customConfigs *CustomConfig) {
 		ConfigValues.Database.SSLMode = ""
 		ConfigValues.Database.User = ""
 	}
-
-	if !customConfigs.useWin {
+	if !customConfigs.UseWin {
 		ConfigValues.WindowsEventLog.Channels = nil
 		ConfigValues.WindowsEventLog.Enabled = false
 		ConfigValues.WindowsEventLog.Query = ""
 	}
-
-	if !customConfigs.useAPI {
+	if !customConfigs.UseAPI {
 		ConfigValues.API.AuthToken = ""
 		ConfigValues.API.BaseURL = ""
 		ConfigValues.API.TimeoutSeconds = ""
 	}
-
-	if !customConfigs.useMSVC {
+	if !customConfigs.UseMSVC {
 		ConfigValues.Microservices.AuthServiceURL = ""
 		ConfigValues.Microservices.LogServiceURL = ""
 		ConfigValues.Microservices.PaymentServiceURL = ""
+	}
+}
+
+func printConfigs() {
+	env := os.Environ()
+	fmt.Println("Environment Variables: ")
+	fmt.Println(env)
+	defaultConfigJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
+	if err != nil {
+		fmt.Println("Error marshalling defaultConfig:", err)
+		return
+	}
+	fmt.Println("Configuration set: ", string(defaultConfigJSON))
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return
 	}
 }
