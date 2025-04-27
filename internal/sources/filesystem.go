@@ -1,10 +1,11 @@
 package sources
 
 import (
-	"path/filepath"
+	"fmt"
+	models "tidybeaver/pkg/models"
 )
 
-func GetFileNameWithoutExtension(filePath string) {
-	// Get the base name of the file (without the directory path)
-	filepath.Base(filePath)
+func GetLogsFromFS() {
+	generatedSampleLogs := models.GenerateLogs()
+	fmt.Println(generatedSampleLogs)
 }
