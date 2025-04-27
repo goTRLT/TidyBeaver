@@ -11,9 +11,10 @@ var UserInputConfig UserInputConfigurations
 
 type Configs struct {
 	App struct {
-		Env      string `json:"Env"`
-		Port     string `json:"Port"`
-		LogLevel string `json:"LogLevel"`
+		Env       string `json:"Env"`
+		Port      string `json:"Port"`
+		LogLevel  string `json:"LogLevel"`
+		LogAmount string `json:"LogAmount"`
 	} `json:"App"`
 	Database struct {
 		Host     string `json:"Host"`
@@ -154,8 +155,4 @@ func printConfigs() {
 		return
 	}
 	fmt.Println("Configuration set: ", string(defaultConfigJSON))
-	if err != nil {
-		fmt.Println("Error: ", err)
-		return
-	}
 }
