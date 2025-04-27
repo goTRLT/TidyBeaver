@@ -6,19 +6,19 @@ import (
 )
 
 func GetLogsFromSources(configs config.Configs, userInputConfig config.UserInputConfigurations) {
-	if config.UserInputConfig.UseAPI == true {
+	if config.UserInputConfig.UseAPI {
 
 	}
-	if config.UserInputConfig.UseDB == true {
+	if config.UserInputConfig.UseDB {
 
 	}
-	if config.UserInputConfig.UseFS == true {
-		sources.GetFileNameWithoutExtension(configs.LogPaths.LocalLogFolder)
+	if config.UserInputConfig.UseFS {
+		sources.GetLogsFromFS()
 	}
-	if config.UserInputConfig.UseMSVC == true {
+	if config.UserInputConfig.UseMSVC {
 
 	}
-	if config.UserInputConfig.UseWin == true {
+	if config.UserInputConfig.UseWin {
 
 	}
 }
