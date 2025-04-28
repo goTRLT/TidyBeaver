@@ -19,7 +19,7 @@
       "TimeoutSeconds": "30"
     },
     "LogPaths": {
-      "LocalLogFolder": "C:/logs",
+      "LocalLogFolder": "C:/",
       "IncludeSubDirs": true
     },
     "Microservices": {
