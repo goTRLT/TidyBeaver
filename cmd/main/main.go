@@ -13,5 +13,5 @@ func main() {
 	Configurations, UserInputConfigurations := config.SetConfigs()
 	fmt.Println("Starting the application...")
 	aggregator.GetLogsFromSources(Configurations, UserInputConfigurations)
-
+	aggregator.WriteLogsToStorage()
 }
