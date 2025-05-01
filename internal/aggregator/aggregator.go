@@ -22,6 +22,7 @@ func GetLogsFromSources(configs config.Configs, userInputConfig config.UserInput
 		if config.UserInputConfig.UseMSVC {
 		}
 		if config.UserInputConfig.UseWin {
+			source.GetLogsFromOS()
 		}
 	}
 }
