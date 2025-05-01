@@ -9,10 +9,10 @@ type SampleLogs struct {
 }
 
 type SampleLog struct {
-	Level   string
-	Service string
-	Message string
-	Time    time.Time
+	Level   string    `json:"Level"`
+	Service string    `json:"Service"`
+	Message string    `json:"Message"`
+	Time    time.Time `json:"Time"`
 }
 
 var AvailableLevels = []string{"INFO", "DEBUG", "WARN", "ERROR"}
