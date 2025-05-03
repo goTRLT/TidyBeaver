@@ -15,14 +15,14 @@ type SampleLog struct {
 	Time    time.Time `json:"Time"`
 }
 
-var AvailableLevels = []string{"INFO", "DEBUG", "WARN", "ERROR"}
-var AvailableServices = []string{"auth-service", "payment-service", "user-service", "inventory-service"}
-var AvailableErrorMessages = []string{
+var SampleLevels = []string{"INFO", "DEBUG", "WARN", "ERROR"}
+var SampleServices = []string{"auth-service", "payment-service", "user-service", "inventory-service"}
+var SampleErrorMessages = []string{
 	"User authentication failed",
 	"Payment transaction error",
 	"Database connection timeout",
 }
-var AvailableInfoMessages = []string{
+var SampleInfoMessages = []string{
 	"Successfully completed operation",
 	"Success!",
 }
