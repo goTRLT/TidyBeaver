@@ -2,8 +2,8 @@
 ## WIP - Log Aggregator
 
 Development Steps
-- [ ] 1. Watch a directory and parse logs in real-time
-- [ ] 2. Save structured logs (JSON) into local files
+- [X] 1. Watch a directory and parse logs in real-time
+- [X] 2. Save structured logs (JSON) into local files
 - [ ] 3. Send logs via HTTP POST and store them
 - [ ] 4. Query logs by service or severity
 - [ ] 5. Add structured logging from sample Go microservices
