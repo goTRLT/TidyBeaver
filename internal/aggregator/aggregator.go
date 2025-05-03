@@ -9,24 +9,25 @@ import (
 
 var Logs models.SampleLogs
 
-func GetLogsFromSources(configs config.Configs, userInputConfig config.UserInputConfigurations) {
-	if config.UserInputConfig.UseMock {
+func GetLogsFromSources() {
+	if config.UserInputConfigValues.UseSampleLogs {
 		Logs = source.GetLogsFromMock()
 	} else {
-		if config.UserInputConfig.UseAPI {
+		if config.UserInputConfigValues.UseAPI {
 		}
-		if config.UserInputConfig.UseDB {
+		if config.UserInputConfigValues.UseDatabase {
 		}
-		if config.UserInputConfig.UseFS {
+		if config.UserInputConfigValues.UseFileSystem {
+			source.GetLogsFromFileSystem()
 		}
-		if config.UserInputConfig.UseMSVC {
+		if config.UserInputConfigValues.UseMicroservice {
 		}
-		if config.UserInputConfig.UseWin {
+		if config.UserInputConfigValues.UseWindowsEvents {
 			source.GetLogsFromOS()
 		}
 	}
 }
 
 func WriteLogsToStorage() {
-	storage.WriteLogsToFile(Logs)
+	storage.WriteSampleLogsToFile(Logs)
 }
