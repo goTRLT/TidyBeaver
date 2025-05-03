@@ -10,8 +10,8 @@ var Configurations config.Configs
 var UserInputConfigurations config.UserInputConfigurations
 
 func main() {
-	Configurations, UserInputConfigurations := config.SetConfigs()
+	config.SetConfigs()
 	fmt.Println("Starting the application...")
-	aggregator.GetLogsFromSources(Configurations, UserInputConfigurations)
+	aggregator.GetLogsFromSources()
 	aggregator.WriteLogsToStorage()
 }
