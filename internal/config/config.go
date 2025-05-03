@@ -4,10 +4,12 @@ import (
 	json "encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 var ConfigValues Configs
-var UserInputConfig UserInputConfigurations
+var UserInputConfigValues UserInputConfigurations
+var LogAmountSet int
 
 type Configs struct {
 	App struct {
@@ -46,20 +48,20 @@ type Configs struct {
 }
 
 type UserInputConfigurations struct {
-	UseFS   bool
-	UseDB   bool
-	UseWin  bool
-	UseAPI  bool
-	UseMSVC bool
-	UseMock bool
+	UseFileSystem    bool
+	UseDatabase      bool
+	UseWindowsEvents bool
+	UseAPI           bool
+	UseMicroservice  bool
+	UseSampleLogs    bool
 }
 
 func SetConfigs() (Configs, UserInputConfigurations) {
 	getDefaultConfig()
 	getCustomConfig()
-	overwriteConfigs(&UserInputConfig)
+	overwriteConfigs(&UserInputConfigValues)
 	printConfigs()
-	return ConfigValues, UserInputConfig
+	return ConfigValues, UserInputConfigValues
 }
 
 func getDefaultConfig() {
@@ -70,6 +72,8 @@ func getDefaultConfig() {
 	defer configFile.Close()
 	decodedJson := json.NewDecoder(configFile)
 	decodedJson.Decode(&ConfigValues)
+	logAmount, _ := strconv.ParseInt(ConfigValues.App.LogAmount, 0, 0)
+	LogAmountSet = int(logAmount)
 }
 
 func getCustomConfig() {
@@ -80,54 +84,54 @@ func getCustomConfig() {
 	if !checkAnswer() {
 		fmt.Println("Do you want to use every source available? ")
 		if checkAnswer() {
-			UserInputConfig.UseAPI = true
-			UserInputConfig.UseDB = true
-			UserInputConfig.UseFS = true
-			UserInputConfig.UseMSVC = true
-			UserInputConfig.UseWin = true
+			UserInputConfigValues.UseAPI = true
+			UserInputConfigValues.UseDatabase = true
+			UserInputConfigValues.UseFileSystem = true
+			UserInputConfigValues.UseMicroservice = true
+			UserInputConfigValues.UseWindowsEvents = true
 
 		} else if !checkAnswer() {
 			fmt.Println("Do you want to use a Local Folder as a source for logs? ")
-			UserInputConfig.UseFS = checkAnswer()
+			UserInputConfigValues.UseFileSystem = checkAnswer()
 
 			fmt.Println("Do you want to use a Postgres Database as a source for logs? ")
-			UserInputConfig.UseDB = checkAnswer()
+			UserInputConfigValues.UseDatabase = checkAnswer()
 
 			fmt.Println("Do you want to use Windows Events as a source for logs? ")
-			UserInputConfig.UseWin = checkAnswer()
+			UserInputConfigValues.UseWindowsEvents = checkAnswer()
 
 			fmt.Println("Do you want to use a mock API as a source for logs? ")
-			UserInputConfig.UseAPI = checkAnswer()
+			UserInputConfigValues.UseAPI = checkAnswer()
 
 			fmt.Println("Do you want to use a mock Microservice as a source for logs? ")
-			UserInputConfig.UseMSVC = checkAnswer()
+			UserInputConfigValues.UseMicroservice = checkAnswer()
 		}
 	} else {
-		UserInputConfig.UseMock = true
+		UserInputConfigValues.UseSampleLogs = true
 	}
 }
 
 func checkAnswer() bool {
-	answer := ""
-	fmt.Scanln(&answer)
-	for answer != "Y" && answer != "N" {
+	userInput := ""
+	fmt.Scanln(&userInput)
+	for userInput != "Y" && userInput != "N" {
 		fmt.Println("Please enter a valid answer: Y for Yes or N for No ")
-		fmt.Scanln(&answer)
+		fmt.Scanln(&userInput)
 	}
-	if answer == "Y" {
+	if userInput == "Y" {
 		return true
-	} else if answer == "N" {
+	} else if userInput == "N" {
 		return false
 	}
 	return false
 }
 
 func overwriteConfigs(customConfigs *UserInputConfigurations) {
-	if !customConfigs.UseFS && !customConfigs.UseMock {
+	if !customConfigs.UseFileSystem && !customConfigs.UseSampleLogs {
 		ConfigValues.LogPaths.IncludeSubDirs = false
 		ConfigValues.LogPaths.LocalLogFolder = ""
 	}
-	if !customConfigs.UseDB || customConfigs.UseMock {
+	if !customConfigs.UseDatabase || customConfigs.UseSampleLogs {
 		ConfigValues.Database.Host = ""
 		ConfigValues.Database.Name = ""
 		ConfigValues.Database.Password = ""
@@ -135,17 +139,17 @@ func overwriteConfigs(customConfigs *UserInputConfigurations) {
 		ConfigValues.Database.SSLMode = ""
 		ConfigValues.Database.User = ""
 	}
-	if !customConfigs.UseWin || customConfigs.UseMock {
+	if !customConfigs.UseWindowsEvents || customConfigs.UseSampleLogs {
 		ConfigValues.WindowsEventLog.Channels = nil
 		ConfigValues.WindowsEventLog.Enabled = false
 		ConfigValues.WindowsEventLog.Query = ""
 	}
-	if !customConfigs.UseAPI || customConfigs.UseMock {
+	if !customConfigs.UseAPI || customConfigs.UseSampleLogs {
 		ConfigValues.API.AuthToken = ""
 		ConfigValues.API.BaseURL = ""
 		ConfigValues.API.TimeoutSeconds = ""
 	}
-	if !customConfigs.UseMSVC || customConfigs.UseMock {
+	if !customConfigs.UseMicroservice || customConfigs.UseSampleLogs {
 		ConfigValues.Microservices.AuthServiceURL = ""
 		ConfigValues.Microservices.LogServiceURL = ""
 		ConfigValues.Microservices.PaymentServiceURL = ""
@@ -154,12 +158,11 @@ func overwriteConfigs(customConfigs *UserInputConfigurations) {
 
 func printConfigs() {
 	env := os.Environ()
-	fmt.Println("Environment Variables: ")
-	fmt.Println(env)
-	defaultConfigJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
+	fmt.Println("Environment Variables: ", env)
+	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
 	if err != nil {
 		fmt.Println("Error marshalling defaultConfig:", err)
 		return
 	}
-	fmt.Println("Configuration set: ", string(defaultConfigJSON))
+	fmt.Println("Configuration set: ", string(defaultConfigsJSON))
 }
