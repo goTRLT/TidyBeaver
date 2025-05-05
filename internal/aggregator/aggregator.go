@@ -28,6 +28,6 @@ func GetLogsFromSources() {
 	}
 }
 
-func WriteLogsToStorage() {
+func WriteLogsToStorages() {
 	storage.WriteSampleLogsToFile(Logs)
 }
