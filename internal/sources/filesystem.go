@@ -8,10 +8,10 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-var FileDetailedLogs models.DetailedLogs
-var FileDetailedLog models.DetailedLog
+var FileDetailedLogs models.AdaptedLogs
+var FileDetailedLog models.AdaptedLog
 
-func GetLogsFromFileSystem() {
+func GetLogsFromFileSystem() models.AdaptedLogs {
 	files, err := os.ReadDir(`.\Logs`)
 	if err != nil {
 		log.Fatal(err)
@@ -19,18 +19,19 @@ func GetLogsFromFileSystem() {
 	fmt.Println("Files: ", files)
 
 	for _, file := range files {
-		test, err := os.Open(`.\Logs\` + file.Name())
+		logFile, err := os.Open(`.\Logs\` + file.Name())
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer test.Close()
-		test2 := json.NewDecoder(test)
-		test2.Decode(&FileDetailedLog)
+		defer logFile.Close()
+		decodedJson := json.NewDecoder(logFile)
+		decodedJson.Decode(&FileDetailedLogs)
 		indentedDetailedLog, err := json.MarshalIndent(FileDetailedLog, "", "  ")
 		if err != nil {
 			fmt.Println("Error marshalling the Indented Detailed Log:", err)
-			return
+			return FileDetailedLogs
 		}
 		fmt.Println("Detailed Log: ", string(indentedDetailedLog))
 	}
+	return FileDetailedLogs
 }
