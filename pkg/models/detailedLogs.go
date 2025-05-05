@@ -4,11 +4,11 @@ import (
 	"time"
 )
 
-type DetailedLogs struct {
-	DetailedLog []DetailedLog
+type AdaptedLogs struct {
+	AdaptedLog []AdaptedLog
 }
 
-type DetailedLog struct {
+type AdaptedLog struct {
 	Level      string    `json:"Level"`
 	Service    string    `json:"Service"`
 	Message    string    `json:"Message"`
