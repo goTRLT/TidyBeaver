@@ -8,10 +8,6 @@ import (
 )
 
 func WriteSampleLogsToFile(sampleLogs models.SampleLogs) {
-	receivedLogsByte := fmt.Sprint(sampleLogs)
-	os.WriteFile((`.\Logs\TidyBeaverSampleLogs.txt`), []byte(receivedLogsByte), 0644)
-	fmt.Println("Sample Logs saved as Text")
-
 	encodedSampleLogs, err := json.Marshal(sampleLogs)
 	if err != nil {
 		return
