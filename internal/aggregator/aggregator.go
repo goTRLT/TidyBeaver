@@ -7,27 +7,42 @@ import (
 	"tidybeaver/pkg/models"
 )
 
-var Logs models.SampleLogs
+var MockLogs models.SampleLogs
+var OSLogs source.WindowsEventLogs
+var FSLogs models.AdaptedLogs
 
 func GetLogsFromSources() {
 	if config.UserInputConfigValues.UseSampleLogs {
-		Logs = source.GetLogsFromMock()
+		MockLogs = source.GetLogsFromMock()
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 		}
 		if config.UserInputConfigValues.UseDatabase {
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			source.GetLogsFromFileSystem()
+			FSLogs = source.GetLogsFromFileSystem()
 		}
 		if config.UserInputConfigValues.UseMicroservice {
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
-			source.GetLogsFromOS()
+			OSLogs = source.GetLogsFromOS()
 		}
 	}
 }
 
 func WriteLogsToStorages() {
-	storage.WriteSampleLogsToFile(Logs)
+	if config.UserInputConfigValues.UseSampleLogs {
+		storage.WriteSampleLogsToFile(MockLogs)
+	} else {
+		if config.UserInputConfigValues.UseAPI {
+		}
+		if config.UserInputConfigValues.UseDatabase {
+		}
+		if config.UserInputConfigValues.UseFileSystem {
+		}
+		if config.UserInputConfigValues.UseMicroservice {
+		}
+		if config.UserInputConfigValues.UseWindowsEvents {
+		}
+	}
 }
