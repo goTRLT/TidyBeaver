@@ -52,5 +52,6 @@ func GetLogsFromOS() WindowsEventLogs {
 	}
 
 	fmt.Print(windowsEventLogs)
-	return windowsEventLogs
+	return windowsEventLogs 
+	
 }
