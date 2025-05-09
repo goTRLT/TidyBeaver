@@ -3,6 +3,7 @@ package sources
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"os/exec"
 	config "tidybeaver/internal/config"
 )
@@ -39,6 +40,8 @@ func GetLogsFromOS() WindowsEventLogs {
 		fmt.Printf("Error running PowerShell command: %v\n", err)
 		return windowsEventLogs
 	}
+	os.WriteFile((`.\Logs\TidyBeaverOSLogs.json`), out, 0644)
+	fmt.Println("OS Logs saved as Json")
 
 	fmt.Println("outputString: " + string(out))
 
@@ -48,5 +51,6 @@ func GetLogsFromOS() WindowsEventLogs {
 		return windowsEventLogs
 	}
 
+	fmt.Print(windowsEventLogs)
 	return windowsEventLogs
 }
