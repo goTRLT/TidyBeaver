@@ -8,19 +8,19 @@ import (
 )
 
 var MockLogs models.SampleLogs
-var OSLogs source.WindowsEventLogs
 var FSLogs models.AdaptedLogs
+var OSLogs source.WindowsEventLogs
 
 func GetLogsFromSources() {
 	if config.UserInputConfigValues.UseSampleLogs {
-		MockLogs = source.GetLogsFromMock()
+		MockLogs = source.GetSetSampleLogs()
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 		}
 		if config.UserInputConfigValues.UseDatabase {
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			FSLogs = source.GetLogsFromFileSystem()
+			FSLogs = source.GetLogsFromFS()
 		}
 		if config.UserInputConfigValues.UseMicroservice {
 		}
@@ -39,10 +39,12 @@ func WriteLogsToStorages() {
 		if config.UserInputConfigValues.UseDatabase {
 		}
 		if config.UserInputConfigValues.UseFileSystem {
+			storage.WriteLogsToFile(FSLogs)
 		}
 		if config.UserInputConfigValues.UseMicroservice {
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
 		}
+		storage.WriteLogsToFile(OSLogs)
 	}
 }
