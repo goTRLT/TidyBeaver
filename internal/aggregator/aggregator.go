@@ -33,10 +33,12 @@ func GetLogsFromSources() {
 func WriteLogsToStorages() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		storage.WriteSampleLogsToFile(MockLogs)
+		storage.WriteLogsToDB(MockLogs)
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 		}
 		if config.UserInputConfigValues.UseDatabase {
+			storage.WriteLogsToDB(MockLogs)
 		}
 		if config.UserInputConfigValues.UseFileSystem {
 			storage.WriteLogsToFile(FSLogs)
@@ -44,7 +46,7 @@ func WriteLogsToStorages() {
 		if config.UserInputConfigValues.UseMicroservice {
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
+			storage.WriteLogsToFile(OSLogs)
 		}
-		storage.WriteLogsToFile(OSLogs)
 	}
 }
