@@ -56,7 +56,7 @@ type UserInputConfigurations struct {
 	UseSampleLogs    bool
 }
 
-func SetConfigs() (Configs, UserInputConfigurations) {
+func GetSetConfigs() (Configs, UserInputConfigurations) {
 	getDefaultConfig()
 	getCustomConfig()
 	overwriteConfigs(&UserInputConfigValues)
