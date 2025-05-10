@@ -23,6 +23,6 @@ var SampleErrorMessages = []string{
 	"Database connection timeout",
 }
 var SampleInfoMessages = []string{
-	"Successfully completed operation",
+	"Operation completed successfully",
 	"Success!",
 }
