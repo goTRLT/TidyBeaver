@@ -11,7 +11,7 @@ import (
 var FileDetailedLogs models.AdaptedLogs
 var FileDetailedLog models.AdaptedLog
 
-func GetLogsFromFileSystem() models.AdaptedLogs {
+func GetLogsFromFS() models.AdaptedLogs {
 	files, err := os.ReadDir(`.\Logs`)
 	if err != nil {
 		log.Fatal(err)
