@@ -40,10 +40,6 @@ func GetLogsFromOS() WindowsEventLogs {
 		return windowsEventLogs
 	}
 
-	// Testing file.go handling
-	// os.WriteFile((`.\Logs\TidyBeaverOSLogs.json`), out, 0644)
-	// fmt.Println("OS Logs saved as Json")
-
 	err = json.Unmarshal(out, &windowsEventLogs.WindowsEventLogs)
 	if err != nil {
 		fmt.Printf("Error unmarshaling JSON: %v\n", err)
