@@ -11,7 +11,7 @@ import (
 var SampleLogsEntry models.SampleLogs
 var SampleLogEntry models.SampleLog
 
-func GetLogsFromMock() models.SampleLogs {
+func GetSetSampleLogs() models.SampleLogs {
 	generatedSampleLogs := GenerateSampleLogs()
 	fmt.Println(generatedSampleLogs)
 	return generatedSampleLogs
