@@ -10,8 +10,8 @@ var Configurations config.Configs
 var UserInputConfigurations config.UserInputConfigurations
 
 func main() {
-	config.SetConfigs()
-	fmt.Println("Starting the application...")
+	config.GetSetConfigs()
+	fmt.Println("The Tidy Beaver starts working")
 	aggregator.GetLogsFromSources()
 	aggregator.WriteLogsToStorages()
 }
