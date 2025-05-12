@@ -8,8 +8,9 @@ import (
 )
 
 var MockLogs models.SampleLogs
-var FSLogs models.AdaptedLogs
+var FSLogs models.TransformedLogs
 var OSLogs source.WindowsEventLogs
+var TransformedLogs models.TransformedLogs
 
 func GetLogsFromSources() {
 	if config.UserInputConfigValues.UseSampleLogs {
@@ -30,15 +31,16 @@ func GetLogsFromSources() {
 	}
 }
 
+
 func WriteLogsToStorages() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		storage.WriteSampleLogsToFile(MockLogs)
-		storage.WriteLogsToDB(MockLogs)
+		storage.WriteSampleLogsToDB(MockLogs)
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 		}
 		if config.UserInputConfigValues.UseDatabase {
-			storage.WriteLogsToDB(MockLogs)
+			storage.WriteLogsToDB(TransformedLogs)
 		}
 		if config.UserInputConfigValues.UseFileSystem {
 			storage.WriteLogsToFile(FSLogs)
