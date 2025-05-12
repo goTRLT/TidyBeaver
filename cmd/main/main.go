@@ -13,5 +13,4 @@ func main() {
 	config.GetSetConfigs()
 	fmt.Println("The Tidy Beaver starts working")
 	aggregator.Init()
-
 }
