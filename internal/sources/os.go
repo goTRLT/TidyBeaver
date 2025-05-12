@@ -35,12 +35,14 @@ var windowsEventLogs WindowsEventLogs
 func GetLogsFromOS() WindowsEventLogs {
 	cmd := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest "+config.ConfigValues.App.LogAmount+" | ConvertTo-Json -Depth 2")
 	out, err := cmd.Output()
+
 	if err != nil {
 		fmt.Printf("Error running PowerShell command: %v\n", err)
 		return windowsEventLogs
 	}
 
 	err = json.Unmarshal(out, &windowsEventLogs.WindowsEventLogs)
+	
 	if err != nil {
 		fmt.Printf("Error unmarshaling JSON: %v\n", err)
 		return windowsEventLogs
