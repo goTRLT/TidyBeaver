@@ -12,6 +12,14 @@ var FSLogs models.TransformedLogs
 var OSLogs source.WindowsEventLogs
 var TransformedLogs models.TransformedLogs
 
+func Init() {
+	GetLogsFromSources()
+	TransformLogs()
+	WriteLogsToStorages()
+}
+
+
+
 func GetLogsFromSources() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		MockLogs = source.GetSetSampleLogs()
