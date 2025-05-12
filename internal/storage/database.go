@@ -10,7 +10,7 @@ import (
 )
 
 func WriteSampleLogsToDB(sampleLogs models.SampleLogs) {
-	connStr := "user=postgres password=postgres dbname=TidyBeaverLogs sslmode=disable"
+	connStr := "host=localhost port=5432 user=tidybeaver password=tidybeaver dbname=TidyBeaverLogs sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -20,7 +20,7 @@ func WriteSampleLogsToDB(sampleLogs models.SampleLogs) {
 		var userID int
 		instanceID := rand.Int63()
 
-		err = db.QueryRow(`INSERT INTO public."Logs" (InstanceID, Time, Level, Source, Service, EntryType, Message, SentToS3)
+		err = db.QueryRow(`INSERT INTO public."Logs" (instanceID, time, level, source, service, entrytype, message, awsbucketsent)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`, instanceID, id.Time, id.Level, "SampleLog", id.Service, "SampleLog", id.Message, "False").Scan(&userID)
 		if err != nil {
 			log.Println("Error inserting log entry:", err)
@@ -31,18 +31,24 @@ func WriteSampleLogsToDB(sampleLogs models.SampleLogs) {
 	}
 }
 
-func WriteLogsToDB(logs any) {
-	connStr := "user=postgres dbname=TidyBeaverLogs sslmode=disable"
+func WriteLogsToDB(logs models.TransformedLogs) {
+	connStr := "host=localhost port=5432 user=tidybeaver password=tidybeaver dbname=TidyBeaverLogs sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var userid int
+	for _, id := range logs.TransformedLog {
+		var userID int
+		instanceID := rand.Int63()
 
-	err = db.QueryRow(`INSERT INTO Logs (InstanceID, Time, Level, Source, Service, EntryType, Message, SentToS3)
-	VALUES (    $age,    NOW(),   'INFO',    'ApplicationLogger',    'AuthService',    'Log',    'User login successful.',    FALSE) RETURNING id`).Scan(&userid)
-	if err != nil {
-		log.Fatal(err)
+		err = db.QueryRow(`INSERT INTO public."Logs" (instanceID, time, level, source, service, entrytype, message, awsbucketsent)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`, instanceID, id.Time, id.Level, "SampleLog", id.Service, "SampleLog", id.Message, "False").Scan(&userID)
+		if err != nil {
+			log.Println("Error inserting log entry:", err)
+			continue
+		}
+
+		log.Printf("Log entry inserted with ID: %d\n", instanceID)
 	}
 }
