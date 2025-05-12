@@ -8,10 +8,10 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-var FileDetailedLogs models.AdaptedLogs
-var FileDetailedLog models.AdaptedLog
+var FileDetailedLogs models.TransformedLogs
+var FileDetailedLog models.TransformedLog
 
-func GetLogsFromFS() models.AdaptedLogs {
+func GetLogsFromFS() models.TransformedLogs {
 	files, err := os.ReadDir(`.\Logs`)
 	if err != nil {
 		log.Fatal(err)
