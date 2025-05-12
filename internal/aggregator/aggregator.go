@@ -18,8 +18,6 @@ func Init() {
 	WriteLogsToStorages()
 }
 
-
-
 func GetLogsFromSources() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		MockLogs = source.GetSetSampleLogs()
@@ -38,7 +36,6 @@ func GetLogsFromSources() {
 		}
 	}
 }
-
 
 func WriteLogsToStorages() {
 	if config.UserInputConfigValues.UseSampleLogs {
