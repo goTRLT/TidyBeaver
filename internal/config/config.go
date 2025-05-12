@@ -66,9 +66,11 @@ func GetSetConfigs() (Configs, UserInputConfigurations) {
 
 func getDefaultConfig() {
 	configFile, err := os.Open("internal/config/config.json")
+
 	if err != nil {
 		return
 	}
+
 	defer configFile.Close()
 	decodedJson := json.NewDecoder(configFile)
 	decodedJson.Decode(&ConfigValues)
@@ -160,9 +162,11 @@ func printConfigs() {
 	env := os.Environ()
 	fmt.Println("Environment Variables: ", env)
 	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
+
 	if err != nil {
 		fmt.Println("Error marshalling defaultConfig:", err)
 		return
 	}
+	
 	fmt.Println("Configuration set: ", string(defaultConfigsJSON))
 }
