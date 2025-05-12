@@ -25,3 +25,4 @@ go.work.sum
 .env
 Logs/TidyBeaverAdaptedLogs.json
 Logs/TidyBeaverSampleLogs.json
+Logs/TidyBeaverSampleLogs.json
