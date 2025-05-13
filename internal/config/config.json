@@ -8,9 +8,9 @@
     "Database": {
       "Host": "localhost",
       "Port": "5432",
-      "User": "postgres",
-      "Password": "yourpassword",
-      "Name": "logdb",
+      "User": "tidybeaver",
+      "Password": "tidybeaver",
+      "Name": "TidyBeaverLogs",
       "SSLMode": "disable"
     },
     "API": {
