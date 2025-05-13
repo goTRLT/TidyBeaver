@@ -7,10 +7,12 @@ import (
 	"strconv"
 )
 
+// Refactor to switch from Global variables to arguments
 var ConfigValues Configs
 var UserInputConfigValues UserInputConfigurations
 var LogAmountSet int
 
+// Refactor config.json for Database sensitive data
 type Configs struct {
 	App struct {
 		Env       string `json:"Env"`
@@ -64,11 +66,13 @@ func GetSetConfigs() (Configs, UserInputConfigurations) {
 	return ConfigValues, UserInputConfigValues
 }
 
+// Refactor to use configurable path or environment variable
 func getDefaultConfig() {
 	configFile, err := os.Open("internal/config/config.json")
 
 	if err != nil {
-		return
+		panic(`Error getting default configuration for TidyBeaver!!!
+		TidyBeaver stopped working.`)
 	}
 
 	defer configFile.Close()
@@ -113,6 +117,7 @@ func getCustomConfig() {
 	}
 }
 
+// Refactor to take out redundant check
 func checkAnswer() bool {
 	userInput := ""
 	fmt.Scanln(&userInput)
@@ -167,6 +172,6 @@ func printConfigs() {
 		fmt.Println("Error marshalling defaultConfig:", err)
 		return
 	}
-	
+
 	fmt.Println("Configuration set: ", string(defaultConfigsJSON))
 }
