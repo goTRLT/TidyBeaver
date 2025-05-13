@@ -2,24 +2,27 @@ package aggregator
 
 import (
 	config "tidybeaver/internal/config"
-	source "tidybeaver/internal/sources"
 )
 
+// Refactor to Helper Function
 func TransformLogs() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		return
 	} else {
 		if config.UserInputConfigValues.UseAPI {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseDatabase {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			FSLogs = source.GetLogsFromFS()
+			//TODO
 		}
 		if config.UserInputConfigValues.UseMicroservice {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
-			OSLogs = source.GetLogsFromOS()
+			//TODO
 		}
 	}
 }
