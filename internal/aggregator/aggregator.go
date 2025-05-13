@@ -1,6 +1,7 @@
 package aggregator
 
 import (
+	"log"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
 	storage "tidybeaver/internal/storage"
@@ -8,8 +9,7 @@ import (
 )
 
 var MockLogs models.SampleLogs
-var FSLogs models.TransformedLogs
-var OSLogs source.WindowsEventLogs
+var OSLogs models.WindowsEventLogs
 var TransformedLogs models.TransformedLogs
 
 func Init() {
@@ -18,39 +18,51 @@ func Init() {
 	WriteLogsToStorages()
 }
 
+// Refactor to Helper Function
 func GetLogsFromSources() {
+	var err error
 	if config.UserInputConfigValues.UseSampleLogs {
 		MockLogs = source.GetSetSampleLogs()
 	} else {
 		if config.UserInputConfigValues.UseAPI {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseDatabase {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			FSLogs = source.GetLogsFromFS()
+			TransformedLogs = source.GetLogsFromFS()
 		}
 		if config.UserInputConfigValues.UseMicroservice {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
-			OSLogs = source.GetLogsFromOS()
+
+			OSLogs, err = source.GetLogsFromOS()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }
 
+// Refactor to Helper Function
 func WriteLogsToStorages() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		storage.WriteSampleLogsToFile(MockLogs)
 		storage.WriteSampleLogsToDB(MockLogs)
 	} else {
 		if config.UserInputConfigValues.UseAPI {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseDatabase {
 			storage.WriteLogsToDB(TransformedLogs)
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			storage.WriteLogsToFile(FSLogs)
+			storage.WriteLogsToFile(TransformedLogs)
 		}
 		if config.UserInputConfigValues.UseMicroservice {
+			//TODO
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
 			storage.WriteLogsToFile(OSLogs)
