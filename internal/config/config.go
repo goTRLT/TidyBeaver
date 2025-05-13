@@ -61,7 +61,6 @@ type UserInputConfigurations struct {
 func GetSetConfigs() (Configs, UserInputConfigurations) {
 	getDefaultConfig()
 	getCustomConfig()
-	overwriteConfigs(&UserInputConfigValues)
 	printConfigs()
 	return ConfigValues, UserInputConfigValues
 }
@@ -131,36 +130,6 @@ func checkAnswer() bool {
 		return false
 	}
 	return false
-}
-
-func overwriteConfigs(customConfigs *UserInputConfigurations) {
-	if !customConfigs.UseFileSystem && !customConfigs.UseSampleLogs {
-		ConfigValues.LogPaths.IncludeSubDirs = false
-		ConfigValues.LogPaths.LocalLogFolder = ""
-	}
-	if !customConfigs.UseDatabase || customConfigs.UseSampleLogs {
-		ConfigValues.Database.Host = ""
-		ConfigValues.Database.Name = ""
-		ConfigValues.Database.Password = ""
-		ConfigValues.Database.Port = ""
-		ConfigValues.Database.SSLMode = ""
-		ConfigValues.Database.User = ""
-	}
-	if !customConfigs.UseWindowsEvents || customConfigs.UseSampleLogs {
-		ConfigValues.WindowsEventLog.Channels = nil
-		ConfigValues.WindowsEventLog.Enabled = false
-		ConfigValues.WindowsEventLog.Query = ""
-	}
-	if !customConfigs.UseAPI || customConfigs.UseSampleLogs {
-		ConfigValues.API.AuthToken = ""
-		ConfigValues.API.BaseURL = ""
-		ConfigValues.API.TimeoutSeconds = ""
-	}
-	if !customConfigs.UseMicroservice || customConfigs.UseSampleLogs {
-		ConfigValues.Microservices.AuthServiceURL = ""
-		ConfigValues.Microservices.LogServiceURL = ""
-		ConfigValues.Microservices.PaymentServiceURL = ""
-	}
 }
 
 func printConfigs() {
