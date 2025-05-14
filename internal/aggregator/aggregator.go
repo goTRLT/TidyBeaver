@@ -16,16 +16,16 @@ var MSVLogs []string //Placeholder
 var DBLogs []string  //Placeholder
 
 func Init() {
-	GetLogsFromSources()
+	FetchLogs()
 	TransformLogs()
-	WriteLogsToStorages()
+	SaveLogs()
 }
 
 // Refactor to Helper Function
-func GetLogsFromSources() {
+func FetchLogs() {
 	var err error
 	if config.UserInputConfigValues.UseSampleLogs {
-		MockLogs, err = source.GetSetSampleLogs()
+		MockLogs, err = source.CreateSampleLogs()
 
 		if err != nil {
 			log.Fatal(err)
@@ -39,7 +39,7 @@ func GetLogsFromSources() {
 			//TODO
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			TransformedLogs, err = source.GetLogsFromFS()
+			TransformedLogs, err = source.FetchFSLogs()
 
 			if err != nil {
 				log.Fatal(err)
@@ -51,7 +51,7 @@ func GetLogsFromSources() {
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
 
-			OSLogs, err = source.GetLogsFromOS()
+			OSLogs, err = source.FetchOSLogs()
 
 			if err != nil {
 				log.Fatal(err)
@@ -82,22 +82,22 @@ func TransformLogs() {
 	}
 }
 
-func WriteLogsToStorages() {
+func SaveLogs() {
 	if len(MockLogs.SampleLog) != 0 {
-		storage.WriteSampleLogsToFile(&MockLogs)
-		storage.WriteSampleLogsToDB(&MockLogs)
+		storage.SaveSampleLogsJson(&MockLogs)
+		storage.DBInsertSampleLogs(&MockLogs)
 	}
 	if len(OSLogs.WindowsEventLogs) != 0 {
-		storage.WriteLogsToFile(&OSLogs)
+		storage.SaveLogsJson(&OSLogs)
 	}
 	if len(TransformedLogs.TransformedLog) != 0 {
-		storage.WriteLogsToFile(&TransformedLogs)
+		storage.SaveLogsJson(&TransformedLogs)
 	}
 	if len(APILogs) != 0 {
 		//TODO
 	}
 	if len(DBLogs) != 0 {
-		storage.WriteLogsToDB(&TransformedLogs)
+		storage.DBInsertLogs(&TransformedLogs)
 	}
 	if len(MSVLogs) != 0 {
 		//TODO
