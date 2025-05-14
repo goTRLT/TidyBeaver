@@ -13,7 +13,7 @@ import (
 var SampleLogsEntry models.SampleLogs
 var SampleLogEntry models.SampleLog
 
-func GetSetSampleLogs() (model models.SampleLogs, err error) {
+func CreateSampleLogs() (model models.SampleLogs, err error) {
 	generatedSampleLogs, err := GenerateSampleLogs()
 
 	if err != nil {
