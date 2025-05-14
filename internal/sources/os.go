@@ -8,7 +8,7 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func GetLogsFromOS() (windowsEventLogs models.WindowsEventLogs, err error) {
+func FetchOSLogs() (windowsEventLogs models.WindowsEventLogs, err error) {
 	cmd := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest "+config.ConfigValues.App.LogAmount+" | ConvertTo-Json -Depth 2")
 	out, err := cmd.Output()
 
