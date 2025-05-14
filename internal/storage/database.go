@@ -10,7 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func WriteSampleLogsToDB(sampleLogs *models.SampleLogs) {
+func DBInsertSampleLogs(sampleLogs *models.SampleLogs) {
 	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
 	db, err := sql.Open("postgres", connStr)
 
@@ -34,7 +34,7 @@ func WriteSampleLogsToDB(sampleLogs *models.SampleLogs) {
 	}
 }
 
-func WriteLogsToDB(logs *models.TransformedLogs) {
+func DBInsertLogs(logs *models.TransformedLogs) {
 	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
 	db, err := sql.Open("postgres", connStr)
 
