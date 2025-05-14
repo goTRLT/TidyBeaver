@@ -1,28 +1,12 @@
 package aggregator
 
 import (
-	config "tidybeaver/internal/config"
+	"tidybeaver/pkg/models"
 )
 
-// Refactor to Helper Function
-func TransformLogs() {
-	if config.UserInputConfigValues.UseSampleLogs {
-		return
-	} else {
-		if config.UserInputConfigValues.UseAPI {
-			//TODO
-		}
-		if config.UserInputConfigValues.UseDatabase {
-			//TODO
-		}
-		if config.UserInputConfigValues.UseFileSystem {
-			//TODO
-		}
-		if config.UserInputConfigValues.UseMicroservice {
-			//TODO
-		}
-		if config.UserInputConfigValues.UseWindowsEvents {
-			//TODO
-		}
-	}
-}
+func TransformSampleLogs(MockLogs *models.SampleLogs)         {}
+func TransformAPILogs(APILogs *[]string)                      {}
+func TransformDBLogs(DBLogs *[]string)                        {}
+func TransformFSLogs(TransformedLogs *models.TransformedLogs) {}
+func TransformMSVLogs(MSVLogs *[]string)                      {}
+func TransformOSLogs(OSLogs *models.WindowsEventLogs)         {}

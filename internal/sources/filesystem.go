@@ -10,7 +10,7 @@ import (
 
 var FileDetailedLogs models.TransformedLogs
 
-func GetLogsFromFS() models.TransformedLogs {
+func GetLogsFromFS() (model models.TransformedLogs, err error) {
 	files, err := os.ReadDir(`.\Logs`)
 
 	if err != nil {
@@ -33,10 +33,10 @@ func GetLogsFromFS() models.TransformedLogs {
 
 		if err != nil {
 			fmt.Println("Error marshalling the Indented Detailed Log:", err)
-			return FileDetailedLogs
+			return FileDetailedLogs, err
 		}
 
 		fmt.Println("Detailed Log: ", string(indentedDetailedLog))
 	}
-	return FileDetailedLogs
+	return FileDetailedLogs, err
 }

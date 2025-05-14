@@ -11,6 +11,9 @@ import (
 var MockLogs models.SampleLogs
 var OSLogs models.WindowsEventLogs
 var TransformedLogs models.TransformedLogs
+var APILogs []string //Placeholder
+var MSVLogs []string //Placeholder
+var DBLogs []string  //Placeholder
 
 func Init() {
 	GetLogsFromSources()
@@ -22,7 +25,12 @@ func Init() {
 func GetLogsFromSources() {
 	var err error
 	if config.UserInputConfigValues.UseSampleLogs {
-		MockLogs = source.GetSetSampleLogs()
+		MockLogs, err = source.GetSetSampleLogs()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 			//TODO
@@ -31,7 +39,12 @@ func GetLogsFromSources() {
 			//TODO
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			TransformedLogs = source.GetLogsFromFS()
+			TransformedLogs, err = source.GetLogsFromFS()
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
 		}
 		if config.UserInputConfigValues.UseMicroservice {
 			//TODO
@@ -39,33 +52,54 @@ func GetLogsFromSources() {
 		if config.UserInputConfigValues.UseWindowsEvents {
 
 			OSLogs, err = source.GetLogsFromOS()
+
 			if err != nil {
 				log.Fatal(err)
 			}
+
 		}
 	}
 }
 
-// Refactor to Helper Function
+func TransformLogs() {
+	if len(MockLogs.SampleLog) != 0 {
+		TransformSampleLogs(&MockLogs)
+	}
+	if len(OSLogs.WindowsEventLogs) != 0 {
+		TransformOSLogs(&OSLogs)
+	}
+	if len(TransformedLogs.TransformedLog) != 0 {
+		TransformFSLogs(&TransformedLogs)
+	}
+	if len(APILogs) != 0 {
+		//TODO
+	}
+	if len(DBLogs) != 0 {
+		//TODO
+	}
+	if len(MSVLogs) != 0 {
+		//TODO
+	}
+}
+
 func WriteLogsToStorages() {
-	if config.UserInputConfigValues.UseSampleLogs {
-		storage.WriteSampleLogsToFile(MockLogs)
-		storage.WriteSampleLogsToDB(MockLogs)
-	} else {
-		if config.UserInputConfigValues.UseAPI {
-			//TODO
-		}
-		if config.UserInputConfigValues.UseDatabase {
-			storage.WriteLogsToDB(TransformedLogs)
-		}
-		if config.UserInputConfigValues.UseFileSystem {
-			storage.WriteLogsToFile(TransformedLogs)
-		}
-		if config.UserInputConfigValues.UseMicroservice {
-			//TODO
-		}
-		if config.UserInputConfigValues.UseWindowsEvents {
-			storage.WriteLogsToFile(OSLogs)
-		}
+	if len(MockLogs.SampleLog) != 0 {
+		storage.WriteSampleLogsToFile(&MockLogs)
+		storage.WriteSampleLogsToDB(&MockLogs)
+	}
+	if len(OSLogs.WindowsEventLogs) != 0 {
+		storage.WriteLogsToFile(&OSLogs)
+	}
+	if len(TransformedLogs.TransformedLog) != 0 {
+		storage.WriteLogsToFile(&TransformedLogs)
+	}
+	if len(APILogs) != 0 {
+		//TODO
+	}
+	if len(DBLogs) != 0 {
+		storage.WriteLogsToDB(&TransformedLogs)
+	}
+	if len(MSVLogs) != 0 {
+		//TODO
 	}
 }
