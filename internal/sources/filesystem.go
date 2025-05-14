@@ -10,7 +10,7 @@ import (
 
 var FileDetailedLogs models.TransformedLogs
 
-func GetLogsFromFS() (model models.TransformedLogs, err error) {
+func FetchFSLogs() (model models.TransformedLogs, err error) {
 	files, err := os.ReadDir(`.\Logs`)
 
 	if err != nil {
