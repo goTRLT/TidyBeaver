@@ -7,7 +7,7 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func WriteSampleLogsToFile(sampleLogs *models.SampleLogs) {
+func SaveSampleLogsJson(sampleLogs *models.SampleLogs) {
 	encodedSampleLogs, err := json.Marshal(sampleLogs)
 	if err != nil {
 		return
@@ -17,7 +17,7 @@ func WriteSampleLogsToFile(sampleLogs *models.SampleLogs) {
 	}
 }
 
-func WriteLogsToFile(Logs any) {
+func SaveLogsJson(Logs any) {
 	encodedLogs, err := json.Marshal(Logs)
 	if err != nil {
 		return
