@@ -2,7 +2,6 @@ package sources
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	config "tidybeaver/internal/config"
 	"tidybeaver/pkg/models"
@@ -45,6 +44,6 @@ func FetchDBLogs() (models.DBLogs, error) {
 
 		dbLogs.DBLog = append(dbLogs.DBLog, dbLogEntry)
 	}
-	fmt.Println("DbLogs", dbLogs)
+	// fmt.Println("DbLogs", dbLogs)
 	return dbLogs, rows.Err()
 }
