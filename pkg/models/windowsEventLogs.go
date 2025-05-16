@@ -1,10 +1,10 @@
 package models
 
-type WindowsEventLogs struct {
-	WindowsEventLogs []WindowsEventLog
+type OSLogs struct {
+	OS []OS
 }
 
-type WindowsEventLog struct {
+type OS struct {
 	MachineName        string   `json:"MachineName"`
 	Data               []string `json:"Data"`
 	Index              int      `json:"Index"`
