@@ -9,11 +9,11 @@ import (
 )
 
 var MockLogs models.SampleLogs
-var OSLogs models.WindowsEventLogs
-var TransformedLogs models.TransformedLogs
+var OSLogs models.OSLogs
+var TransformedLogs models.StandardLogs
 var APILogs []string //Placeholder
 var MSVLogs []string //Placeholder
-var DBLogs []string  //Placeholder
+var DBLogs models.DBLogs
 
 func Init() {
 	FetchLogs()
@@ -36,7 +36,12 @@ func FetchLogs() {
 			//TODO
 		}
 		if config.UserInputConfigValues.UseDatabase {
-			//TODO
+			DBLogs, err = source.FetchDBLogs()
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
 		}
 		if config.UserInputConfigValues.UseFileSystem {
 			TransformedLogs, err = source.FetchFSLogs()
@@ -65,16 +70,16 @@ func TransformLogs() {
 	if len(MockLogs.SampleLog) != 0 {
 		TransformSampleLogs(&MockLogs)
 	}
-	if len(OSLogs.WindowsEventLogs) != 0 {
+	if len(OSLogs.OS) != 0 {
 		TransformOSLogs(&OSLogs)
 	}
-	if len(TransformedLogs.TransformedLog) != 0 {
+	if len(TransformedLogs.StandardLog) != 0 {
 		TransformFSLogs(&TransformedLogs)
 	}
 	if len(APILogs) != 0 {
 		//TODO
 	}
-	if len(DBLogs) != 0 {
+	if len(DBLogs.DBLog) != 0 {
 		//TODO
 	}
 	if len(MSVLogs) != 0 {
@@ -87,16 +92,16 @@ func SaveLogs() {
 		storage.SaveSampleLogsJson(&MockLogs)
 		storage.DBInsertSampleLogs(&MockLogs)
 	}
-	if len(OSLogs.WindowsEventLogs) != 0 {
+	if len(OSLogs.OS) != 0 {
 		storage.SaveLogsJson(&OSLogs)
 	}
-	if len(TransformedLogs.TransformedLog) != 0 {
+	if len(TransformedLogs.StandardLog) != 0 {
 		storage.SaveLogsJson(&TransformedLogs)
 	}
 	if len(APILogs) != 0 {
 		//TODO
 	}
-	if len(DBLogs) != 0 {
+	if len(DBLogs.DBLog) != 0 {
 		storage.DBInsertLogs(&TransformedLogs)
 	}
 	if len(MSVLogs) != 0 {
