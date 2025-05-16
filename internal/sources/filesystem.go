@@ -29,14 +29,15 @@ func FetchFSLogs() (model models.StandardLogs, err error) {
 		defer logFile.Close()
 		decodedJson := json.NewDecoder(logFile)
 		decodedJson.Decode(&FileDetailedLogs)
-		indentedDetailedLog, err := json.MarshalIndent(FileDetailedLogs.StandardLog, "", "  ")
+		// indentedDetailedLog, err := json.MarshalIndent(FileDetailedLogs.StandardLog, "", "  ")
 
 		if err != nil {
 			fmt.Println("Error marshalling the Indented Detailed Log:", err)
 			return FileDetailedLogs, err
 		}
 
-		fmt.Println("Detailed Log: ", string(indentedDetailedLog))
+		fmt.Println("logFile: ", logFile.Name())
+		fmt.Println("Detailed Log: ", FileDetailedLogs)
 	}
 	return FileDetailedLogs, err
 }
