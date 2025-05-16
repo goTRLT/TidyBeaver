@@ -8,9 +8,9 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-var FileDetailedLogs models.TransformedLogs
+var FileDetailedLogs models.StandardLogs
 
-func FetchFSLogs() (model models.TransformedLogs, err error) {
+func FetchFSLogs() (model models.StandardLogs, err error) {
 	files, err := os.ReadDir(`.\Logs`)
 
 	if err != nil {
@@ -29,7 +29,7 @@ func FetchFSLogs() (model models.TransformedLogs, err error) {
 		defer logFile.Close()
 		decodedJson := json.NewDecoder(logFile)
 		decodedJson.Decode(&FileDetailedLogs)
-		indentedDetailedLog, err := json.MarshalIndent(FileDetailedLogs.TransformedLog, "", "  ")
+		indentedDetailedLog, err := json.MarshalIndent(FileDetailedLogs.StandardLog, "", "  ")
 
 		if err != nil {
 			fmt.Println("Error marshalling the Indented Detailed Log:", err)
