@@ -2,10 +2,13 @@ package sources
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	config "tidybeaver/internal/config"
 	"tidybeaver/pkg/models"
 )
+
+var dbLogEntry models.DBLog
 
 func FetchDBLogs() (models.DBLogs, error) {
 	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
@@ -21,6 +24,27 @@ func FetchDBLogs() (models.DBLogs, error) {
 	}
 
 	defer rows.Close()
+	var dbLogs models.DBLogs
 
-	return rows, err
+	for rows.Next() {
+		err := rows.Scan(
+			&dbLogEntry.Level,
+			&dbLogEntry.Column,
+			&dbLogEntry.Constraint,
+			&dbLogEntry.Datatype,
+			&dbLogEntry.Table_name,
+			&dbLogEntry.Schema,
+			&dbLogEntry.Errcode,
+			&dbLogEntry.Detail,
+		)
+
+		if err != nil {
+			log.Fatal(err)
+			continue
+		}
+
+		dbLogs.DBLog = append(dbLogs.DBLog, dbLogEntry)
+	}
+	fmt.Println("DbLogs", dbLogs)
+	return dbLogs, rows.Err()
 }
