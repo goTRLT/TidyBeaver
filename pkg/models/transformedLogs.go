@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-type TransformedLogs struct {
-	TransformedLog []struct {
+type StandardLogs struct {
+	StandardLog []struct {
 		Level      string    `json:"Level"`
 		Service    string    `json:"Service"`
 		Message    string    `json:"Message"`
