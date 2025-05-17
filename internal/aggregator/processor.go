@@ -1,12 +1,11 @@
 package aggregator
 
-import (
-	"tidybeaver/pkg/models"
-)
+// import (
+// 	"tidybeaver/pkg/models"
+// )
 
-func TransformSampleLogs(MockLogs *models.SampleLogs)      {}
-func TransformAPILogs(APILogs *[]string)                   {}
-func TransformDBLogs(DBLogs *[]string)                     {}
-func TransformFSLogs(TransformedLogs *models.StandardLogs) {}
-func TransformMSVLogs(MSVLogs *[]string)                   {}
-func TransformOSLogs(OSLogs *models.OSLogs)                {}
+// func TransformAPILogs(APILogs *[]string) models.AggregatedLogs    {}
+// func TransformDBLogs(DBLogs *models.DBLogs) models.AggregatedLogs {}
+// func TransformFSLogs(FSLogs *models.FSLogs) models.AggregatedLogs {}
+// func TransformMSVLogs(MSVLogs *[]string) models.AggregatedLogs    {}
+// func TransformOSLogs(OSLogs *models.OSLogs) models.AggregatedLogs {}
