@@ -11,6 +11,7 @@ import (
 var ConfigValues Configs
 var UserInputConfigValues UserInputConfigurations
 var LogAmountSet int
+var Env []string
 
 // Refactor config.json for Database sensitive data
 type Configs struct {
@@ -133,8 +134,8 @@ func checkAnswer() bool {
 }
 
 func printConfigs() {
-	env := os.Environ()
-	fmt.Println("Environment Variables: ", env)
+	Env = os.Environ()
+	fmt.Println("Environment Variables: ", Env)
 	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
 
 	if err != nil {
