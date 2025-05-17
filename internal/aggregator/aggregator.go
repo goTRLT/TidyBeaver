@@ -9,7 +9,7 @@ import (
 	"tidybeaver/pkg/models"
 )
 
-var AggregatedLogs models.AggregatedLogs
+var AggregatedLogs models.AggregatedLog
 var MockLogs models.SampleLogs
 var OSLogs models.OSLogs
 var FSLogs models.FSLogs
