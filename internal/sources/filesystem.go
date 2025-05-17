@@ -8,9 +8,9 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-var FileDetailedLogs models.StandardLogs
+var FileDetailedLogs models.FSLogs
 
-func FetchFSLogs() (model models.StandardLogs, err error) {
+func FetchFSLogs() (model models.FSLogs, err error) {
 	files, err := os.ReadDir(`.\Logs`)
 
 	if err != nil {
