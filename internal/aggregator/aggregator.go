@@ -10,14 +10,14 @@ import (
 
 var MockLogs models.SampleLogs
 var OSLogs models.OSLogs
-var TransformedLogs models.StandardLogs
+var FSLogs models.FSLogs
 var APILogs []string //Placeholder
 var MSVLogs []string //Placeholder
 var DBLogs models.DBLogs
 
 func Init() {
 	FetchLogs()
-	TransformLogs()
+	// AggregateLogs()
 	SaveLogs()
 }
 
@@ -44,7 +44,7 @@ func FetchLogs() {
 
 		}
 		if config.UserInputConfigValues.UseFileSystem {
-			TransformedLogs, err = source.FetchFSLogs()
+			FSLogs, err = source.FetchFSLogs()
 
 			if err != nil {
 				log.Fatal(err)
@@ -66,26 +66,26 @@ func FetchLogs() {
 	}
 }
 
-func TransformLogs() {
-	if len(MockLogs.SampleLog) != 0 {
-		TransformSampleLogs(&MockLogs)
-	}
-	if len(OSLogs.OS) != 0 {
-		TransformOSLogs(&OSLogs)
-	}
-	if len(TransformedLogs.StandardLog) != 0 {
-		TransformFSLogs(&TransformedLogs)
-	}
-	if len(APILogs) != 0 {
-		//TODO
-	}
-	if len(DBLogs.DBLog) != 0 {
-		//TODO
-	}
-	if len(MSVLogs) != 0 {
-		//TODO
-	}
-}
+// func AggregateLogs() {
+// 	if len(MockLogs.SampleLog) != 0 {
+// 		TransformSampleLogs(&MockLogs)
+// 	}
+// 	if len(OSLogs.OS) != 0 {
+// 		TransformOSLogs(&OSLogs)
+// 	}
+// 	if len(FSLogs.FSLog) != 0 {
+// 		TransformFSLogs(&FSLogs)
+// 	}
+// 	if len(APILogs) != 0 {
+// 		//TODO
+// 	}
+// 	if len(DBLogs.DBLog) != 0 {
+// 		TransformDBLogs(&DBLogs)
+// 	}
+// 	if len(MSVLogs) != 0 {
+// 		//TODO
+// 	}
+// }
 
 func SaveLogs() {
 	if len(MockLogs.SampleLog) != 0 {
@@ -95,14 +95,14 @@ func SaveLogs() {
 	if len(OSLogs.OS) != 0 {
 		storage.SaveLogsJson(&OSLogs)
 	}
-	if len(TransformedLogs.StandardLog) != 0 {
-		storage.SaveLogsJson(&TransformedLogs)
+	if len(FSLogs.FSLog) != 0 {
+		storage.SaveLogsJson(&FSLogs)
 	}
 	if len(APILogs) != 0 {
 		//TODO
 	}
 	if len(DBLogs.DBLog) != 0 {
-		storage.DBInsertLogs(&TransformedLogs)
+		storage.DBInsertLogs(&FSLogs)
 	}
 	if len(MSVLogs) != 0 {
 		//TODO
