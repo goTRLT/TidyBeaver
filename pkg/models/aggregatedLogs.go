@@ -2,10 +2,6 @@ package models
 
 import "time"
 
-type AggregatedLogs struct {
-	AggregatedLog []AggregatedLog
-}
-
 type AggregatedLog []struct {
 	Category           string    `json:"category,omitempty"`
 	CategoryNumber     int       `json:"category_number,omitempty"`
