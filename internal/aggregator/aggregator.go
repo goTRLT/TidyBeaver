@@ -1,6 +1,7 @@
 package aggregator
 
 import (
+	"fmt"
 	"log"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
@@ -8,6 +9,7 @@ import (
 	"tidybeaver/pkg/models"
 )
 
+var AggregatedLogs models.AggregatedLogs
 var MockLogs models.SampleLogs
 var OSLogs models.OSLogs
 var FSLogs models.FSLogs
@@ -17,7 +19,7 @@ var DBLogs models.DBLogs
 
 func Init() {
 	FetchLogs()
-	// AggregateLogs()
+	AggregateLogs()
 	SaveLogs()
 }
 
@@ -66,26 +68,27 @@ func FetchLogs() {
 	}
 }
 
-// func AggregateLogs() {
-// 	if len(MockLogs.SampleLog) != 0 {
-// 		TransformSampleLogs(&MockLogs)
-// 	}
-// 	if len(OSLogs.OS) != 0 {
-// 		TransformOSLogs(&OSLogs)
-// 	}
-// 	if len(FSLogs.FSLog) != 0 {
-// 		TransformFSLogs(&FSLogs)
-// 	}
-// 	if len(APILogs) != 0 {
-// 		//TODO
-// 	}
-// 	if len(DBLogs.DBLog) != 0 {
-// 		TransformDBLogs(&DBLogs)
-// 	}
-// 	if len(MSVLogs) != 0 {
-// 		//TODO
-// 	}
-// }
+func AggregateLogs() {
+	if len(MockLogs.SampleLog) != 0 {
+		transformed := TransformSampleLogs(&MockLogs)
+		fmt.Println(transformed)
+	}
+	// if len(OSLogs.OS) != 0 {
+	// 	TransformOSLogs(&OSLogs)
+	// }
+	// if len(FSLogs.FSLog) != 0 {
+	// 	TransformFSLogs(&FSLogs)
+	// }
+	// if len(APILogs) != 0 {
+	// 	//TODO
+	// }
+	// if len(DBLogs.DBLog) != 0 {
+	// 	TransformDBLogs(&DBLogs)
+	// }
+	// if len(MSVLogs) != 0 {
+	// 	//TODO
+	// }
+}
 
 func SaveLogs() {
 	if len(MockLogs.SampleLog) != 0 {
