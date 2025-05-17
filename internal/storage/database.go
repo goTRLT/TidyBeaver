@@ -34,7 +34,7 @@ func DBInsertSampleLogs(sampleLogs *models.SampleLogs) {
 	}
 }
 
-func DBInsertLogs(logs *models.StandardLogs) {
+func DBInsertLogs(logs *models.FSLogs) {
 	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
 	db, err := sql.Open("postgres", connStr)
 
@@ -42,7 +42,7 @@ func DBInsertLogs(logs *models.StandardLogs) {
 		log.Fatal(err)
 	}
 
-	for _, id := range logs.StandardLog {
+	for _, id := range logs.FSLog {
 		var userID int
 		instanceID := rand.Int63()
 
