@@ -5,20 +5,20 @@ type OSLogs struct {
 }
 
 type OS struct {
-	MachineName        string   `json:"MachineName"`
-	Data               []string `json:"Data"`
-	Index              int      `json:"Index"`
 	Category           string   `json:"Category"`
 	CategoryNumber     int      `json:"CategoryNumber"`
-	EventID            int      `json:"EventID"`
+	Container          string   `json:"Container"`
+	Data               []string `json:"Data"`
 	EntryType          int      `json:"EntryType"`
-	Message            string   `json:"Message"`
-	Source             string   `json:"Source"`
-	ReplacementStrings []string `json:"ReplacementStrings"`
+	EventID            int      `json:"EventID"`
+	Index              int      `json:"Index"`
 	InstanceID         int      `json:"InstanceID"`
+	MachineName        string   `json:"MachineName"`
+	Message            string   `json:"Message"`
+	ReplacementStrings []string `json:"ReplacementStrings"`
+	Source             string   `json:"Source"`
+	SplitLines         string   `json:"SplitLines"`
 	TimeGenerated      string   `json:"TimeGenerated"`
 	TimeWritten        string   `json:"TimeWritten"`
 	UserName           string   `json:"UserName"`
-	SplitLines         string   `json:"SplitLines"`
-	Container          string   `json:"Container"`
 }
