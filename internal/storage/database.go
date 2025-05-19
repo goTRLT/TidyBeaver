@@ -10,7 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func DBInsertSampleLogs(sampleLogs *models.SampleLogs) {
+func DBInsertSampleLogs(logs *models.AggregatedLogs) {
 	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
 	db, err := sql.Open("postgres", connStr)
 
@@ -34,7 +34,7 @@ func DBInsertSampleLogs(sampleLogs *models.SampleLogs) {
 	}
 }
 
-func DBInsertLogs(logs *models.FSLogs) {
+func DBInsertLogs(logs *models.AggregatedLogs) {
 	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
 	db, err := sql.Open("postgres", connStr)
 
@@ -42,7 +42,7 @@ func DBInsertLogs(logs *models.FSLogs) {
 		log.Fatal(err)
 	}
 
-	for _, id := range logs.FSLog {
+	for _, id := range logs {
 		var userID int
 		instanceID := rand.Int63()
 
