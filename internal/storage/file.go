@@ -7,17 +7,7 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func SaveSampleLogsJson(logs *models.AggregatedLogs) {
-	encodedSampleLogs, err := json.Marshal(sampleLogs)
-	if err != nil {
-		return
-	} else {
-		os.WriteFile((`.\Logs\TidyBeaverSampleLogs.json`), encodedSampleLogs, 0644)
-		fmt.Println("Sample Logs saved as Json")
-	}
-}
-
-func SaveLogsJson(Logs any) {
+func SaveLogsJson(Logs *models.AggregatedLogs) {
 	encodedLogs, err := json.Marshal(Logs)
 	if err != nil {
 		return
