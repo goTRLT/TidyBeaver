@@ -1,0 +1,3 @@
+INSERT INTO public.logs(
+	id, category, category_number, checksum, client_ip, "column", component, computer_name, "constraint", container, correlation_id, data, datatype, detail, endpoint, entry_type, environment, errcode, event_id, event_type, file_path, file_size, host, http_method, index, instance_id, latency_ms, level, line_number, log_name, machine_name, message, request_body, replacement_strings, response_body, rows_affected, schema, service, source, split_lines, span_id, status_code, table_name, time_generated, time_written, transaction_id, user_agent, user_id, user_name, query)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
