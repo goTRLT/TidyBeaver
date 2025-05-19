@@ -9,7 +9,7 @@ import (
 	"tidybeaver/pkg/models"
 )
 
-var AggregatedLogs models.AggregatedLog
+var AggregatedLogs models.AggregatedLogs
 var MockLogs models.SampleLogs
 var OSLogs models.OSLogs
 var FSLogs models.FSLogs
@@ -91,23 +91,8 @@ func AggregateLogs() {
 }
 
 func SaveLogs() {
-	if len(MockLogs.SampleLog) != 0 {
-		storage.SaveSampleLogsJson(&MockLogs)
-		storage.DBInsertSampleLogs(&MockLogs)
+
+		storage.SaveSampleLogsJson(&AggregatedLogs)
+		storage.DBInsertSampleLogs(&AggregatedLogs)
 	}
-	if len(OSLogs.OS) != 0 {
-		storage.SaveLogsJson(&OSLogs)
-	}
-	if len(FSLogs.FSLog) != 0 {
-		storage.SaveLogsJson(&FSLogs)
-	}
-	if len(APILogs) != 0 {
-		//TODO
-	}
-	if len(DBLogs.DBLog) != 0 {
-		storage.DBInsertLogs(&FSLogs)
-	}
-	if len(MSVLogs) != 0 {
-		//TODO
-	}
-}
+
