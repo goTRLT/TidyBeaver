@@ -8,7 +8,7 @@ import (
 
 func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models.AggregatedLog) {
 
-	var aggregatedLogs2 []models.AggregatedLog
+	var transformedLogs []models.AggregatedLog
 	for _, val := range SampleLogs.SampleLog {
 		test := models.New(
 			"",
@@ -61,10 +61,10 @@ func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models
 			"",
 			"",
 		)
-		aggregatedLogs2 = append(aggregatedLogs2, test)
+		transformedLogs = append(transformedLogs, test)
 	}
-	fmt.Println(aggregatedLogs2)
-	return aggregatedLogs2
+	fmt.Println(transformedLogs)
+	return transformedLogs
 }
 
 // func TransformAPILogs(APILogs *[]string) models.AggregatedLogs    {}
