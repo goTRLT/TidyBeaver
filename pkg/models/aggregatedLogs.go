@@ -21,10 +21,10 @@ type AggregatedLog struct {
 	Datatype           string    `json:"datatype,omitempty"`
 	Detail             string    `json:"detail,omitempty"`
 	Endpoint           string    `json:"endpoint,omitempty"`
-	EntryType          string    `json:"entry_type,omitempty"`
+	EntryType          int       `json:"entry_type,omitempty"`
 	Environment        string    `json:"environment,omitempty"`
 	Errcode            string    `json:"errcode,omitempty"`
-	EventID            string    `json:"event_id,omitempty"`
+	EventID            int       `json:"event_id,omitempty"`
 	EventType          string    `json:"event_type,omitempty"`
 	FilePath           string    `json:"file_path,omitempty"`
 	FileSize           int64     `json:"file_size,omitempty"`
@@ -73,10 +73,10 @@ func New(
 	Datatype string,
 	Detail string,
 	Endpoint string,
-	EntryType string,
+	EntryType int,
 	Environment string,
 	Errcode string,
-	EventID string,
+	EventID int,
 	EventType string,
 	FilePath string,
 	FileSize int64,
