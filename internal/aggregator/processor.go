@@ -7,10 +7,9 @@ import (
 )
 
 func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models.AggregatedLog) {
-
 	var transformedLogs []models.AggregatedLog
 	for _, val := range SampleLogs.SampleLog {
-		test := models.New(
+		transformedLog := models.New(
 			"",
 			0,
 			"",
@@ -61,17 +60,16 @@ func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models
 			"",
 			"",
 		)
-		transformedLogs = append(transformedLogs, test)
+		transformedLogs = append(transformedLogs, transformedLog)
 	}
 	fmt.Println(transformedLogs)
 	return transformedLogs
 }
 
 func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedLog) {
-
 	var transformedLogs []models.AggregatedLog
 	for _, val := range FSLogs.FSLog {
-		test := models.New(
+		transformedLog := models.New(
 			"",
 			0,
 			"",
@@ -86,7 +84,7 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 			"",
 			"",
 			"",
-			"",
+			val.EntryType,
 			"",
 			"",
 			"",
@@ -95,8 +93,8 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 			0,
 			"",
 			"",
-			0,
-			0,
+			val.Index,
+			val.InstanceID,
 			0,
 			val.Level,
 			0,
@@ -109,7 +107,7 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 			0,
 			"",
 			val.Service,
-			"Sample Log",
+			val.Source,
 			"",
 			"",
 			0,
@@ -122,7 +120,67 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 			"",
 			"",
 		)
-		transformedLogs = append(transformedLogs, test)
+		transformedLogs = append(transformedLogs, transformedLog)
+	}
+	fmt.Println(transformedLogs)
+	return transformedLogs
+}
+
+func TransformDBLogs(DBLogs *models.DBLogs) (aggregatedLogs []models.AggregatedLog) {
+	var transformedLogs []models.AggregatedLog
+	for _, val := range FSLogs.FSLog {
+		transformedLog := models.New(
+			"",
+			0,
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			[]string{"", ""},
+			"",
+			"",
+			"",
+			val.EntryType,
+			"",
+			"",
+			"",
+			"",
+			"",
+			0,
+			"",
+			"",
+			val.Index,
+			val.InstanceID,
+			0,
+			val.Level,
+			0,
+			"",
+			"",
+			val.Message,
+			"",
+			[]string{"", ""},
+			"",
+			0,
+			"",
+			val.Service,
+			val.Source,
+			"",
+			"",
+			0,
+			"",
+			val.Time,
+			time.Now(),
+			"",
+			"",
+			"",
+			"",
+			"",
+		)
+		transformedLogs = append(transformedLogs, transformedLog)
 	}
 	fmt.Println(transformedLogs)
 	return transformedLogs
