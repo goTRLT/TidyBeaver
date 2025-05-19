@@ -10,7 +10,7 @@ import (
 )
 
 var AggregatedLogs models.AggregatedLogs
-var MockLogs models.SampleLogs
+var SampleLogs models.SampleLogs
 var OSLogs models.OSLogs
 var FSLogs models.FSLogs
 var APILogs []string //Placeholder
@@ -19,7 +19,7 @@ var DBLogs models.DBLogs
 
 func Init() {
 	FetchLogs()
-	AggregateLogs()
+	TransformLogs()
 	SaveLogs()
 }
 
@@ -27,7 +27,7 @@ func Init() {
 func FetchLogs() {
 	var err error
 	if config.UserInputConfigValues.UseSampleLogs {
-		MockLogs, err = source.CreateSampleLogs()
+		SampleLogs, err = source.CreateSampleLogs()
 
 		if err != nil {
 			log.Fatal(err)
@@ -68,22 +68,26 @@ func FetchLogs() {
 	}
 }
 
-func AggregateLogs() {
-	if len(MockLogs.SampleLog) != 0 {
-		transformed := TransformSampleLogs(&MockLogs)
-		fmt.Println(transformed)
+func TransformLogs() {
+	if len(SampleLogs.SampleLog) != 0 {
+		TransformedLogs := TransformSampleLogs(&SampleLogs)
+		Aggregate(&TransformedLogs)
+		// for _, log := range transformedLogs {
+		// 	AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, log)
+		// }
+		// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 	}
-	// if len(OSLogs.OS) != 0 {
-	// 	TransformOSLogs(&OSLogs)
-	// }
-	// if len(FSLogs.FSLog) != 0 {
-	// 	TransformFSLogs(&FSLogs)
-	// }
+	if len(OSLogs.OS) != 0 {
+		TransformOSLogs(&OSLogs)
+	}
+	if len(FSLogs.FSLog) != 0 {
+		TransformFSLogs(&FSLogs)
+	}
+	if len(DBLogs.DBLog) != 0 {
+		TransformDBLogs(&DBLogs)
+	}
 	// if len(APILogs) != 0 {
 	// 	//TODO
-	// }
-	// if len(DBLogs.DBLog) != 0 {
-	// 	TransformDBLogs(&DBLogs)
 	// }
 	// if len(MSVLogs) != 0 {
 	// 	//TODO
@@ -91,8 +95,13 @@ func AggregateLogs() {
 }
 
 func SaveLogs() {
+	storage.SaveLogsJson(&AggregatedLogs)
+	storage.DBInsertLogs(&AggregatedLogs)
+}
 
-		storage.SaveSampleLogsJson(&AggregatedLogs)
-		storage.DBInsertSampleLogs(&AggregatedLogs)
+func Aggregate(transformedLog *[]models.AggregatedLog) {
+	for _, log := range transformedLog {
+		AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, log.AggregatedLogSlice...)
 	}
-
+	fmt.Println(AggregatedLogs.AggregatedLogSlice)
+}
