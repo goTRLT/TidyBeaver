@@ -37,7 +37,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 	outputApp, errApp := cmdApp.Output()
 
 	if errApp != nil {
-		log.Fatal("Error running PowerShell command: %v\n", errApp)
+		log.Fatal("Error running PowerShell command: ", errApp)
 		return outputApp, outputSys, outputSec, errApp
 	}
 
@@ -47,7 +47,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 	outputSys, errSys := cmdSys.Output()
 
 	if errSys != nil {
-		log.Fatal("Error running PowerShell command: %v\n", errSys)
+		log.Fatal("Error running PowerShell command: ", errSys)
 		return outputApp, outputSys, outputSec, errSys
 	}
 
@@ -57,7 +57,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 	outputSec, errSec := cmdSec.Output()
 
 	if errSec != nil {
-		log.Fatal("Error running PowerShell command: %v\n", errSec)
+		log.Fatal("Error running PowerShell command: ", errSec)
 		return outputApp, outputSys, outputSec, errSec
 	}
 
@@ -73,12 +73,10 @@ func MergeJSONOutputs(outputs ...[]byte) ([]byte, error) {
 		err := json.Unmarshal(vals, &temp)
 
 		if err != nil {
-			log.Fatal("Error unmarshaling JSON: %v\n", err)
+			log.Fatal("Error unmarshaling JSON: ", err)
 			return vals, err
 		}
-		for _, v := range temp {
-			out = append(out, v)
-		}
+		out = append(out, temp...)
 	}
 	return json.Marshal(out)
 }
