@@ -3,6 +3,7 @@ package aggregator
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"tidybeaver/pkg/models"
 	"time"
@@ -72,17 +73,18 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 	for _, val := range OSLogs.OS {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
 		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
-		parsedTime, err := time.Parse(time.DateTime, val.TimeWritten)
-		parsedTime = parsedTime.Add(0)
-		fmt.Println(parsedTime)
-		// parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
-		// if err != nil {
-		// 	log.Fatal("failed to parse milliseconds: %w", err)
-		// }
+		fmt.Println(val.TimeWritten)
 
-		// seconds := parsedTime / 1000
-		// nanoseconds := (parsedTime % 1000) * 1000000
-		// unixTime := time.Unix(seconds, nanoseconds)
+		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
+		if err != nil {
+			log.Fatal("failed to parse milliseconds: %w", err)
+		}
+
+		seconds := parsedTime / 1000
+		nanoseconds := (parsedTime % 1000) * 1000000
+		unixTime := time.Unix(seconds, nanoseconds)
+		unixTime = unixTime.Round(time.Millisecond)
+		fmt.Println("unix: ", unixTime)
 
 		if err != nil {
 			log.Fatal(err)
@@ -102,7 +104,7 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 			ReplacementStrings: val.ReplacementStrings,
 			Source:             "Operational System: " + val.Source,
 			SplitLines:         val.SplitLines,
-			TimeGenerated:      parsedTime,
+			TimeGenerated:      unixTime,
 			TimeWritten:        time.Now(),
 			UserName:           val.UserName,
 		}
