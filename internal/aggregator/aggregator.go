@@ -1,6 +1,7 @@
 package aggregator
 
 import (
+	"fmt"
 	"log"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
@@ -12,7 +13,7 @@ var AggregatedLogs models.AggregatedLogs
 var SampleLogs models.SampleLogs
 var OSLogs models.OSLogs
 var FSLogs models.FSLogs
-var APILogs []string //Placeholder
+var APILogs models.APILogs
 var MSVLogs []string //Placeholder
 var DBLogs models.DBLogs
 
@@ -34,7 +35,13 @@ func FetchLogs() {
 
 	} else {
 		if config.UserInputConfigValues.UseAPI {
-			//TODO
+			APILogs, err = source.FetchAPILogs()
+
+			fmt.Println("Api logs ", APILogs)
+
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 		if config.UserInputConfigValues.UseDatabase {
 			DBLogs, err = source.FetchDBLogs()
@@ -84,9 +91,10 @@ func TransformLogs() {
 		TransformedLogs := TransformDBLogs(&DBLogs)
 		Aggregate(&TransformedLogs)
 	}
-	// if len(APILogs) != 0 {
-	// 	//TODO
-	// }
+	if len(APILogs) != 0 {
+		TransformedLogs := TransformAPILogs(&APILogs)
+		Aggregate(&TransformedLogs)
+	}
 	// if len(MSVLogs) != 0 {
 	// 	//TODO
 	// }
