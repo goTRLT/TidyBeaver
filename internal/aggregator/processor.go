@@ -3,6 +3,8 @@ package aggregator
 import (
 	"fmt"
 	"log"
+	"strconv"
+	"strings"
 	"tidybeaver/pkg/models"
 	"time"
 )
@@ -10,57 +12,14 @@ import (
 func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range SampleLogs.SampleLog {
-		transformedLog := models.New(
-			"",
-			0,
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			[]string{"", ""},
-			"",
-			"",
-			"",
-			0,
-			"",
-			"",
-			0,
-			"",
-			"",
-			0,
-			"",
-			"",
-			0,
-			0,
-			0,
-			val.Level,
-			0,
-			"",
-			"",
-			val.Message,
-			"",
-			[]string{"", ""},
-			"",
-			0,
-			"",
-			val.Service,
-			"Sample Log",
-			"",
-			"",
-			0,
-			"",
-			val.Time,
-			time.Now(),
-			"",
-			"",
-			"",
-			"",
-			"",
-		)
+		transformedLog := models.AggregatedLog{
+			Level:         val.Level,
+			Message:       val.Message,
+			Service:       val.Service,
+			Source:        "Sample Log",
+			TimeGenerated: val.Time,
+			TimeWritten:   time.Now(),
+		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
 	fmt.Println(transformedLogs)
@@ -70,57 +29,17 @@ func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models
 func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range FSLogs.FSLog {
-		transformedLog := models.New(
-			"",
-			0,
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			[]string{"", ""},
-			"",
-			"",
-			"",
-			val.EntryType,
-			"",
-			"",
-			0,
-			"",
-			"",
-			0,
-			"",
-			"",
-			val.Index,
-			val.InstanceID,
-			0,
-			val.Level,
-			0,
-			"",
-			"",
-			val.Message,
-			"",
-			[]string{"", ""},
-			"",
-			0,
-			"",
-			val.Service,
-			val.Source,
-			"",
-			"",
-			0,
-			"",
-			val.Time,
-			time.Now(),
-			"",
-			"",
-			"",
-			"",
-			"",
-		)
+		transformedLog := models.AggregatedLog{
+			EntryType:     val.EntryType,
+			Index:         val.Index,
+			InstanceID:    val.InstanceID,
+			Level:         val.Level,
+			Message:       "FileSystem: " + val.Message,
+			Service:       val.Service,
+			Source:        val.Source,
+			TimeGenerated: val.Time,
+			TimeWritten:   time.Now(),
+		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
 	fmt.Println(transformedLogs)
@@ -130,57 +49,19 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 func TransformDBLogs(DBLogs *models.DBLogs) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range DBLogs.DBLog {
-		transformedLog := models.New(
-			"",
-			0,
-			"",
-			"",
-			val.Column,
-			"",
-			"",
-			"",
-			"",
-			val.Constraint,
-			[]string{"", ""},
-			val.Datatype,
-			val.Detail,
-			"",
-			0,
-			"",
-			val.Errcode,
-			0,
-			"",
-			"",
-			0,
-			"",
-			"",
-			0,
-			0,
-			0,
-			val.Level,
-			0,
-			"",
-			"",
-			"",
-			"",
-			[]string{"", ""},
-			"",
-			0,
-			val.Schema,
-			"",
-			"Database",
-			"",
-			"",
-			0,
-			val.Table_name,
-			time.Now(),
-			time.Now(),
-			"",
-			"",
-			"",
-			"",
-			"",
-		)
+		transformedLog := models.AggregatedLog{
+			Column:        val.Column,
+			CorrelationID: val.Constraint,
+			Datatype:      val.Datatype,
+			Detail:        val.Detail,
+			Errcode:       val.Errcode,
+			Level:         val.Level,
+			Schema:        val.Schema,
+			Source:        "Database",
+			TableName:     val.Table_name,
+			TimeGenerated: time.Now(),
+			TimeWritten:   time.Now(),
+		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
 	fmt.Println(transformedLogs)
@@ -190,63 +71,41 @@ func TransformDBLogs(DBLogs *models.DBLogs) (aggregatedLogs []models.AggregatedL
 func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range OSLogs.OS {
-		parsedTime, err := time.Parse(time.RFC3339, val.TimeGenerated)
+		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
+		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
+		// parsedTime, err := time.Parse(time.DateTime, val.TimeGenerated)
+
+		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
+		if err != nil {
+			fmt.Errorf("failed to parse milliseconds: %w", err)
+		}
+
+		seconds := parsedTime / 1000
+		nanoseconds := (parsedTime % 1000) * 1000000
+		unixTime := time.Unix(seconds, nanoseconds)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		transformedLog := models.New(
-			val.Category,
-			val.CategoryNumber,
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			val.Container,
-			"",
-			val.Data,
-			"",
-			"",
-			"",
-			val.EntryType,
-			"",
-			"",
-			val.EventID,
-			"",
-			"",
-			0,
-			"",
-			"",
-			val.Index,
-			val.InstanceID,
-			0,
-			"",
-			0,
-			"",
-			val.MachineName,
-			val.Message,
-			"",
-			val.ReplacementStrings,
-			"",
-			0,
-			"",
-			"",
-			"OS: "+val.Source,
-			val.SplitLines,
-			"",
-			0,
-			"",
-			parsedTime,
-			time.Now(),
-			"",
-			"",
-			"",
-			val.UserName,
-			"",
-		)
+		transformedLog := models.AggregatedLog{
+			Category:           val.Category,
+			CategoryNumber:     val.CategoryNumber,
+			Container:          val.Container,
+			Data:               val.Data,
+			EntryType:          val.EntryType,
+			EventID:            val.EventID,
+			Index:              val.Index,
+			InstanceID:         val.InstanceID,
+			MachineName:        val.MachineName,
+			Message:            val.Message,
+			ReplacementStrings: val.ReplacementStrings,
+			Source:             "Operational System: " + val.Source,
+			SplitLines:         val.SplitLines,
+			TimeGenerated:      unixTime,
+			TimeWritten:        time.Now(),
+			UserName:           val.UserName,
+		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
 	fmt.Println(transformedLogs)
