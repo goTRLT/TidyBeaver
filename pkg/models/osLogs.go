@@ -8,11 +8,11 @@ type OS struct {
 	Category           string   `json:"Category"`
 	CategoryNumber     int      `json:"CategoryNumber"`
 	Container          string   `json:"Container"`
-	Data               []string `json:"Data"`
+	Data               []int    `json:"Data"`
 	EntryType          int      `json:"EntryType"`
 	EventID            int      `json:"EventID"`
 	Index              int      `json:"Index"`
-	InstanceID         int      `json:"InstanceID"`
+	InstanceID         int64    `json:"InstanceID"`
 	MachineName        string   `json:"MachineName"`
 	Message            string   `json:"Message"`
 	ReplacementStrings []string `json:"ReplacementStrings"`
