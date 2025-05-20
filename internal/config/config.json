@@ -14,7 +14,7 @@
       "SSLMode": "disable"
     },
     "API": {
-      "BaseURL": "https://api.example.com",
+      "BaseURL": "http://localhost:9090/api/random-response?count=",
       "AuthToken": "your_api_token",
       "TimeoutSeconds": "30"
     },
