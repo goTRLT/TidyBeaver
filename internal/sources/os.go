@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	config "tidybeaver/internal/config"
 	models "tidybeaver/pkg/models"
 )
 
-func FetchOSLogs() (windowsEventLogs models.OSLogs, err error) {
-
+func FetchOSLogs() (OSLogs models.OSLogs, err error) {
 	output1, output2, output3, err := RunCommands()
 
 	if err != nil {
@@ -17,24 +17,24 @@ func FetchOSLogs() (windowsEventLogs models.OSLogs, err error) {
 	}
 
 	out, err := MergeJSONOutputs(output1, output2, output3)
-	// fmt.Println("out", string(out))
+	fmt.Println("out", string(out))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = json.Unmarshal(out, &windowsEventLogs.OS)
+	err = json.Unmarshal(out, &OSLogs.OS)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// fmt.Print("wel", windowsEventLogs)
+	fmt.Print("wel ", OSLogs)
 
-	return windowsEventLogs, err
+	return OSLogs, err
 }
 
 func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err error) {
-	cmdApp := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest 2 | ConvertTo-Json -Depth 2; ")
+	cmdApp := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest "+config.ConfigValues.App.LogAmount+" | ConvertTo-Json -Depth 2; ")
 	outputApp, errApp := cmdApp.Output()
 
 	if errApp != nil {
@@ -44,7 +44,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 
 	//fmt.Print("outputApp", string(outputApp))
 
-	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest 2 | ConvertTo-Json -Depth 2; ")
+	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest "+config.ConfigValues.App.LogAmount+" | ConvertTo-Json -Depth 2; ")
 	outputSys, errSys := cmdSys.Output()
 
 	if errSys != nil {
@@ -54,7 +54,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 
 	//fmt.Print("outputSys", string(outputSys))
 
-	cmdSec := exec.Command("powershell", "-Command", "Get-EventLog -LogName Security -Newest 2 | ConvertTo-Json -Depth 2")
+	cmdSec := exec.Command("powershell", "-Command", "Get-EventLog -LogName Security -Newest "+config.ConfigValues.App.LogAmount+" | ConvertTo-Json -Depth 2")
 	outputSec, errSec := cmdSec.Output()
 
 	if errSec != nil {
