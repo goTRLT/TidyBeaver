@@ -72,19 +72,18 @@ func TransformLogs() {
 	if len(SampleLogs.SampleLog) != 0 {
 		TransformedLogs := TransformSampleLogs(&SampleLogs)
 		Aggregate(&TransformedLogs)
-		// for _, log := range transformedLogs {
-		// 	AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, log)
-		// }
-		// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 	}
 	if len(OSLogs.OS) != 0 {
-		TransformOSLogs(&OSLogs)
+		TransformedLogs := TransformOSLogs(&OSLogs)
+		Aggregate(&TransformedLogs)
 	}
 	if len(FSLogs.FSLog) != 0 {
-		TransformFSLogs(&FSLogs)
+		TransformedLogs := TransformFSLogs(&FSLogs)
+		Aggregate(&TransformedLogs)
 	}
 	if len(DBLogs.DBLog) != 0 {
-		TransformDBLogs(&DBLogs)
+		TransformedLogs := TransformDBLogs(&DBLogs)
+		Aggregate(&TransformedLogs)
 	}
 	// if len(APILogs) != 0 {
 	// 	//TODO
@@ -100,8 +99,6 @@ func SaveLogs() {
 }
 
 func Aggregate(transformedLog *[]models.AggregatedLog) {
-	for _, log := range transformedLog {
-		AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, log.AggregatedLogSlice...)
-	}
+	AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, *transformedLog...)
 	fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
