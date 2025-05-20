@@ -3,7 +3,7 @@
       "Env": "development",
       "Port": "8080",
       "LogLevel": "debug",
-      "LogAmount": "50"
+      "LogAmount": "20"
     },
     "Database": {
       "Host": "localhost",
