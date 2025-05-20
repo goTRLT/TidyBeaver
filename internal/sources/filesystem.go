@@ -36,8 +36,8 @@ func FetchFSLogs() (model models.FSLogs, err error) {
 			return FileDetailedLogs, err
 		}
 
-		fmt.Println("logFile: ", logFile.Name())
-		fmt.Println("Detailed Log: ", FileDetailedLogs)
+		// fmt.Println("logFile: ", logFile.Name())
+		// fmt.Println("Detailed Log: ", FileDetailedLogs)
 	}
 	return FileDetailedLogs, err
 }
