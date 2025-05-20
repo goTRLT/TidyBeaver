@@ -13,6 +13,6 @@ type FSLogs struct {
 		Index      int       `json:"Index"`
 		EntryType  int       `json:"EntryType"`
 		Source     string    `json:"Source"`
-		InstanceID int       `json:"InstanceID"`
+		InstanceID int64     `json:"InstanceID"`
 	}
 }
