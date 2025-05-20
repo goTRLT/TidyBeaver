@@ -3,7 +3,6 @@ package aggregator
 import (
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
 	"tidybeaver/pkg/models"
 	"time"
@@ -22,7 +21,7 @@ func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models
 		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
-	fmt.Println(transformedLogs)
+	// fmt.Println(transformedLogs)
 	return transformedLogs
 }
 
@@ -42,7 +41,7 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
-	fmt.Println(transformedLogs)
+	// fmt.Println(transformedLogs)
 	return transformedLogs
 }
 
@@ -64,7 +63,7 @@ func TransformDBLogs(DBLogs *models.DBLogs) (aggregatedLogs []models.AggregatedL
 		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
-	fmt.Println(transformedLogs)
+	// fmt.Println(transformedLogs)
 	return transformedLogs
 }
 
@@ -73,16 +72,17 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 	for _, val := range OSLogs.OS {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
 		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
-		// parsedTime, err := time.Parse(time.DateTime, val.TimeGenerated)
+		parsedTime, err := time.Parse(time.DateTime, val.TimeWritten)
+		parsedTime = parsedTime.Add(0)
+		fmt.Println(parsedTime)
+		// parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
+		// if err != nil {
+		// 	log.Fatal("failed to parse milliseconds: %w", err)
+		// }
 
-		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
-		if err != nil {
-			fmt.Errorf("failed to parse milliseconds: %w", err)
-		}
-
-		seconds := parsedTime / 1000
-		nanoseconds := (parsedTime % 1000) * 1000000
-		unixTime := time.Unix(seconds, nanoseconds)
+		// seconds := parsedTime / 1000
+		// nanoseconds := (parsedTime % 1000) * 1000000
+		// unixTime := time.Unix(seconds, nanoseconds)
 
 		if err != nil {
 			log.Fatal(err)
@@ -102,13 +102,13 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 			ReplacementStrings: val.ReplacementStrings,
 			Source:             "Operational System: " + val.Source,
 			SplitLines:         val.SplitLines,
-			TimeGenerated:      unixTime,
+			TimeGenerated:      parsedTime,
 			TimeWritten:        time.Now(),
 			UserName:           val.UserName,
 		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
-	fmt.Println(transformedLogs)
+	// fmt.Println(transformedLogs)
 	return transformedLogs
 }
 
