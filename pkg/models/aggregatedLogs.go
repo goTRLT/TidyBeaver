@@ -26,7 +26,7 @@ type AggregatedLog struct {
 	Errcode            string    `json:"errcode,omitempty"`
 	EventID            int       `json:"event_id,omitempty"`
 	EventType          string    `json:"event_type,omitempty"`
-	FilePath           string    `json:"file_path,omitempty"`
+	Path               string    `json:"file_path,omitempty"`
 	FileSize           int64     `json:"file_size,omitempty"`
 	Host               string    `json:"host,omitempty"`
 	HTTPMethod         string    `json:"http_method,omitempty"`
