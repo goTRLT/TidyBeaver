@@ -2,7 +2,6 @@ package sources
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"math/rand"
 	config "tidybeaver/internal/config"
@@ -20,7 +19,7 @@ func CreateSampleLogs() (model models.SampleLogs, err error) {
 		log.Fatal(err)
 	}
 
-	fmt.Println(generatedSampleLogs)
+	// fmt.Println(generatedSampleLogs)
 	return generatedSampleLogs, err
 }
 
@@ -49,7 +48,7 @@ func GenerateSampleLogs() (model models.SampleLogs, err error) {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < config.LogAmountSet; i++ {
 		SampleLogEntry, err = GenerateLog()
-		fmt.Println(SampleLogEntry)
+		// fmt.Println(SampleLogEntry)
 		SampleLogsEntry.SampleLog = append(SampleLogsEntry.SampleLog, SampleLogEntry)
 	}
 
