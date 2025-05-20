@@ -1,7 +1,6 @@
 package aggregator
 
 import (
-	"fmt"
 	"log"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
@@ -100,5 +99,5 @@ func SaveLogs() {
 
 func Aggregate(transformedLog *[]models.AggregatedLog) {
 	AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, *transformedLog...)
-	fmt.Println(AggregatedLogs.AggregatedLogSlice)
+	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
