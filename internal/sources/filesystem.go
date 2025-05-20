@@ -32,7 +32,7 @@ func FetchFSLogs() (model models.FSLogs, err error) {
 		// indentedDetailedLog, err := json.MarshalIndent(FileDetailedLogs.StandardLog, "", "  ")
 
 		if err != nil {
-			fmt.Println("Error marshalling the Indented Detailed Log:", err)
+			log.Fatal("Error marshalling the Indented Detailed Log:", err)
 			return FileDetailedLogs, err
 		}
 
