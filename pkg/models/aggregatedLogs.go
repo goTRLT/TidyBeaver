@@ -17,7 +17,7 @@ type AggregatedLog struct {
 	Constraint         string    `json:"constraint,omitempty"`
 	Container          string    `json:"container,omitempty"`
 	CorrelationID      string    `json:"correlation_id,omitempty"`
-	Data               []string  `json:"Data,omitempty"`
+	Data               []int     `json:"Data,omitempty"`
 	Datatype           string    `json:"datatype,omitempty"`
 	Detail             string    `json:"detail,omitempty"`
 	Endpoint           string    `json:"endpoint,omitempty"`
@@ -31,7 +31,7 @@ type AggregatedLog struct {
 	Host               string    `json:"host,omitempty"`
 	HTTPMethod         string    `json:"http_method,omitempty"`
 	Index              int       `json:"index,omitempty"`
-	InstanceID         int       `json:"instance_id,omitempty"`
+	InstanceID         int64     `json:"instance_id,omitempty"`
 	LatencyMs          int       `json:"latency_ms,omitempty"`
 	Level              string    `json:"level,omitempty"`
 	LineNumber         int       `json:"line_number,omitempty"`
