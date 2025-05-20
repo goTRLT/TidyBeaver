@@ -1,7 +1,6 @@
 package aggregator
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -73,7 +72,7 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 	for _, val := range OSLogs.OS {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
 		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
-		fmt.Println(val.TimeWritten)
+		// fmt.Println(val.TimeWritten)
 
 		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
 		if err != nil {
@@ -84,7 +83,7 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 		nanoseconds := (parsedTime % 1000) * 1000000
 		unixTime := time.Unix(seconds, nanoseconds)
 		unixTime = unixTime.Round(time.Millisecond)
-		fmt.Println("unix: ", unixTime)
+		// fmt.Println("unix: ", unixTime)
 
 		if err != nil {
 			log.Fatal(err)
@@ -107,6 +106,37 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 			TimeGenerated:      unixTime,
 			TimeWritten:        time.Now(),
 			UserName:           val.UserName,
+		}
+		transformedLogs = append(transformedLogs, transformedLog)
+	}
+	// fmt.Println(transformedLogs)
+	return transformedLogs
+}
+
+func TransformAPILogs(OSLogs *models.APILog) (aggregatedLogs []models.AggregatedLog) {
+	var transformedLogs []models.AggregatedLog
+	for _, val := range APILogs {
+
+		parsedTime, err := strconv.ParseInt(val.Timestamp, 10, 64)
+
+		if err != nil {
+			log.Fatal("failed to parse milliseconds: %w", err)
+		}
+
+		seconds := parsedTime / 1000
+		nanoseconds := (parsedTime % 1000) * 1000000
+		unixTime := time.Unix(seconds, nanoseconds)
+		unixTime = unixTime.Round(time.Millisecond)
+
+		transformedLog := models.AggregatedLog{
+			Message:       val.Message,
+			StatusCode:    val.StatusCode,
+			ResponseBody:  val.RequestID,
+			Path:          val.Path,
+			Detail:        val.Status,
+			TimeGenerated: unixTime,
+			Source:        "API",
+			TimeWritten:   time.Now(),
 		}
 		transformedLogs = append(transformedLogs, transformedLog)
 	}
