@@ -8,9 +8,8 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-var FileDetailedLogs models.FSLogs
-
 func FetchFSLogs() (model models.FSLogs, err error) {
+	var FSLogs models.FSLogs
 	files, err := os.ReadDir(`.\Logs`)
 
 	if err != nil {
@@ -27,17 +26,28 @@ func FetchFSLogs() (model models.FSLogs, err error) {
 		}
 
 		defer logFile.Close()
+		var tempLogs models.FSLogs
+
 		decodedJson := json.NewDecoder(logFile)
-		decodedJson.Decode(&FileDetailedLogs)
-		// indentedDetailedLog, err := json.MarshalIndent(FileDetailedLogs.StandardLog, "", "  ")
+		decodedJson.Decode(&tempLogs)
+
+		if err != nil {
+			log.Printf("Error decoding file %s: %v", file.Name(), err)
+			continue
+		}
+
+		FSLogs.FSLog = append(FSLogs.FSLog, tempLogs.FSLog...)
+
+		indentedFSLog, err := json.MarshalIndent(tempLogs, "", "  ")
 
 		if err != nil {
 			log.Fatal("Error marshalling the Indented Detailed Log:", err)
-			return FileDetailedLogs, err
+			return FSLogs, err
 		}
 
-		// fmt.Println("logFile: ", logFile.Name())
-		// fmt.Println("Detailed Log: ", FileDetailedLogs)
+		fmt.Println("logFile: ", logFile.Name())
+		fmt.Println("indentedFSLog: ", string(indentedFSLog))
+		fmt.Println("FSLogs: ", FSLogs)
 	}
-	return FileDetailedLogs, err
+	return FSLogs, err
 }
