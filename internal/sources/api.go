@@ -2,7 +2,6 @@ package sources
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"tidybeaver/internal/config"
@@ -21,7 +20,7 @@ func FetchAPILogs() (APILogs models.APILogs, err error) {
 
 	defer resp.Body.Close()
 
-	fmt.Println("Resp ", resp)
+	// fmt.Println("Resp ", resp)
 
 	var responses []models.APILog
 
@@ -29,7 +28,7 @@ func FetchAPILogs() (APILogs models.APILogs, err error) {
 		log.Fatal(err)
 	}
 
-	fmt.Println("ActResp ", responses)
+	// fmt.Println("ActResp ", responses)
 
 	APILogs.APILog = append(APILogEntry, responses...)
 
