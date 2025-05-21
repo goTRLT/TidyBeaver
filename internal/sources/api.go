@@ -2,33 +2,36 @@ package sources
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"tidybeaver/internal/config"
 	"tidybeaver/pkg/models"
 )
 
-func FetchAPILogs() (APILogs []models.APILogs, err error) {
+func FetchAPILogs() (APILogs models.APILogs, err error) {
 
+	var APILogEntry []models.APILog
 	//TODO Add Timeout
 	resp, err := http.Get(config.ConfigValues.API.BaseURL + config.ConfigValues.App.LogAmount)
 
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
 	defer resp.Body.Close()
 
-	// fmt.Println("Resp ", resp)
+	fmt.Println("Resp ", resp)
 
 	var responses []models.APILog
 
 	if err := json.NewDecoder(resp.Body).Decode(&responses); err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
-	// fmt.Println("ActResp ", responses)
+	fmt.Println("ActResp ", responses)
 
-	append(APILogs, responses...)
+	APILogs.APILog = append(APILogEntry, responses...)
 
 	return APILogs, err
 }
