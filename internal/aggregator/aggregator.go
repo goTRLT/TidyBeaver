@@ -91,7 +91,7 @@ func TransformLogs() {
 		TransformedLogs := TransformDBLogs(&DBLogs)
 		Aggregate(&TransformedLogs)
 	}
-	if len(APILogs) != 0 {
+	if len(APILogs.APILog) != 0 {
 		TransformedLogs := TransformAPILogs(&APILogs)
 		Aggregate(&TransformedLogs)
 	}
