@@ -1,8 +1,6 @@
 package aggregator
 
 import (
-	"fmt"
-	"log"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
 	storage "tidybeaver/internal/storage"
@@ -16,6 +14,7 @@ var FSLogs models.FSLogs
 var APILogs models.APILogs
 var MSVLogs []string //Placeholder
 var DBLogs models.DBLogs
+var Errors []error
 
 func Init() {
 	FetchLogs()
@@ -30,24 +29,22 @@ func FetchLogs() {
 		SampleLogs, err = source.CreateSampleLogs()
 
 		if err != nil {
-			log.Fatal(err)
+			AggregateErrors(err)
 		}
 
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 			APILogs, err = source.FetchAPILogs()
 
-			fmt.Println("Api logs ", APILogs)
-
 			if err != nil {
-				log.Fatal(err)
+				AggregateErrors(err)
 			}
 		}
 		if config.UserInputConfigValues.UseDatabase {
 			DBLogs, err = source.FetchDBLogs()
 
 			if err != nil {
-				log.Fatal(err)
+				AggregateErrors(err)
 			}
 
 		}
@@ -55,7 +52,7 @@ func FetchLogs() {
 			FSLogs, err = source.FetchFSLogs()
 
 			if err != nil {
-				log.Fatal(err)
+				AggregateErrors(err)
 			}
 
 		}
@@ -67,7 +64,7 @@ func FetchLogs() {
 			OSLogs, err = source.FetchOSLogs()
 
 			if err != nil {
-				log.Fatal(err)
+				AggregateErrors(err)
 			}
 
 		}
@@ -76,24 +73,43 @@ func FetchLogs() {
 
 func TransformLogs() {
 	if len(SampleLogs.SampleLog) != 0 {
-		TransformedLogs := TransformSampleLogs(&SampleLogs)
-		Aggregate(&TransformedLogs)
+		TransformedLogs, err := TransformSampleLogs(&SampleLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
 	}
 	if len(OSLogs.OS) != 0 {
-		TransformedLogs := TransformOSLogs(&OSLogs)
-		Aggregate(&TransformedLogs)
+		TransformedLogs, err := TransformOSLogs(&OSLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
 	}
 	if len(FSLogs.FSLog) != 0 {
-		TransformedLogs := TransformFSLogs(&FSLogs)
-		Aggregate(&TransformedLogs)
+		TransformedLogs, err := TransformFSLogs(&FSLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
 	}
 	if len(DBLogs.DBLog) != 0 {
-		TransformedLogs := TransformDBLogs(&DBLogs)
-		Aggregate(&TransformedLogs)
+		TransformedLogs, err := TransformDBLogs(&DBLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
 	}
 	if len(APILogs.APILog) != 0 {
-		TransformedLogs := TransformAPILogs(&APILogs)
-		Aggregate(&TransformedLogs)
+		TransformedLogs, err := TransformAPILogs(&APILogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
+	}
+	if Errors != nil {
+		TransformedLogs := TransformErrors(Errors)
+		AggregateLogs(&TransformedLogs)
 	}
 	// if len(MSVLogs) != 0 {
 	// 	//TODO
@@ -105,7 +121,12 @@ func SaveLogs() {
 	storage.DBInsertLogs(&AggregatedLogs)
 }
 
-func Aggregate(transformedLog *[]models.AggregatedLog) {
+func AggregateLogs(transformedLog *[]models.AggregatedLog) {
 	AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, *transformedLog...)
+	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
+}
+
+func AggregateErrors(err error) {
+	Errors = append(Errors, err)
 	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
