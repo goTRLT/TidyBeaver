@@ -113,9 +113,9 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 	return transformedLogs
 }
 
-func TransformAPILogs(OSLogs *models.APILog) (aggregatedLogs []models.AggregatedLog) {
+func TransformAPILogs(APILogs *models.APILogs) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range APILogs {
+	for _, val := range APILogs.APILog {
 
 		parsedTime, err := strconv.ParseInt(val.Timestamp, 10, 64)
 
