@@ -14,11 +14,12 @@ func ProcessLogs(AggregatedLogs *models.AggregatedLogs, SampleLogs *models.Sampl
 	if len(SampleLogs.SampleLog) != 0 {
 		ProcessSampleLogs(SampleLogs)
 	}
-	if len(OSLogs.OS) != 0 {
-		ProcessOSLogs(OSLogs)
-	}
+	fmt.Print("Lenght: ", len(FSLogs.FSLog))
 	if len(FSLogs.FSLog) != 0 {
 		ProcessFSLogs(FSLogs)
+	}
+	if len(OSLogs.OS) != 0 {
+		ProcessOSLogs(OSLogs)
 	}
 	if len(DBLogs.DBLog) != 0 {
 		ProcessDBLogs(DBLogs)
@@ -56,7 +57,7 @@ func ProcessSampleLogs(SampleLogs *models.SampleLogs) {
 }
 
 func ProcessFSLogs(FSLogs *models.FSLogs) {
-	var transformedLogs []models.AggregatedLog
+	var transformedLogs2 []models.AggregatedLog
 	for _, val := range FSLogs.FSLog {
 		transformedLog := models.AggregatedLog{
 			Category:           val.Category,
@@ -109,14 +110,14 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 			UserName:           val.UserName,
 			Query:              val.Query,
 		}
-		transformedLogs = append(transformedLogs, transformedLog)
+		transformedLogs2 = append(transformedLogs2, transformedLog)
+		fmt.Println("transformedLog2: ", transformedLogs2)
 	}
-
-	if transformedLogs == nil {
+	if transformedLogs2 == nil {
 		Errors = append(Errors, errors.New("error on Transforming FS Logs into Standard Logs"))
 	}
 	// fmt.Println("transformedLogs ", transformedLogs)
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
+	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs2...)
 }
 
 func ProcessDBLogs(DBLogs *models.DBLogs) {
@@ -242,7 +243,7 @@ func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 }
 
 func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
-	fmt.Println("AggregatedLogs ", AggregatedLogs)
+	// fmt.Println("AggregatedLogs ", AggregatedLogs)
 	storage.JSONSaveLogs(AggregatedLogs)
 	storage.DBInsertLogs(AggregatedLogs)
 }
