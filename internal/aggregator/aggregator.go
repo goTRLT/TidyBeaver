@@ -1,9 +1,9 @@
 package aggregator
 
 import (
+	"fmt"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
-	storage "tidybeaver/internal/storage"
 	"tidybeaver/pkg/models"
 )
 
@@ -18,8 +18,11 @@ var DBLogs models.DBLogs
 var Errors []error
 
 func Init() {
+	fmt.Println("The Tidy Beaver starts fetching Logs")
 	FetchLogs()
+	fmt.Println("The Tidy Beaver is organizing the Logs")
 	TransformLogs()
+	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
 	SaveLogs()
 }
 
@@ -72,58 +75,8 @@ func FetchLogs() {
 	}
 }
 
-func TransformLogs() {
-	if len(SampleLogs.SampleLog) != 0 {
-		TransformedLogs, err := TransformSampleLogs(&SampleLogs)
-		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
-	}
-	if len(OSLogs.OS) != 0 {
-		TransformedLogs, err := TransformOSLogs(&OSLogs)
-		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
-	}
-	if len(FSLogs.FSLog) != 0 {
-		TransformedLogs, err := TransformFSLogs(&FSLogs)
-		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
-	}
-	if len(DBLogs.DBLog) != 0 {
-		TransformedLogs, err := TransformDBLogs(&DBLogs)
-		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
-	}
-	if len(APILogs.APILog) != 0 {
-		TransformedLogs, err := TransformAPILogs(&APILogs)
-		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
-	}
-	if Errors != nil {
-		TransformedLogs := TransformErrors(Errors)
-		AggregateLogs(&TransformedLogs)
-	}
-	// if len(MSVLogs) != 0 {
-	// 	//TODO
-	// }
-}
-
-func SaveLogs() {
-	storage.SaveLogsJson(&AggregatedLogs)
-	storage.DBInsertLogs(&AggregatedLogs)
-}
-
 func AggregateLogs(transformedLog *[]models.AggregatedLog) {
-	AggregatedLogs.AggregatedLogSlice = append(AggregatedLogs.AggregatedLogSlice, *transformedLog...)
+	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, *transformedLog...)
 	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
 
