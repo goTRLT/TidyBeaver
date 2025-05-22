@@ -21,7 +21,7 @@ func Init() {
 	fmt.Println("The Tidy Beaver starts fetching Logs")
 	FetchLogs()
 	fmt.Println("The Tidy Beaver is organizing the Logs")
-	ManageLogs()
+	ProcessLogs()
 	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
 	SaveLogs()
 }
@@ -53,17 +53,4 @@ func FetchLogs() {
 			ErrorCheck(err)
 		}
 	}
-}
-
-func AggregateLogs(transformedLog *[]models.AggregatedLog) {
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, *transformedLog...)
-	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
-}
-
-func ErrorCheck(err error) {
-	if err != nil {
-		Errors = append(Errors, err)
-	}
-
-	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
