@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TransformLogs() {
+func ManageLogs() {
 	if len(SampleLogs.SampleLog) != 0 {
 		TransformedLogs, err := TransformSampleLogs(&SampleLogs)
 		AggregateLogs(&TransformedLogs)
