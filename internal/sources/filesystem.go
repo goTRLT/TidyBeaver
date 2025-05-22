@@ -38,16 +38,16 @@ func FetchFSLogs() (model models.FSLogs, err error) {
 
 		FSLogs.FSLog = append(FSLogs.FSLog, tempLogs.FSLog...)
 
-		indentedFSLog, err := json.MarshalIndent(tempLogs, "", "  ")
+		// indentedFSLog, err := json.MarshalIndent(tempLogs, "", "  ")
 
-		if err != nil {
-			log.Fatal("Error marshalling the Indented Detailed Log:", err)
-			return FSLogs, err
-		}
+		// if err != nil {
+		// 	log.Fatal("Error marshalling the Indented Detailed Log:", err)
+		// 	return FSLogs, err
+		// }
 
-		fmt.Println("logFile: ", logFile.Name())
-		fmt.Println("indentedFSLog: ", string(indentedFSLog))
-		fmt.Println("FSLogs: ", FSLogs)
+		// fmt.Println("logFile: ", logFile.Name())
+		// fmt.Println("indentedFSLog: ", string(indentedFSLog))
+		// fmt.Println("FSLogs: ", FSLogs)
 	}
 	return FSLogs, err
 }
