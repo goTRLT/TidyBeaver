@@ -1,8 +1,8 @@
 package aggregator
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 	storage "tidybeaver/internal/storage"
@@ -10,43 +10,31 @@ import (
 	"time"
 )
 
-func ManageLogs() {
+func ProcessLogs() {
 	if len(SampleLogs.SampleLog) != 0 {
-		TransformedLogs, err := TransformSampleLogs(&SampleLogs)
-		AggregateLogs(&TransformedLogs)
-		ErrorCheck(err)
-
+		ProcessSampleLogs(&SampleLogs)
 	}
 	if len(OSLogs.OS) != 0 {
-		TransformedLogs, err := TransformOSLogs(&OSLogs)
-		AggregateLogs(&TransformedLogs)
-		ErrorCheck(err)
+		ProcessOSLogs(&OSLogs)
 	}
 	if len(FSLogs.FSLog) != 0 {
-		TransformedLogs, err := TransformFSLogs(&FSLogs)
-		AggregateLogs(&TransformedLogs)
-		ErrorCheck(err)
+		ProcessFSLogs(&FSLogs)
 	}
 	if len(DBLogs.DBLog) != 0 {
-		TransformedLogs, err := TransformDBLogs(&DBLogs)
-		AggregateLogs(&TransformedLogs)
-		ErrorCheck(err)
+		ProcessDBLogs(&DBLogs)
 	}
 	if len(APILogs.APILog) != 0 {
-		TransformedLogs, err := TransformAPILogs(&APILogs)
-		AggregateLogs(&TransformedLogs)
-		ErrorCheck(err)
+		ManageAPILogs(&APILogs)
 	}
 	if len(Errors) != 0 {
-		TransformedLogs := TransformErrors(&Errors)
-		AggregateLogs(&TransformedLogs)
+		ProcessErrors(&Errors)
 	}
 	// if len(MSVLogs) != 0 {
 	// 	//TODO
 	// }
 }
 
-func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models.AggregatedLog, err error) {
+func ProcessSampleLogs(SampleLogs *models.SampleLogs) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range SampleLogs.SampleLog {
 		transformedLog := models.AggregatedLog{
@@ -61,13 +49,13 @@ func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models
 	}
 
 	if transformedLogs == nil {
-		return transformedLogs, fmt.Errorf("error on Transforming Sample Logs into Standard Logs")
+		Errors = append(Errors, errors.New("error on Transforming Sample Logs into Standard Logs"))
 	}
 	// fmt.Println(transformedLogs)
-	return transformedLogs, err
+	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
-func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedLog, err error) {
+func ProcessFSLogs(FSLogs *models.FSLogs) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range FSLogs.FSLog {
 		transformedLog := models.AggregatedLog{
@@ -125,13 +113,12 @@ func TransformFSLogs(FSLogs *models.FSLogs) (aggregatedLogs []models.AggregatedL
 	}
 
 	if transformedLogs == nil {
-		return transformedLogs, fmt.Errorf("error on Transforming FS Logs into Standard Logs")
+		Errors = append(Errors, errors.New("error on Transforming FS Logs into Standard Logs"))
 	}
 	// fmt.Println(transformedLogs)
-	return transformedLogs, err
 }
 
-func TransformDBLogs(DBLogs *models.DBLogs) (aggregatedLogs []models.AggregatedLog, err error) {
+func ProcessDBLogs(DBLogs *models.DBLogs) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range DBLogs.DBLog {
 		transformedLog := models.AggregatedLog{
@@ -151,13 +138,12 @@ func TransformDBLogs(DBLogs *models.DBLogs) (aggregatedLogs []models.AggregatedL
 	}
 
 	if transformedLogs == nil {
-		return transformedLogs, fmt.Errorf("error on Transforming DB Logs into Standard Logs")
+		Errors = append(Errors, errors.New("error on Transforming DB Logs into Standard Logs"))
 	}
 	// fmt.Println(transformedLogs)
-	return transformedLogs, err
 }
 
-func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedLog, err error) {
+func ProcessOSLogs(OSLogs *models.OSLogs) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range OSLogs.OS {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
@@ -166,7 +152,7 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 
 		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
 		if err != nil {
-			log.Fatal("failed to parse milliseconds: %w", err)
+			Errors = append(Errors, err)
 		}
 
 		seconds := parsedTime / 1000
@@ -176,7 +162,7 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 		// fmt.Println("unix: ", unixTime)
 
 		if err != nil {
-			log.Fatal(err)
+			Errors = append(Errors, err)
 		}
 
 		transformedLog := models.AggregatedLog{
@@ -201,13 +187,12 @@ func TransformOSLogs(OSLogs *models.OSLogs) (aggregatedLogs []models.AggregatedL
 	}
 
 	if transformedLogs == nil {
-		return transformedLogs, fmt.Errorf("error on Transforming OS Logs into Standard Logs")
+		Errors = append(Errors, errors.New("error on Transforming OS Logs into Standard Logs"))
 	}
 	// fmt.Println(transformedLogs)
-	return transformedLogs, err
 }
 
-func TransformAPILogs(APILogs *models.APILogs) (aggregatedLogs []models.AggregatedLog, err error) {
+func ManageAPILogs(APILogs *models.APILogs) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range APILogs.APILog {
 
@@ -225,15 +210,14 @@ func TransformAPILogs(APILogs *models.APILogs) (aggregatedLogs []models.Aggregat
 	}
 
 	if transformedLogs == nil {
-		return transformedLogs, fmt.Errorf("error on Transforming API Logs into Standard Logs")
+		Errors = append(Errors, errors.New("error on Transforming API Logs into Standard Logs"))
 	}
 	// fmt.Println(transformedLogs)
-	return transformedLogs, err
 }
 
 // func TransformMSVLogs(MSVLogs *[]string) models.AggregatedLogs    {}
 
-func TransformErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
+func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range *Errors {
 		transformedLog := models.AggregatedLog{
@@ -256,4 +240,12 @@ func TransformErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 func SaveLogs() {
 	storage.JSONSaveLogs(&AggregatedLogs)
 	storage.DBInsertLogs(&AggregatedLogs)
+}
+
+func ErrorCheck(err error) {
+	if err != nil {
+		Errors = append(Errors, err)
+	}
+
+	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
