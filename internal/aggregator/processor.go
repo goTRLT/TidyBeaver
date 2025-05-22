@@ -38,7 +38,7 @@ func ManageLogs() {
 		ErrorCheck(err)
 	}
 	if len(Errors) != 0 {
-		TransformedLogs := TransformErrors(Errors)
+		TransformedLogs := TransformErrors(&Errors)
 		AggregateLogs(&TransformedLogs)
 	}
 	// if len(MSVLogs) != 0 {
@@ -233,9 +233,9 @@ func TransformAPILogs(APILogs *models.APILogs) (aggregatedLogs []models.Aggregat
 
 // func TransformMSVLogs(MSVLogs *[]string) models.AggregatedLogs    {}
 
-func TransformErrors(Errors []error) (aggregatedLogs []models.AggregatedLog) {
+func TransformErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range Errors {
+	for _, val := range *Errors {
 		transformedLog := models.AggregatedLog{
 			Category:      "ERROR",
 			Message:       val.Error(),
