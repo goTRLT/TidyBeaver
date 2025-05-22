@@ -31,46 +31,28 @@ func FetchLogs() {
 	var err error
 	if config.UserInputConfigValues.UseSampleLogs {
 		SampleLogs, err = source.CreateSampleLogs()
-
-		if err != nil {
-			AggregateErrors(err)
-		}
+		ErrorCheck(err)
 
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 			APILogs, err = source.FetchAPILogs()
+			ErrorCheck(err)
 
-			if err != nil {
-				AggregateErrors(err)
-			}
 		}
 		if config.UserInputConfigValues.UseDatabase {
 			DBLogs, err = source.FetchDBLogs()
-
-			if err != nil {
-				AggregateErrors(err)
-			}
-
+			ErrorCheck(err)
 		}
 		if config.UserInputConfigValues.UseFileSystem {
 			FSLogs, err = source.FetchFSLogs()
-
-			if err != nil {
-				AggregateErrors(err)
-			}
-
+			ErrorCheck(err)
 		}
 		if config.UserInputConfigValues.UseMicroservice {
 			//TODO
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
-
 			OSLogs, err = source.FetchOSLogs()
-
-			if err != nil {
-				AggregateErrors(err)
-			}
-
+			ErrorCheck(err)
 		}
 	}
 }
@@ -80,7 +62,10 @@ func AggregateLogs(transformedLog *[]models.AggregatedLog) {
 	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
 
-func AggregateErrors(err error) {
-	Errors = append(Errors, err)
+func ErrorCheck(err error) {
+	if err != nil {
+		Errors = append(Errors, err)
+	}
+
 	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
