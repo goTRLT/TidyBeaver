@@ -7,6 +7,7 @@ import (
 	"tidybeaver/pkg/models"
 )
 
+// Change to non-global variables
 var AggregatedLogs models.AggregatedLogs
 var SampleLogs models.SampleLogs
 var OSLogs models.OSLogs
@@ -22,7 +23,7 @@ func Init() {
 	SaveLogs()
 }
 
-// Refactor to Helper Function
+// Refactor to Helper Function and add goroutines/channels
 func FetchLogs() {
 	var err error
 	if config.UserInputConfigValues.UseSampleLogs {
