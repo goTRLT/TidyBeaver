@@ -4,7 +4,7 @@
 Development Steps
 - [X] 1. Watch a directory and parse logs in real-time
 - [X] 2. Save structured logs (JSON) into local files
-- [ ] 3. Send logs via HTTP POST and store them
+- [X] 3. Send logs via HTTP POST and store them
 - [ ] 4. Query logs by service or severity
 - [ ] 5. Add structured logging from sample Go microservices
 - [X] 6. Accept logs in multiple formats (plain text, JSON)
@@ -14,7 +14,7 @@ Development Steps
 - [ ] 10. Push alerts to Slack
 - [ ] 11. Build a web dashboard using Go (with gin + html/template) that queries your aggregator API.
 - [ ] 12. Unit testing with testing package
-- [ ] 13. Logging best practices (structured logs, correlation IDs)
+- [X] 13. Logging best practices (structured logs, correlation IDs)
 - [ ] 14. Use gRPC for service-to-service log transfer
 - [ ] 15. Use Kafka for log transfer
 - [ ] 16. Add to README: architecture, instructions and screenshots
