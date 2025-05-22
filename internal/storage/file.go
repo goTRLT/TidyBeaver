@@ -7,7 +7,7 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func SaveLogsJson(Logs *models.AggregatedLogs) {
+func JSONSaveLogs(Logs *models.AggregatedLogs) {
 	encodedLogs, err := json.Marshal(Logs)
 	if err != nil {
 		return
