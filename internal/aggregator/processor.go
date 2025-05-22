@@ -5,9 +5,55 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	storage "tidybeaver/internal/storage"
 	"tidybeaver/pkg/models"
 	"time"
 )
+
+func TransformLogs() {
+	if len(SampleLogs.SampleLog) != 0 {
+		TransformedLogs, err := TransformSampleLogs(&SampleLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
+	}
+	if len(OSLogs.OS) != 0 {
+		TransformedLogs, err := TransformOSLogs(&OSLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
+	}
+	if len(FSLogs.FSLog) != 0 {
+		TransformedLogs, err := TransformFSLogs(&FSLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
+	}
+	if len(DBLogs.DBLog) != 0 {
+		TransformedLogs, err := TransformDBLogs(&DBLogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
+	}
+	if len(APILogs.APILog) != 0 {
+		TransformedLogs, err := TransformAPILogs(&APILogs)
+		AggregateLogs(&TransformedLogs)
+		if err != nil {
+			AggregateErrors(err)
+		}
+	}
+	if Errors != nil {
+		TransformedLogs := TransformErrors(Errors)
+		AggregateLogs(&TransformedLogs)
+	}
+	// if len(MSVLogs) != 0 {
+	// 	//TODO
+	// }
+}
 
 func TransformSampleLogs(SampleLogs *models.SampleLogs) (aggregatedLogs []models.AggregatedLog, err error) {
 	var transformedLogs []models.AggregatedLog
@@ -214,4 +260,9 @@ func TransformErrors(Errors []error) (aggregatedLogs []models.AggregatedLog) {
 	}
 	// fmt.Println(transformedLogs)
 	return transformedLogs
+}
+
+func SaveLogs() {
+	storage.SaveLogsJson(&AggregatedLogs)
+	storage.DBInsertLogs(&AggregatedLogs)
 }
