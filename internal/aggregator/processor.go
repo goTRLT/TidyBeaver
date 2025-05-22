@@ -14,39 +14,30 @@ func TransformLogs() {
 	if len(SampleLogs.SampleLog) != 0 {
 		TransformedLogs, err := TransformSampleLogs(&SampleLogs)
 		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
+		ErrorCheck(err)
+
 	}
 	if len(OSLogs.OS) != 0 {
 		TransformedLogs, err := TransformOSLogs(&OSLogs)
 		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
+		ErrorCheck(err)
 	}
 	if len(FSLogs.FSLog) != 0 {
 		TransformedLogs, err := TransformFSLogs(&FSLogs)
 		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
+		ErrorCheck(err)
 	}
 	if len(DBLogs.DBLog) != 0 {
 		TransformedLogs, err := TransformDBLogs(&DBLogs)
 		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
+		ErrorCheck(err)
 	}
 	if len(APILogs.APILog) != 0 {
 		TransformedLogs, err := TransformAPILogs(&APILogs)
 		AggregateLogs(&TransformedLogs)
-		if err != nil {
-			AggregateErrors(err)
-		}
+		ErrorCheck(err)
 	}
-	if Errors != nil {
+	if len(Errors) != 0 {
 		TransformedLogs := TransformErrors(Errors)
 		AggregateLogs(&TransformedLogs)
 	}
@@ -263,6 +254,6 @@ func TransformErrors(Errors []error) (aggregatedLogs []models.AggregatedLog) {
 }
 
 func SaveLogs() {
-	storage.SaveLogsJson(&AggregatedLogs)
+	storage.JSONSaveLogs(&AggregatedLogs)
 	storage.DBInsertLogs(&AggregatedLogs)
 }
