@@ -32,12 +32,10 @@ func FetchLogs() {
 	if config.UserInputConfigValues.UseSampleLogs {
 		SampleLogs, err = source.CreateSampleLogs()
 		ErrorCheck(err)
-
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 			APILogs, err = source.FetchAPILogs()
 			ErrorCheck(err)
-
 		}
 		if config.UserInputConfigValues.UseDatabase {
 			DBLogs, err = source.FetchDBLogs()
