@@ -21,7 +21,7 @@ func Init() {
 	fmt.Println("The Tidy Beaver starts fetching Logs")
 	FetchLogs()
 	fmt.Println("The Tidy Beaver is organizing the Logs")
-	TransformLogs()
+	ManageLogs()
 	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
 	SaveLogs()
 }
