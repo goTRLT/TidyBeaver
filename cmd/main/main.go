@@ -11,6 +11,6 @@ var UserInputConfigurations config.UserInputConfigurations
 
 func main() {
 	fmt.Println("The Tidy Beaver wakes up and says: Hello there!")
-	config.GetSetConfigs()
+	config.Init()
 	aggregator.Init()
 }
