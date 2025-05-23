@@ -59,7 +59,7 @@ type UserInputConfigurations struct {
 	UseSampleLogs    bool
 }
 
-func GetSetConfigs() (Configs, UserInputConfigurations) {
+func Init() (Configs, UserInputConfigurations) {
 	getDefaultConfig()
 	getCustomConfig()
 	printConfigs()
