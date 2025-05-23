@@ -20,8 +20,10 @@ var Errors []error
 func Init() {
 	fmt.Println("The Tidy Beaver starts fetching Logs")
 	FetchLogs()
+
 	fmt.Println("The Tidy Beaver is organizing the Logs")
 	ProcessLogs(&AggregatedLogs, &SampleLogs, &OSLogs, &FSLogs, &APILogs, &MSVLogs, &DBLogs, &Errors)
+	
 	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
 	SaveLogs(&AggregatedLogs)
 }
