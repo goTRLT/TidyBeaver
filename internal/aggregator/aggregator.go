@@ -22,8 +22,15 @@ func Init() {
 	FetchLogs()
 
 	fmt.Println("The Tidy Beaver is organizing the Logs")
-	ProcessLogs(&AggregatedLogs, &SampleLogs, &OSLogs, &FSLogs, &APILogs, &MSVLogs, &DBLogs, &Errors)
-	
+	ProcessLogs(&AggregatedLogs)
+	ProcessLogs(&SampleLogs)
+	ProcessLogs(&OSLogs)
+	ProcessLogs(&FSLogs)
+	ProcessLogs(&APILogs)
+	ProcessLogs(&MSVLogs)
+	ProcessLogs(&DBLogs)
+	ProcessLogs(&Errors)
+
 	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
 	SaveLogs(&AggregatedLogs)
 }
