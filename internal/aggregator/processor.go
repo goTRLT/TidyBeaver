@@ -10,29 +10,47 @@ import (
 	"time"
 )
 
-func ProcessLogs(AggregatedLogs *models.AggregatedLogs, SampleLogs *models.SampleLogs, OSLogs *models.OSLogs, FSLogs *models.FSLogs, APILogs *models.APILogs, MSVLogs *[]string, DBLogs *models.DBLogs, Errors *[]error) {
-	if len(SampleLogs.SampleLog) != 0 {
-		ProcessSampleLogs(SampleLogs)
+// func ProcessLogs(AggregatedLogs *models.AggregatedLogs, SampleLogs *models.SampleLogs, OSLogs *models.OSLogs, FSLogs *models.FSLogs, APILogs *models.APILogs, MSVLogs *[]string, DBLogs *models.DBLogs, Errors *[]error) {
+// 	if len(SampleLogs.SampleLog) != 0 {
+// 		ProcessSampleLogs(SampleLogs)
+// 	}
+// 	fmt.Print("Lenght: ", len(FSLogs.FSLog))
+// 	if len(FSLogs.FSLog) != 0 {
+// 		ProcessFSLogs(FSLogs)
+// 	}
+// 	if len(OSLogs.OS) != 0 {
+// 		ProcessOSLogs(OSLogs)
+// 	}
+// 	if len(DBLogs.DBLog) != 0 {
+// 		ProcessDBLogs(DBLogs)
+// 	}
+// 	if len(APILogs.APILog) != 0 {
+// 		ManageAPILogs(APILogs)
+// 	}
+// 	if len(*Errors) != 0 {
+// 		ProcessErrors(Errors)
+// 	}
+// 	// if len(MSVLogs) != 0 {
+// 	// 	//TODO
+// 	// }
+// }
+
+func ProcessLogs(LogType any) {
+	switch LogType.(type) {
+	case *models.SampleLogs:
+		go ProcessSampleLogs(&SampleLogs)
+	case *models.OSLogs:
+		go ProcessOSLogs(&OSLogs)
+	case *models.FSLogs:
+		go ProcessFSLogs(&FSLogs)
+	case *models.APILogs:
+		go ProcessAPILogs(&APILogs)
+	// case *models.MSVLogs:
+	case *models.DBLogs:
+		go ProcessDBLogs(&DBLogs)
+	case *[]error:
+		go ProcessErrors(&Errors)
 	}
-	fmt.Print("Lenght: ", len(FSLogs.FSLog))
-	if len(FSLogs.FSLog) != 0 {
-		ProcessFSLogs(FSLogs)
-	}
-	if len(OSLogs.OS) != 0 {
-		ProcessOSLogs(OSLogs)
-	}
-	if len(DBLogs.DBLog) != 0 {
-		ProcessDBLogs(DBLogs)
-	}
-	if len(APILogs.APILog) != 0 {
-		ManageAPILogs(APILogs)
-	}
-	if len(*Errors) != 0 {
-		ProcessErrors(Errors)
-	}
-	// if len(MSVLogs) != 0 {
-	// 	//TODO
-	// }
 }
 
 func ProcessSampleLogs(SampleLogs *models.SampleLogs) {
@@ -196,7 +214,7 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
-func ManageAPILogs(APILogs *models.APILogs) {
+func ProcessAPILogs(APILogs *models.APILogs) {
 	var transformedLogs []models.AggregatedLog
 	for _, val := range APILogs.APILog {
 
