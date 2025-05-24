@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"math/rand"
-	"os"
+	"tidybeaver/internal/config"
 	models "tidybeaver/pkg/models"
 
 	"github.com/lib/pq"
@@ -12,7 +12,8 @@ import (
 
 func DBInsertLogs(logs *models.AggregatedLogs) {
 	// connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
-	connStr := `host=` + os.Getenv("DB_HOST") + ` port=` + os.Getenv("DB_PORT") + ` user=` + os.Getenv("DB_USER") + ` password=` + os.Getenv("DB_PW") + ` dbname=` + os.Getenv("DB_NAME") + ` sslmode=` + os.Getenv("SSLMODE")
+	connStr := `host=` + config.EnvVar["DB_HOST"] + ` port=` + config.EnvVar["DB_PORT"] + ` user=` + config.EnvVar["DB_USER"] + ` password=` + config.EnvVar["DB_PW"] + ` dbname=` + config.EnvVar["DB_NAME"] + ` sslmode=` + config.EnvVar["SSLMODE"]
+
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
