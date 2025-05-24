@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 // Refactor to switch from Global variables to arguments
@@ -126,8 +128,13 @@ func checkAnswer() bool {
 
 func printConfigs() {
 
-	EnvVar = os.Environ()
+	err := godotenv.Load("T:/Repo/TidyBeaver/.env")
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
 	fmt.Println("Environment Variables: ", EnvVar)
+
 	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
 
 	if err != nil {
