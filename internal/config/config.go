@@ -13,7 +13,7 @@ import (
 var ConfigValues Configs
 var UserInputConfigValues UserInputConfigurations
 var LogAmountSet int
-var EnvVar []string
+var EnvVar map[string]string
 
 type Configs struct {
 	App struct {
@@ -133,14 +133,14 @@ func printConfigs() {
 		fmt.Println("Error loading .env file")
 	}
 
-	test, err := godotenv.Read("T:/Repo/TidyBeaver/.env")
+	EnvVar, err := godotenv.Read("T:/Repo/TidyBeaver/.env")
 
 	if err != nil {
 		fmt.Println("Error marshalling defaultConfig:", err)
 		return
 	}
 
-	for val := range test {
+	for val := range EnvVar {
 		fmt.Println("Environment Variables: ", val, ":", (os.Getenv(val)))
 	}
 
