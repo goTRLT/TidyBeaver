@@ -11,9 +11,8 @@ import (
 var ConfigValues Configs
 var UserInputConfigValues UserInputConfigurations
 var LogAmountSet int
-var Env []string
+var EnvVar []string
 
-// Refactor config.json for Database sensitive data
 type Configs struct {
 	App struct {
 		Env       string `json:"Env"`
@@ -21,14 +20,6 @@ type Configs struct {
 		LogLevel  string `json:"LogLevel"`
 		LogAmount string `json:"LogAmount"`
 	} `json:"App"`
-	Database struct {
-		Host     string `json:"Host"`
-		Port     string `json:"Port"`
-		User     string `json:"User"`
-		Password string `json:"Password"`
-		Name     string `json:"Name"`
-		SSLMode  string `json:"SSLMode"`
-	} `json:"Database"`
 	API struct {
 		BaseURL        string `json:"BaseURL"`
 		AuthToken      string `json:"AuthToken"`
@@ -125,17 +116,18 @@ func checkAnswer() bool {
 		fmt.Println("Please enter a valid answer: Y for Yes or N for No ")
 		fmt.Scanln(&userInput)
 	}
-	if userInput == "Y" {
+	if userInput == "Y" || userInput == "y" {
 		return true
-	} else if userInput == "N" {
+	} else if userInput == "N" || userInput == "n" {
 		return false
 	}
 	return false
 }
 
 func printConfigs() {
-	Env = os.Environ()
-	fmt.Println("Environment Variables: ", Env)
+
+	EnvVar = os.Environ()
+	fmt.Println("Environment Variables: ", EnvVar)
 	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
 
 	if err != nil {
