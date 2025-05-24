@@ -3,6 +3,7 @@ package sources
 import (
 	"database/sql"
 	"log"
+	"os"
 	config "tidybeaver/internal/config"
 	"tidybeaver/pkg/models"
 )
@@ -10,7 +11,7 @@ import (
 var dbLogEntry models.DBLog
 
 func FetchDBLogs() (models.DBLogs, error) {
-	connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
+	connStr := `host=` + os.Getenv("DB_HOST") + ` port=` + os.Getenv("DB_PORT") + ` user=` + os.Getenv("DB_USER") + ` password=` + os.Getenv("DB_PW") + ` dbname=` + os.Getenv("DB_NAME") + ` sslmode=` + os.Getenv("SSLMODE")
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
