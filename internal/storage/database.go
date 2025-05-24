@@ -2,6 +2,7 @@ package storage
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"math/rand"
 	"tidybeaver/internal/config"
@@ -13,7 +14,12 @@ import (
 func DBInsertLogs(logs *models.AggregatedLogs) {
 	// connStr := `host=` + config.ConfigValues.Database.Host + ` port=` + config.ConfigValues.Database.Port + ` user=` + config.ConfigValues.Database.User + ` password=` + config.ConfigValues.Database.Password + ` dbname=` + config.ConfigValues.Database.Name + ` sslmode=` + config.ConfigValues.Database.SSLMode
 	connStr := `host=` + config.EnvVar["DB_HOST"] + ` port=` + config.EnvVar["DB_PORT"] + ` user=` + config.EnvVar["DB_USER"] + ` password=` + config.EnvVar["DB_PW"] + ` dbname=` + config.EnvVar["DB_NAME"] + ` sslmode=` + config.EnvVar["SSLMODE"]
-
+	fmt.Println(`host=` + string(config.EnvVar["DB_HOST"]))
+	fmt.Println(` port=` + config.EnvVar["DB_PORT"])
+	fmt.Println(` user=` + config.EnvVar["DB_USER"])
+	fmt.Println(` password=` + config.EnvVar["DB_PW"])
+	fmt.Println(` dbname=` + config.EnvVar["DB_NAME"])
+	fmt.Println(` sslmode=` + config.EnvVar["SSLMODE"])
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
