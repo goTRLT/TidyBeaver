@@ -133,7 +133,16 @@ func printConfigs() {
 		fmt.Println("Error loading .env file")
 	}
 
-	fmt.Println("Environment Variables: ", EnvVar)
+	test, err := godotenv.Read("T:/Repo/TidyBeaver/.env")
+
+	if err != nil {
+		fmt.Println("Error marshalling defaultConfig:", err)
+		return
+	}
+
+	for val := range test {
+		fmt.Println("Environment Variables: ", val)
+	}
 
 	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
 
