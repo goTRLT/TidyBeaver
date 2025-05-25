@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ var Configurations config.Configs
 var UserInputConfigurations config.UserInputConfigurations
 
 func main() {
-
+	go InitAPI()
 	fmt.Println("The Tidy Beaver wakes up and says: Hello there!")
 	config.Init()
 
