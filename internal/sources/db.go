@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"log"
 	config "tidybeaver/internal/config"
-	"tidybeaver/pkg/models"
+	types "tidybeaver/pkg/types"
 )
 
-var dbLogEntry models.DBLog
+var dbLogEntry types.DBLog
 
-func FetchDBLogs() (models.DBLogs, error) {
+func FetchDBLogs() (types.DBLogs, error) {
 	connStr := `host=` + config.EnvVar["DB_HOST"] + ` port=` + config.EnvVar["DB_PORT"] + ` user=` + config.EnvVar["DB_USER"] + ` password=` + config.EnvVar["DB_PW"] + ` dbname=` + config.EnvVar["DB_NAME"] + ` sslmode=` + config.EnvVar["SSLMODE"]
 	fmt.Println(`host=` + config.EnvVar["DB_HOST"])
 	fmt.Println(` port=` + config.EnvVar["DB_PORT"])
@@ -30,7 +30,7 @@ func FetchDBLogs() (models.DBLogs, error) {
 	}
 
 	defer rows.Close()
-	var dbLogs models.DBLogs
+	var dbLogs types.DBLogs
 
 	for rows.Next() {
 		err := rows.Scan(
