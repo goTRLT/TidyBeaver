@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	models "tidybeaver/pkg/models"
+	types "tidybeaver/pkg/types"
 )
 
-func JSONSaveLogs(Logs *models.AggregatedLogs) {
+func JSONSaveLogs(Logs *types.AggregatedLogs) {
 	encodedLogs, err := json.Marshal(Logs)
 	if err != nil {
 		return
