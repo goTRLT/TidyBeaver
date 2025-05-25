@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"log"
 	"os/exec"
-	models "tidybeaver/pkg/models"
+	types "tidybeaver/pkg/types"
 )
 
-func FetchOSLogs() (OSLogs models.OSLogs, err error) {
+func FetchOSLogs() (OSLogs types.OSLogs, err error) {
 	output1, output2, output3, err := RunCommands()
 
 	if err != nil {
