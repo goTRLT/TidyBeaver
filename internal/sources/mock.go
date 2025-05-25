@@ -5,14 +5,14 @@ import (
 	"log"
 	"math/rand"
 	config "tidybeaver/internal/config"
-	models "tidybeaver/pkg/models"
+	types "tidybeaver/pkg/types"
 	"time"
 )
 
-var SampleLogsEntry models.SampleLogs
-var SampleLogEntry models.SampleLog
+var SampleLogsEntry types.SampleLogs
+var SampleLogEntry types.SampleLog
 
-func CreateSampleLogs() (model models.SampleLogs, err error) {
+func CreateSampleLogs() (model types.SampleLogs, err error) {
 	generatedSampleLogs, err := GenerateSampleLogs()
 
 	if err != nil {
@@ -37,14 +37,14 @@ func randomTime() time.Time {
 func selectSampleMessage(sampleLevel string) string {
 	var sampleMessage string
 	if sampleLevel == "WARN" || sampleLevel == "ERROR" {
-		sampleMessage = randomChoice(models.SampleErrorMessages)
+		sampleMessage = randomChoice(types.SampleErrorMessages)
 	} else if sampleLevel == "INFO" || sampleLevel == "DEBUG" {
-		sampleMessage = randomChoice(models.SampleInfoMessages)
+		sampleMessage = randomChoice(types.SampleInfoMessages)
 	}
 	return sampleMessage
 }
 
-func GenerateSampleLogs() (model models.SampleLogs, err error) {
+func GenerateSampleLogs() (model types.SampleLogs, err error) {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < config.LogAmountSet; i++ {
 		SampleLogEntry, err = GenerateLog()
@@ -59,9 +59,9 @@ func GenerateSampleLogs() (model models.SampleLogs, err error) {
 	return SampleLogsEntry, err
 }
 
-func GenerateLog() (sampleLog models.SampleLog, err error) {
-	sampleLog.Level = randomChoice(models.SampleLevels)
-	sampleLog.Service = randomChoice(models.SampleServices)
+func GenerateLog() (sampleLog types.SampleLog, err error) {
+	sampleLog.Level = randomChoice(types.SampleLevels)
+	sampleLog.Service = randomChoice(types.SampleServices)
 	sampleLog.Message = selectSampleMessage(sampleLog.Level)
 	sampleLog.Time = randomTime()
 
