@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	models "tidybeaver/pkg/models"
+	typess "tidybeaver/pkg/types"
 )
 
-func FetchFSLogs() (model models.FSLogs, err error) {
-	var FSLogs models.FSLogs
+func FetchFSLogs() (types typess.FSLogs, err error) {
+	var FSLogs typess.FSLogs
 	files, err := os.ReadDir(`.\Logs`)
 
 	if err != nil {
@@ -26,7 +26,7 @@ func FetchFSLogs() (model models.FSLogs, err error) {
 		}
 
 		defer logFile.Close()
-		var tempLogs models.FSLogs
+		var tempLogs typess.FSLogs
 
 		decodedJson := json.NewDecoder(logFile)
 		decodedJson.Decode(&tempLogs)
