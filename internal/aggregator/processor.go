@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 	storage "tidybeaver/internal/storage"
-	"tidybeaver/pkg/models"
+	types "tidybeaver/pkg/types"
 	"time"
 )
 
@@ -37,26 +37,26 @@ import (
 
 func ProcessLogs(LogType any) {
 	switch LogType.(type) {
-	case *models.SampleLogs:
+	case *types.SampleLogs:
 		go ProcessSampleLogs(&SampleLogs)
-	case *models.OSLogs:
+	case *types.OSLogs:
 		go ProcessOSLogs(&OSLogs)
-	case *models.FSLogs:
+	case *types.FSLogs:
 		go ProcessFSLogs(&FSLogs)
-	case *models.APILogs:
+	case *types.APILogs:
 		go ProcessAPILogs(&APILogs)
 	// case *models.MSVLogs:
-	case *models.DBLogs:
+	case *types.DBLogs:
 		go ProcessDBLogs(&DBLogs)
 	case *[]error:
 		go ProcessErrors(&Errors)
 	}
 }
 
-func ProcessSampleLogs(SampleLogs *models.SampleLogs) {
-	var transformedLogs []models.AggregatedLog
+func ProcessSampleLogs(SampleLogs *types.SampleLogs) {
+	var transformedLogs []types.AggregatedLog
 	for _, val := range SampleLogs.SampleLog {
-		transformedLog := models.AggregatedLog{
+		transformedLog := types.AggregatedLog{
 			Level:         val.Level,
 			Message:       val.Message,
 			Service:       val.Service,
@@ -74,10 +74,10 @@ func ProcessSampleLogs(SampleLogs *models.SampleLogs) {
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
-func ProcessFSLogs(FSLogs *models.FSLogs) {
-	var transformedLogs2 []models.AggregatedLog
+func ProcessFSLogs(FSLogs *types.FSLogs) {
+	var transformedLogs2 []types.AggregatedLog
 	for _, val := range FSLogs.FSLog {
-		transformedLog := models.AggregatedLog{
+		transformedLog := types.AggregatedLog{
 			Category:           val.Category,
 			CategoryNumber:     val.CategoryNumber,
 			Checksum:           val.Checksum,
@@ -138,10 +138,10 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs2...)
 }
 
-func ProcessDBLogs(DBLogs *models.DBLogs) {
-	var transformedLogs []models.AggregatedLog
+func ProcessDBLogs(DBLogs *types.DBLogs) {
+	var transformedLogs []types.AggregatedLog
 	for _, val := range DBLogs.DBLog {
-		transformedLog := models.AggregatedLog{
+		transformedLog := types.AggregatedLog{
 			Column:        val.Column,
 			CorrelationID: val.Constraint,
 			Datatype:      val.Datatype,
@@ -164,8 +164,8 @@ func ProcessDBLogs(DBLogs *models.DBLogs) {
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
-func ProcessOSLogs(OSLogs *models.OSLogs) {
-	var transformedLogs []models.AggregatedLog
+func ProcessOSLogs(OSLogs *types.OSLogs) {
+	var transformedLogs []types.AggregatedLog
 	for _, val := range OSLogs.OS {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
 		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
@@ -186,7 +186,7 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 			Errors = append(Errors, err)
 		}
 
-		transformedLog := models.AggregatedLog{
+		transformedLog := types.AggregatedLog{
 			Category:           val.Category,
 			CategoryNumber:     val.CategoryNumber,
 			Container:          val.Container,
@@ -214,11 +214,11 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
-func ProcessAPILogs(APILogs *models.APILogs) {
-	var transformedLogs []models.AggregatedLog
+func ProcessAPILogs(APILogs *types.APILogs) {
+	var transformedLogs []types.AggregatedLog
 	for _, val := range APILogs.APILog {
 
-		transformedLog := models.AggregatedLog{
+		transformedLog := types.AggregatedLog{
 			Message:       val.Message,
 			StatusCode:    val.StatusCode,
 			TransactionID: val.RequestID,
@@ -238,12 +238,12 @@ func ProcessAPILogs(APILogs *models.APILogs) {
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
-// func TransformMSVLogs(MSVLogs *[]string) models.AggregatedLogs    {}
+// func TransformMSVLogs(MSVLogs *[]string) types.AggregatedLogs    {}
 
-func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
-	var transformedLogs []models.AggregatedLog
+func ProcessErrors(Errors *[]error) (aggregatedLogs []types.AggregatedLog) {
+	var transformedLogs []types.AggregatedLog
 	for _, val := range *Errors {
-		transformedLog := models.AggregatedLog{
+		transformedLog := types.AggregatedLog{
 			Category:      "ERROR",
 			Message:       val.Error(),
 			TimeGenerated: time.Now(),
@@ -260,7 +260,7 @@ func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 	return transformedLogs
 }
 
-func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
+func SaveLogs(AggregatedLogs *types.AggregatedLogs) {
 	// fmt.Println("AggregatedLogs ", AggregatedLogs)
 	storage.JSONSaveLogs(AggregatedLogs)
 	storage.DBInsertLogs(AggregatedLogs)
