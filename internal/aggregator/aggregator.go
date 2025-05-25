@@ -4,17 +4,17 @@ import (
 	"fmt"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
-	"tidybeaver/pkg/models"
+	types "tidybeaver/pkg/types"
 )
 
 // Change to non-global variables
-var AggregatedLogs models.AggregatedLogs
-var SampleLogs models.SampleLogs
-var OSLogs models.OSLogs
-var FSLogs models.FSLogs
-var APILogs models.APILogs
+var AggregatedLogs types.AggregatedLogs
+var SampleLogs types.SampleLogs
+var OSLogs types.OSLogs
+var FSLogs types.FSLogs
+var APILogs types.APILogs
 var MSVLogs []string //Placeholder
-var DBLogs models.DBLogs
+var DBLogs types.DBLogs
 var Errors []error
 
 func Init() {
