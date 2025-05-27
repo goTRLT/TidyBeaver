@@ -5,22 +5,22 @@ import (
 	"log"
 	"math/rand"
 	config "tidybeaver/internal/config"
-	types "tidybeaver/pkg/types"
+	"tidybeaver/pkg/models"
 	"time"
 )
 
-var SampleLogsEntry types.SampleLogs
-var SampleLogEntry types.SampleLog
+var MockedLogsEntry models.MockedLogs
+var MockedLogEntry models.MockedLog
 
-func CreateSampleLogs() (model types.SampleLogs, err error) {
-	generatedSampleLogs, err := GenerateSampleLogs()
+func CreateMockedLogs() (model models.MockedLogs, err error) {
+	generatedMockedLogs, err := GenerateMockedLogs()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// fmt.Println(generatedSampleLogs)
-	return generatedSampleLogs, err
+	// fmt.Println(generatedMockedLogs)
+	return generatedMockedLogs, err
 }
 
 func randomChoice(choices []string) string {
@@ -34,42 +34,42 @@ func randomTime() time.Time {
 	return now.Add(-time.Duration(randomizedOffset) * time.Second)
 }
 
-func selectSampleMessage(sampleLevel string) string {
-	var sampleMessage string
-	if sampleLevel == "WARN" || sampleLevel == "ERROR" {
-		sampleMessage = randomChoice(types.SampleErrorMessages)
-	} else if sampleLevel == "INFO" || sampleLevel == "DEBUG" {
-		sampleMessage = randomChoice(types.SampleInfoMessages)
+func selectMockedMessage(MockedLevel string) string {
+	var MockedMessage string
+	if MockedLevel == "WARN" || MockedLevel == "ERROR" {
+		MockedMessage = randomChoice(models.MockedErrorMessages)
+	} else if MockedLevel == "INFO" || MockedLevel == "DEBUG" {
+		MockedMessage = randomChoice(models.MockedInfoMessages)
 	}
-	return sampleMessage
+	return MockedMessage
 }
 
-func GenerateSampleLogs() (model types.SampleLogs, err error) {
+func GenerateMockedLogs() (model models.MockedLogs, err error) {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < config.LogAmountSet; i++ {
-		SampleLogEntry, err = GenerateLog()
-		// fmt.Println(SampleLogEntry)
-		SampleLogsEntry.SampleLog = append(SampleLogsEntry.SampleLog, SampleLogEntry)
+		MockedLogEntry, err = GenerateLog()
+		// fmt.Println(MockedLogEntry)
+		MockedLogsEntry.MockedLog = append(MockedLogsEntry.MockedLog, MockedLogEntry)
 	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return SampleLogsEntry, err
+	return MockedLogsEntry, err
 }
 
-func GenerateLog() (sampleLog types.SampleLog, err error) {
-	sampleLog.Level = randomChoice(types.SampleLevels)
-	sampleLog.Service = randomChoice(types.SampleServices)
-	sampleLog.Message = selectSampleMessage(sampleLog.Level)
-	sampleLog.Time = randomTime()
+func GenerateLog() (MockedLog models.MockedLog, err error) {
+	MockedLog.Level = randomChoice(models.MockedLevels)
+	MockedLog.Service = randomChoice(models.MockedServices)
+	MockedLog.Message = selectMockedMessage(MockedLog.Level)
+	MockedLog.Time = randomTime()
 
-	if sampleLog.Level == "" || sampleLog.Service == "" || sampleLog.Message == "" {
-		err = errors.New("error while setting level, service or message for the sample log")
+	if MockedLog.Level == "" || MockedLog.Service == "" || MockedLog.Message == "" {
+		err = errors.New("error while setting level, service or message for the Mocked log")
 		log.Fatal(err)
-		return sampleLog, err
+		return MockedLog, err
 	}
 
-	return sampleLog, err
+	return MockedLog, err
 }
