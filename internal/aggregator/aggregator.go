@@ -4,26 +4,26 @@ import (
 	"fmt"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
-	types "tidybeaver/pkg/types"
+	"tidybeaver/pkg/models"
 )
 
 // Change to non-global variables
-var AggregatedLogs types.AggregatedLogs
-var SampleLogs types.SampleLogs
-var OSLogs types.OSLogs
-var FSLogs types.FSLogs
-var APILogs types.APILogs
+var AggregatedLogs models.AggregatedLogs
+var MockedLogs models.MockedLogs
+var OSLogs models.OSLogs
+var FSLogs models.FSLogs
+var APILogs models.APILogs
 var MSVLogs []string //Placeholder
-var DBLogs types.DBLogs
+var DBLogs models.DBLogs
 var Errors []error
 
 func Init() {
 	fmt.Println("The Tidy Beaver starts fetching Logs")
-	FetchLogs()
+	FetchSourcesLogs()
 
 	fmt.Println("The Tidy Beaver is organizing the Logs")
 	ProcessLogs(&AggregatedLogs)
-	ProcessLogs(&SampleLogs)
+	ProcessLogs(&MockedLogs)
 	ProcessLogs(&OSLogs)
 	ProcessLogs(&FSLogs)
 	ProcessLogs(&APILogs)
@@ -36,36 +36,43 @@ func Init() {
 }
 
 // Refactor to Helper Function and add goroutines/channels
-func FetchLogs() {
+func FetchSourcesLogs() {
 	var err error
-	if config.UserInputConfigValues.UseSampleLogs {
-		SampleLogs, err = source.CreateSampleLogs()
-		ErrorCheck(err)
-		// fmt.Println("Sample ", SampleLogs)
+	if config.UserInputConfigValues.UseMockedLogs {
+		MockedLogs, err = source.CreateMockedLogs()
+		CheckAppendError(err)
+		// fmt.Println("Mocked ", MockedLogs)
 	} else {
 		if config.UserInputConfigValues.UseAPI {
 			APILogs, err = source.FetchAPILogs()
-			ErrorCheck(err)
+			CheckAppendError(err)
 			// fmt.Println("API ", APILogs)
-
 		}
 		if config.UserInputConfigValues.UseDatabase {
 			DBLogs, err = source.FetchDBLogs()
-			ErrorCheck(err)
+			CheckAppendError(err)
 			// fmt.Println("DBLogs ", DBLogs)
 		}
 		if config.UserInputConfigValues.UseFileSystem {
 			FSLogs, err = source.FetchFSLogs()
-			ErrorCheck(err)
+			CheckAppendError(err)
 			fmt.Println("FSLogs ", FSLogs)
 		}
-		if config.UserInputConfigValues.UseMicroservice {
+		if config.UserInputConfigValues.UseMsvc {
 			//TODO
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
 			OSLogs, err = source.FetchOSLogs()
-			ErrorCheck(err)
+			CheckAppendError(err)
 			// fmt.Println("OSLogs ", OSLogs)
 		}
 	}
+}
+
+func CheckAppendError(err error) {
+	if err != nil {
+		Errors = append(Errors, err)
+	}
+
+	// fmt.Println(AggregatedLogs.AggregatedLogSlice)
 }
