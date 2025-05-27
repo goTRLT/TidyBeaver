@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"tidybeaver/pkg/types"
+	"tidybeaver/pkg/models"
 )
 
 func ResponseHandler(w http.ResponseWriter, r *http.Request) {
@@ -16,9 +16,9 @@ func ResponseHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	var result []types.APIResponse
+	var result []models.APIResponse
 	for i := 0; i < count; i++ {
-		result = append(result, GenerateRandomResponse(r.URL.Path))
+		result = append(result, CreateRandomResponse(r.URL.Path))
 	}
 
 	w.Header().Set("Content-Type", "application/json")
