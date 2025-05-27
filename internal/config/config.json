@@ -11,10 +11,10 @@
       "TimeoutSeconds": "30"
     },
     "LogPaths": {
-      "LocalLogFolder": "C:/",
+      "LocalLogFolder": "C:/TidyBeaverLogs/",
       "IncludeSubDirs": true
     },
-    "Microservices": {
+    "Microservice": {
       "AuthServiceURL": "http://localhost:8001",
       "PaymentServiceURL": "http://localhost:8002",
       "LogServiceURL": "http://localhost:8003"
