@@ -31,11 +31,11 @@ type Configs struct {
 		LocalLogFolder string `json:"LocalLogFolder"`
 		IncludeSubDirs bool   `json:"IncludeSubDirs"`
 	} `json:"LogPaths"`
-	Microservices struct {
+	Microservice struct {
 		AuthServiceURL    string `json:"AuthServiceURL"`
 		PaymentServiceURL string `json:"PaymentService"`
 		LogServiceURL     string `json:"LogServiceURL"`
-	} `json:"Microservices"`
+	} `json:"Microservice"`
 	WindowsEventLog struct {
 		Enabled  bool     `json:"Enabled"`
 		Channels []string `json:"Channels"`
@@ -48,8 +48,8 @@ type UserInputConfigurations struct {
 	UseDatabase      bool
 	UseWindowsEvents bool
 	UseAPI           bool
-	UseMicroservice  bool
-	UseSampleLogs    bool
+	UseMsvc          bool
+	UseMockedLogs    bool
 }
 
 func Init() (Configs, UserInputConfigurations) {
@@ -86,27 +86,28 @@ func getCustomConfig() {
 			UserInputConfigValues.UseAPI = true
 			UserInputConfigValues.UseDatabase = true
 			UserInputConfigValues.UseFileSystem = true
-			UserInputConfigValues.UseMicroservice = true
+			UserInputConfigValues.UseMsvc = true
 			UserInputConfigValues.UseWindowsEvents = true
 
 		} else if !checkAnswer() {
-			fmt.Println("Do you want to use a Local Folder as a source for logs? ")
+			fmt.Println("Answer Y (Yes) or N (No) wether you'd like to use each source bellow:")
+			fmt.Println("Local Folder? (C:Logs) ")
 			UserInputConfigValues.UseFileSystem = checkAnswer()
 
-			fmt.Println("Do you want to use a Postgres Database as a source for logs? ")
+			fmt.Println("TidyBeaver's Postgres Database? ")
 			UserInputConfigValues.UseDatabase = checkAnswer()
 
-			fmt.Println("Do you want to use Windows Events as a source for logs? ")
+			fmt.Println("Windows Events? ")
 			UserInputConfigValues.UseWindowsEvents = checkAnswer()
 
-			fmt.Println("Do you want to use a mock API as a source for logs? ")
+			fmt.Println("Mocked API? ")
 			UserInputConfigValues.UseAPI = checkAnswer()
 
-			fmt.Println("Do you want to use a mock Microservice as a source for logs? ")
-			UserInputConfigValues.UseMicroservice = checkAnswer()
+			fmt.Println("Mocked Microservice? ")
+			UserInputConfigValues.UseMsvc = checkAnswer()
 		}
 	} else {
-		UserInputConfigValues.UseSampleLogs = true
+		UserInputConfigValues.UseMockedLogs = true
 	}
 }
 
