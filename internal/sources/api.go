@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 	"tidybeaver/internal/config"
-	types "tidybeaver/pkg/types"
+	"tidybeaver/pkg/models"
 )
 
-func FetchAPILogs() (APILogs types.APILogs, err error) {
+func FetchAPILogs() (APILogs models.APILogs, err error) {
 
-	var APILogEntry []types.APILog
+	var APILogEntry []models.APILog
 	//TODO Add Timeout
 	resp, err := http.Get(config.ConfigValues.API.BaseURL + config.ConfigValues.App.LogAmount)
 
@@ -22,7 +22,7 @@ func FetchAPILogs() (APILogs types.APILogs, err error) {
 
 	// fmt.Println("Resp ", resp)
 
-	var responses []types.APILog
+	var responses []models.APILog
 
 	if err := json.NewDecoder(resp.Body).Decode(&responses); err != nil {
 		log.Fatal(err)
