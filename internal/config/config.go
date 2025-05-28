@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// TODO
 // Refactor to switch from Global variables to arguments
 var ConfigValues Configs
 var UserInputConfigValues UserInputConfigurations
@@ -27,10 +28,10 @@ type Configs struct {
 		AuthToken      string `json:"AuthToken"`
 		TimeoutSeconds string `json:"TimeoutSeconds"`
 	} `json:"API"`
-	LogPaths struct {
+	LogsFolderPath struct {
 		LocalLogFolder string `json:"LocalLogFolder"`
 		IncludeSubDirs bool   `json:"IncludeSubDirs"`
-	} `json:"LogPaths"`
+	} `json:"LogsFolderPath"`
 	Microservice struct {
 		AuthServiceURL    string `json:"AuthServiceURL"`
 		PaymentServiceURL string `json:"PaymentService"`
@@ -44,11 +45,11 @@ type Configs struct {
 }
 
 type UserInputConfigurations struct {
-	UseFileSystem    bool
+	UseFS            bool
 	UseDatabase      bool
 	UseWindowsEvents bool
 	UseAPI           bool
-	UseMsvc          bool
+	UseMSVC          bool
 	UseMockedLogs    bool
 }
 
@@ -59,6 +60,7 @@ func Init() (Configs, UserInputConfigurations) {
 	return ConfigValues, UserInputConfigValues
 }
 
+// TODO
 // Refactor to use configurable path or environment variable
 func getDefaultConfig() {
 	configFile, err := os.Open("internal/config/config.json")
@@ -85,14 +87,15 @@ func getCustomConfig() {
 		if checkAnswer() {
 			UserInputConfigValues.UseAPI = true
 			UserInputConfigValues.UseDatabase = true
-			UserInputConfigValues.UseFileSystem = true
-			UserInputConfigValues.UseMsvc = true
+			UserInputConfigValues.UseFS = true
+			UserInputConfigValues.UseMSVC = true
 			UserInputConfigValues.UseWindowsEvents = true
 
 		} else if !checkAnswer() {
 			fmt.Println("Answer Y (Yes) or N (No) wether you'd like to use each source bellow:")
+
 			fmt.Println("Local Folder? (C:Logs) ")
-			UserInputConfigValues.UseFileSystem = checkAnswer()
+			UserInputConfigValues.UseFS = checkAnswer()
 
 			fmt.Println("TidyBeaver's Postgres Database? ")
 			UserInputConfigValues.UseDatabase = checkAnswer()
@@ -104,13 +107,14 @@ func getCustomConfig() {
 			UserInputConfigValues.UseAPI = checkAnswer()
 
 			fmt.Println("Mocked Microservice? ")
-			UserInputConfigValues.UseMsvc = checkAnswer()
+			UserInputConfigValues.UseMSVC = checkAnswer()
 		}
 	} else {
 		UserInputConfigValues.UseMockedLogs = true
 	}
 }
 
+// TODO
 // Refactor to take out redundant check
 func checkAnswer() bool {
 	userInput := ""
@@ -134,7 +138,7 @@ func printConfigs() {
 		fmt.Println("Error loading .env file")
 	}
 
-	EnvVar, err := godotenv.Read("T:/Repo/TidyBeaver/.env")
+	EnvVar, err = godotenv.Read("T:/Repo/TidyBeaver/.env")
 
 	if err != nil {
 		fmt.Println("Error marshalling defaultConfig:", err)
