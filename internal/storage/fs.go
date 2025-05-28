@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	models "tidybeaver/pkg/models"
+	"time"
 )
 
 func JSONSaveLogs(Logs *models.AggregatedLogs) {
@@ -14,5 +15,6 @@ func JSONSaveLogs(Logs *models.AggregatedLogs) {
 	} else {
 		os.WriteFile((`.\logs\TidyBeaverAdaptedLogs.json`), encodedLogs, 0644)
 		fmt.Println("Logs saved as Json")
+		time.Sleep(1000000000)
 	}
 }
