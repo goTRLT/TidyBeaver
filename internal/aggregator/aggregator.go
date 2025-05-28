@@ -5,6 +5,7 @@ import (
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
 	models "tidybeaver/pkg/models"
+	"time"
 )
 
 // TODO
@@ -20,12 +21,18 @@ var Errors []error
 
 func Init() {
 	fmt.Println("The Tidy Beaver starts fetching Logs")
+	fmt.Println("Working on it...")
+	time.Sleep(1000000000)
 	FetchSourcesLogs()
 
 	fmt.Println("The Tidy Beaver is organizing the Logs")
+	fmt.Println("Working on it...")
+	time.Sleep(1000000000)
 	ProcessLogs()
 
 	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
+	fmt.Println("Working on it...")
+	time.Sleep(1000000000)
 	SaveLogs(&AggregatedLogs)
 }
 
