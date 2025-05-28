@@ -43,7 +43,7 @@ func FetchSourcesLogs() {
 		CheckAppendError(err)
 	} else {
 		if config.UserInputConfigValues.UseAPI {
-			APILogs, err = source.FetchAPILogs()
+			APILogs, err = source.GetAPILogs()
 			CheckAppendError(err)
 		}
 		if config.UserInputConfigValues.UseDatabase {
