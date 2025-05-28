@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"fmt"
@@ -13,6 +13,5 @@ func main() {
 	go InitAPI()
 	fmt.Println("The Tidy Beaver wakes up and says: Hello there!")
 	config.Init()
-
 	aggregator.Init()
 }
