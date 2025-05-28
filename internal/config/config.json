@@ -1,23 +1,7 @@
 {
     "App": {
-      "Env": "development",
-      "Port": "8080",
       "LogLevel": "debug",
       "LogAmount": "20"
-    },
-    "API": {
-      "BaseURL": "http://localhost:9090/api/random-response?count=",
-      "AuthToken": "your_api_token",
-      "TimeoutSeconds": "30"
-    },
-    "LogsFolderPath": {
-      "LocalLogFolder": "C:/TidyBeaverLogs/",
-      "IncludeSubDirs": true
-    },
-    "Microservice": {
-      "AuthServiceURL": "http://localhost:8001",
-      "PaymentServiceURL": "http://localhost:8002",
-      "LogServiceURL": "http://localhost:8003"
     },
     "WindowsEventLog": {
       "Enabled": true,
