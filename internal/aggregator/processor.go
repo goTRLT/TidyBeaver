@@ -6,50 +6,78 @@ import (
 	"strconv"
 	"strings"
 	storage "tidybeaver/internal/storage"
-	"tidybeaver/pkg/models"
+	models "tidybeaver/pkg/models"
 	"time"
 )
 
-// func ProcessLogs(AggregatedLogs *models.AggregatedLogs, MockedLogs *models.MockedLogs, OSLogs *models.OSLogs, FSLogs *models.FSLogs, APILogs *models.APILogs, MSVLogs *[]string, DBLogs *models.DBLogs, Errors *[]error) {
-// 	if len(MockedLogs.MockedLog) != 0 {
-// 		ProcessMockedLogs(MockedLogs)
-// 	}
-// 	fmt.Print("Lenght: ", len(FSLogs.FSLog))
-// 	if len(FSLogs.FSLog) != 0 {
-// 		ProcessFSLogs(FSLogs)
-// 	}
-// 	if len(OSLogs.OS) != 0 {
-// 		ProcessOSLogs(OSLogs)
-// 	}
-// 	if len(DBLogs.DBLog) != 0 {
-// 		ProcessDBLogs(DBLogs)
-// 	}
-// 	if len(APILogs.APILog) != 0 {
-// 		ManageAPILogs(APILogs)
-// 	}
-// 	if len(*Errors) != 0 {
-// 		ProcessErrors(Errors)
-// 	}
-// 	// if len(MSVLogs) != 0 {
-// 	// 	//TODO
-// 	// }
-// }
+func ProcessLogs() {
+	dones := make(chan bool)
+	count := 0
 
-func ProcessLogs(LogType any) {
+	if len(MockedLogs.MockedLog) != 0 {
+		count++
+		go func() {
+			ProcessLogsModels(&MockedLogs)
+			dones <- true
+		}()
+	}
+	if len(OSLogs.OS) != 0 {
+		count++
+		go func() {
+			ProcessLogsModels(&OSLogs)
+			dones <- true
+		}()
+	}
+	if len(FSLogs.FSLog) != 0 {
+		fmt.Print("Lenght: ", len(FSLogs.FSLog))
+		count++
+		go func() {
+			ProcessLogsModels(&FSLogs)
+			dones <- true
+		}()
+	}
+	if len(APILogs.APILog) != 0 {
+		count++
+		go func() {
+			ProcessLogsModels(&APILogs)
+			dones <- true
+		}()
+	}
+	if len(DBLogs.DBLog) != 0 {
+		count++
+		go func() {
+			ProcessLogsModels(&DBLogs)
+			dones <- true
+		}()
+	}
+	if len(Errors) != 0 {
+		count++
+		go func() {
+			ProcessLogsModels(&Errors)
+			dones <- true
+		}()
+	}
+	for i := 0; i < count; i++ {
+		<-dones
+	}
+}
+
+func ProcessLogsModels(LogType any) {
 	switch LogType.(type) {
 	case *models.MockedLogs:
-		go ProcessMockedLogs(&MockedLogs)
+		ProcessMockedLogs(&MockedLogs)
 	case *models.OSLogs:
-		go ProcessOSLogs(&OSLogs)
+		ProcessOSLogs(&OSLogs)
 	case *models.FSLogs:
-		go ProcessFSLogs(&FSLogs)
+		ProcessFSLogs(&FSLogs)
 	case *models.APILogs:
-		go ProcessAPILogs(&APILogs)
+		ProcessAPILogs(&APILogs)
+	//TODO
 	// case *models.MSVLogs:
 	case *models.DBLogs:
-		go ProcessDBLogs(&DBLogs)
+		ProcessDBLogs(&DBLogs)
 	case *[]error:
-		go ProcessErrors(&Errors)
+		ProcessErrors(&Errors)
 	}
 }
 
@@ -70,7 +98,6 @@ func ProcessMockedLogs(MockedLogs *models.MockedLogs) {
 	if transformedLogs == nil {
 		Errors = append(Errors, errors.New("error on Transforming Mocked Logs into Standard Logs"))
 	}
-	// fmt.Println(transformedLogs)
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
@@ -108,14 +135,14 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 			LineNumber:         val.LineNumber,
 			LogName:            val.LogName,
 			MachineName:        val.MachineName,
-			Message:            "FileSystem: " + val.Message,
+			Message:            val.Message,
 			RequestBody:        val.RequestBody,
 			ReplacementStrings: val.ReplacementStrings,
 			ResponseBody:       val.ResponseBody,
 			RowsAffected:       val.RowsAffected,
 			Schema:             val.Schema,
 			Service:            val.Service,
-			Source:             val.Source,
+			Source:             "FileSystem: " + val.Source,
 			SplitLines:         val.SplitLines,
 			SpanID:             val.SpanID,
 			StatusCode:         val.StatusCode,
@@ -129,12 +156,11 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 			Query:              val.Query,
 		}
 		transformedLogs2 = append(transformedLogs2, transformedLog)
-		fmt.Println("transformedLog2: ", transformedLogs2)
+		fmt.Println("transformedLog2 len : ", len(transformedLogs2))
 	}
 	if transformedLogs2 == nil {
 		Errors = append(Errors, errors.New("error on Transforming FS Logs into Standard Logs"))
 	}
-	// fmt.Println("transformedLogs ", transformedLogs)
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs2...)
 }
 
@@ -160,7 +186,6 @@ func ProcessDBLogs(DBLogs *models.DBLogs) {
 	if transformedLogs == nil {
 		Errors = append(Errors, errors.New("error on Transforming DB Logs into Standard Logs"))
 	}
-	// fmt.Println("transformedLogs ", transformedLogs)
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
@@ -169,7 +194,6 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 	for _, val := range OSLogs.OS {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
 		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
-		// fmt.Println(val.TimeWritten)
 
 		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
 		if err != nil {
@@ -180,7 +204,6 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 		nanoseconds := (parsedTime % 1000) * 1000000
 		unixTime := time.Unix(seconds, nanoseconds)
 		unixTime = unixTime.Round(time.Millisecond)
-		// fmt.Println("unix: ", unixTime)
 
 		if err != nil {
 			Errors = append(Errors, err)
@@ -210,7 +233,6 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 	if transformedLogs == nil {
 		Errors = append(Errors, errors.New("error on Transforming OS Logs into Standard Logs"))
 	}
-	// fmt.Println("transformedLogs ", transformedLogs)
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
@@ -234,11 +256,8 @@ func ProcessAPILogs(APILogs *models.APILogs) {
 	if transformedLogs == nil {
 		Errors = append(Errors, errors.New("error on Transforming API Logs into Standard Logs"))
 	}
-	// fmt.Println("transformedLogs ", transformedLogs)
 	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
-
-// func TransformMSVLogs(MSVLogs *[]string) models.AggregatedLogs    {}
 
 func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 	var transformedLogs []models.AggregatedLog
@@ -256,12 +275,10 @@ func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 	if transformedLogs == nil {
 		fmt.Println("error on Transforming Errors into Standard Logs")
 	}
-	// fmt.Println(transformedLogs)
 	return transformedLogs
 }
 
 func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
-	// fmt.Println("AggregatedLogs ", AggregatedLogs)
 	storage.JSONSaveLogs(AggregatedLogs)
 	storage.DBInsertLogs(AggregatedLogs)
 }
