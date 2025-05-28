@@ -10,7 +10,7 @@
       "AuthToken": "your_api_token",
       "TimeoutSeconds": "30"
     },
-    "LogPaths": {
+    "LogsFolderPath": {
       "LocalLogFolder": "C:/TidyBeaverLogs/",
       "IncludeSubDirs": true
     },
