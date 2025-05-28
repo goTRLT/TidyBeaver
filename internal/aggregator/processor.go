@@ -29,7 +29,6 @@ func ProcessLogs() {
 		}()
 	}
 	if len(FSLogs.FSLog) != 0 {
-		fmt.Print("Lenght: ", len(FSLogs.FSLog))
 		count++
 		go func() {
 			ProcessLogsModels(&FSLogs)
@@ -156,7 +155,6 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 			Query:              val.Query,
 		}
 		transformedLogs2 = append(transformedLogs2, transformedLog)
-		fmt.Println("transformedLog2 len : ", len(transformedLogs2))
 	}
 	if transformedLogs2 == nil {
 		Errors = append(Errors, errors.New("error on Transforming FS Logs into Standard Logs"))
