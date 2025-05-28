@@ -5,7 +5,7 @@ import (
 	"log"
 	"math/rand"
 	config "tidybeaver/internal/config"
-	"tidybeaver/pkg/models"
+	models "tidybeaver/pkg/models"
 	"time"
 )
 
@@ -19,7 +19,6 @@ func CreateMockedLogs() (model models.MockedLogs, err error) {
 		log.Fatal(err)
 	}
 
-	// fmt.Println(generatedMockedLogs)
 	return generatedMockedLogs, err
 }
 
@@ -48,7 +47,6 @@ func GenerateMockedLogs() (model models.MockedLogs, err error) {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < config.LogAmountSet; i++ {
 		MockedLogEntry, err = GenerateLog()
-		// fmt.Println(MockedLogEntry)
 		MockedLogsEntry.MockedLog = append(MockedLogsEntry.MockedLog, MockedLogEntry)
 	}
 
