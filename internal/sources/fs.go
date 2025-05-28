@@ -2,7 +2,6 @@ package sources
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	models "tidybeaver/pkg/models"
@@ -14,7 +13,6 @@ func FetchFSLogs() (FSLogs models.FSLogs, err error) {
 
 	if err != nil {
 		log.Fatal(err)
-		fmt.Println(err)
 	}
 
 	defer logFile.Close()
