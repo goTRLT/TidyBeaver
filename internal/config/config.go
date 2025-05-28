@@ -18,25 +18,9 @@ var EnvVar map[string]string
 
 type Configs struct {
 	App struct {
-		Env       string `json:"Env"`
-		Port      string `json:"Port"`
 		LogLevel  string `json:"LogLevel"`
 		LogAmount string `json:"LogAmount"`
 	} `json:"App"`
-	API struct {
-		BaseURL        string `json:"BaseURL"`
-		AuthToken      string `json:"AuthToken"`
-		TimeoutSeconds string `json:"TimeoutSeconds"`
-	} `json:"API"`
-	LogsFolderPath struct {
-		LocalLogFolder string `json:"LocalLogFolder"`
-		IncludeSubDirs bool   `json:"IncludeSubDirs"`
-	} `json:"LogsFolderPath"`
-	Microservice struct {
-		AuthServiceURL    string `json:"AuthServiceURL"`
-		PaymentServiceURL string `json:"PaymentService"`
-		LogServiceURL     string `json:"LogServiceURL"`
-	} `json:"Microservice"`
 	WindowsEventLog struct {
 		Enabled  bool     `json:"Enabled"`
 		Channels []string `json:"Channels"`
