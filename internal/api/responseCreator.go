@@ -2,7 +2,7 @@ package api
 
 import (
 	"math/rand"
-	"tidybeaver/pkg/models"
+	models "tidybeaver/pkg/models"
 	"time"
 
 	"github.com/google/uuid"
