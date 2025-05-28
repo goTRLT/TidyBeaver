@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-	"tidybeaver/pkg/models"
+	models "tidybeaver/pkg/models"
 )
 
 func ResponseHandler(w http.ResponseWriter, r *http.Request) {
