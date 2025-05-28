@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os/exec"
-	"tidybeaver/pkg/models"
+	models "tidybeaver/pkg/models"
 )
 
 func FetchOSLogs() (OSLogs models.OSLogs, err error) {
@@ -15,7 +15,6 @@ func FetchOSLogs() (OSLogs models.OSLogs, err error) {
 	}
 
 	out, err := MergeJSONOutputs(output1, output2, output3)
-	// fmt.Println("out", string(out))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,24 +25,18 @@ func FetchOSLogs() (OSLogs models.OSLogs, err error) {
 		log.Fatal(err)
 	}
 
-	// fmt.Print("wel ", OSLogs)
-
 	return OSLogs, err
 }
 
 func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err error) {
-	// test := config.ConfigValues.App.LogAmount
-	cmdApp := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest 20 | ConvertTo-Json -Depth 2; ")
+	cmdApp := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest 8 | ConvertTo-Json -Depth 2; ")
 	outputApp, errApp := cmdApp.Output()
 
 	if errApp != nil {
 		log.Fatal("Error running PowerShell command: ", errApp)
 		return outputApp, outputSys, outputSec, errApp
 	}
-
-	//fmt.Print("outputApp", string(outputApp))
-
-	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest 20 | ConvertTo-Json -Depth 2; ")
+	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest 8 | ConvertTo-Json -Depth 2; ")
 	outputSys, errSys := cmdSys.Output()
 
 	if errSys != nil {
@@ -51,18 +44,13 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 		return outputApp, outputSys, outputSec, errSys
 	}
 
-	//fmt.Print("outputSys", string(outputSys))
-
-	cmdSec := exec.Command("powershell", "-Command", "Get-EventLog -LogName Security -Newest 20 | ConvertTo-Json -Depth 2")
+	cmdSec := exec.Command("powershell", "-Command", "Get-EventLog -LogName Security -Newest 8 | ConvertTo-Json -Depth 2")
 	outputSec, errSec := cmdSec.Output()
 
 	if errSec != nil {
 		log.Fatal("Error running PowerShell command: ", errSec)
 		return outputApp, outputSys, outputSec, errSec
 	}
-
-	//fmt.Print("outputSec", string(outputSec))
-
 	return outputApp, outputSys, outputSec, err
 }
 
