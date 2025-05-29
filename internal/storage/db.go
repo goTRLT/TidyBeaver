@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	config "tidybeaver/internal/config"
 	models "tidybeaver/pkg/models"
+	"time"
 
 	"github.com/lib/pq"
 )
@@ -30,6 +31,8 @@ func DBInsertLogs(logs *models.AggregatedLogs) {
 			log.Println("Error inserting log entry:", err)
 			continue
 		}
+		log.Printf("Log entry inserted from Source: %s\n", id.Source)
 		log.Printf("Log entry inserted with ID: %d\n", instanceID)
+		time.Sleep(200 * time.Millisecond)
 	}
 }
