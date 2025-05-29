@@ -65,6 +65,12 @@ func FetchSourcesLogs() {
 			OSLogs, err = source.FetchOSLogs()
 			CheckAppendError(err)
 		}
+		fmt.Println("FetchApi: ", len(APILogs.APILog))
+		fmt.Println("FetchDB: ", len(DBLogs.DBLog))
+		fmt.Println("FetchFS: ", len(FSLogs.FSLog))
+		fmt.Println("FetchMSVC: ", len(MSVCLogs.MSVCLog))
+		fmt.Println("FetchOS: ", len(OSLogs.OS))
+
 	}
 }
 
