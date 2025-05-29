@@ -17,32 +17,37 @@ func ProcessLogs() {
 
 	if len(MockedLogs.MockedLog) != 0 {
 		index++
-		go ProcessLogsModels(&MockedLogs)
+		ProcessLogsModels(&MockedLogs)
 		dones[index] = make(chan bool)
 	}
 	if len(OSLogs.OS) != 0 {
 		index++
-		go ProcessLogsModels(&OSLogs)
+		ProcessLogsModels(&OSLogs)
 		dones[index] = make(chan bool)
 	}
 	if len(FSLogs.FSLog) != 0 {
 		index++
-		go ProcessLogsModels(&FSLogs)
+		ProcessLogsModels(&FSLogs)
 		dones[index] = make(chan bool)
 	}
 	if len(APILogs.APILog) != 0 {
 		index++
-		go ProcessLogsModels(&APILogs)
+		ProcessLogsModels(&APILogs)
 		dones[index] = make(chan bool)
 	}
 	if len(DBLogs.DBLog) != 0 {
 		index++
-		go ProcessLogsModels(&DBLogs)
+		ProcessLogsModels(&DBLogs)
+		dones[index] = make(chan bool)
+	}
+	if len(MSVCLogs.MSVCLog) != 0 {
+		index++
+		ProcessLogsModels(&MSVCLogs)
 		dones[index] = make(chan bool)
 	}
 	if len(Errors) != 0 {
 		index++
-		go ProcessLogsModels(&Errors)
+		ProcessLogsModels(&Errors)
 		dones[index] = make(chan bool)
 	}
 
@@ -68,6 +73,9 @@ func CountLogTypes() int {
 		count++
 	}
 	if len(DBLogs.DBLog) != 0 {
+		count++
+	}
+	if len(MSVCLogs.MSVCLog) != 0 {
 		count++
 	}
 	if len(Errors) != 0 {
