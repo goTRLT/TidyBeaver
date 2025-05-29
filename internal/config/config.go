@@ -129,8 +129,9 @@ func printConfigs() {
 		return
 	}
 
+	fmt.Println("Environment Variables: ")
 	for val := range EnvVar {
-		fmt.Println("Environment Variables: ", val, ":", (os.Getenv(val)))
+		fmt.Println(val, ":", (os.Getenv(val)))
 	}
 
 	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
