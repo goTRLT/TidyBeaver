@@ -11,54 +11,75 @@ import (
 )
 
 func ProcessLogs() {
-	dones := make(chan bool)
-	count := 0
+	count := CountLogTypes()
+	index := -1
+	dones := make([]chan bool, count+1)
 
 	if len(MockedLogs.MockedLog) != 0 {
+		index++
+		go ProcessLogsModels(&MockedLogs)
+		dones[index] = make(chan bool)
+	}
+	if len(OSLogs.OS) != 0 {
+		index++
+		go ProcessLogsModels(&OSLogs)
+		dones[index] = make(chan bool)
+	}
+	if len(FSLogs.FSLog) != 0 {
+		index++
+		go ProcessLogsModels(&FSLogs)
+		dones[index] = make(chan bool)
+	}
+	if len(APILogs.APILog) != 0 {
+		index++
+		go ProcessLogsModels(&APILogs)
+		dones[index] = make(chan bool)
+	}
+	if len(DBLogs.DBLog) != 0 {
+		index++
+		go ProcessLogsModels(&DBLogs)
+		dones[index] = make(chan bool)
+	}
+	if len(Errors) != 0 {
+		index++
+		go ProcessLogsModels(&Errors)
+		dones[index] = make(chan bool)
+	}
+
+	for _, done := range dones {
+		if len(dones) == len(done) {
+			continue
+		}
+	}
+}
+
+func CountLogTypes() int {
+	count := -1
+	if len(MockedLogs.MockedLog) != 0 {
 		count++
-		go func() {
-			ProcessLogsModels(&MockedLogs)
-			dones <- true
-		}()
 	}
 	if len(OSLogs.OS) != 0 {
 		count++
-		go func() {
-			ProcessLogsModels(&OSLogs)
-			dones <- true
-		}()
 	}
 	if len(FSLogs.FSLog) != 0 {
 		count++
-		go func() {
-			ProcessLogsModels(&FSLogs)
-			dones <- true
-		}()
 	}
 	if len(APILogs.APILog) != 0 {
 		count++
-		go func() {
-			ProcessLogsModels(&APILogs)
-			dones <- true
-		}()
 	}
 	if len(DBLogs.DBLog) != 0 {
 		count++
-		go func() {
-			ProcessLogsModels(&DBLogs)
-			dones <- true
-		}()
 	}
 	if len(Errors) != 0 {
 		count++
-		go func() {
-			ProcessLogsModels(&Errors)
-			dones <- true
-		}()
 	}
-	for i := 0; i < count; i++ {
-		<-dones
-	}
+	return count
+
+}
+
+func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
+	storage.JSONSaveLogs(AggregatedLogs)
+	storage.DBInsertLogs(AggregatedLogs)
 }
 
 func ProcessLogsModels(LogType any) {
@@ -274,9 +295,4 @@ func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
 		fmt.Println("error on Transforming Errors into Standard Logs")
 	}
 	return transformedLogs
-}
-
-func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
-	storage.JSONSaveLogs(AggregatedLogs)
-	storage.DBInsertLogs(AggregatedLogs)
 }
