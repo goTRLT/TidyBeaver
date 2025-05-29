@@ -111,7 +111,6 @@ func ProcessMSVCLogs(MSVCLogs *models.MSVCLogs) {
 			Source:        "Microservice",
 			TimeGenerated: val.Timestamp,
 			TimeWritten:   time.Now(),
-
 			CorrelationID: val.CorrelationID,
 			Host:          val.Host,
 			TransactionID: val.RequestID,
