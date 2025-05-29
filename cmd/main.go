@@ -13,7 +13,7 @@ var UserInputConfigurations config.UserInputConfigurations
 func main() {
 	go InitAPI()
 	fmt.Println("The Tidy Beaver wakes up and says: Hello there!")
-	time.Sleep(1000000000)
+	time.Sleep(1 * time.Second)
 	config.Init()
 	aggregator.Init()
 }
