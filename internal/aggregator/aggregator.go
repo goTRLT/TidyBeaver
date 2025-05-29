@@ -15,25 +15,28 @@ var MockedLogs models.MockedLogs
 var OSLogs models.OSLogs
 var FSLogs models.FSLogs
 var APILogs models.APILogs
-var MSVCLogs []string //Placeholder
+var MSVCLogs models.MSVCLogs
 var DBLogs models.DBLogs
 var Errors []error
 
 func Init() {
-	fmt.Println("The Tidy Beaver starts fetching Logs")
+	fmt.Println("TidyBeaver is fetching the Logs")
 	fmt.Println("Working on it...")
-	time.Sleep(1000000000)
+	time.Sleep(500 * time.Millisecond)
 	FetchSourcesLogs()
+	fmt.Println("Complete!")
 
-	fmt.Println("The Tidy Beaver is organizing the Logs")
+	fmt.Println("TidyBeaver is organizing the Logs")
 	fmt.Println("Working on it...")
-	time.Sleep(1000000000)
+	time.Sleep(500 * time.Millisecond)
 	ProcessLogs()
+	fmt.Println("Complete!")
 
-	fmt.Println("The Tidy Beaver is stacking up the organized Logs")
+	fmt.Println("TidyBeaver is stacking up the organized Logs")
 	fmt.Println("Working on it...")
-	time.Sleep(1000000000)
+	time.Sleep(500 * time.Millisecond)
 	SaveLogs(&AggregatedLogs)
+	fmt.Println("Complete!")
 }
 
 func FetchSourcesLogs() {
@@ -55,7 +58,8 @@ func FetchSourcesLogs() {
 			CheckAppendError(err)
 		}
 		if config.UserInputConfigValues.UseMSVC {
-			//TODO
+			MSVCLogs, err = source.GetMSVCLogs()
+			CheckAppendError(err)
 		}
 		if config.UserInputConfigValues.UseWindowsEvents {
 			OSLogs, err = source.FetchOSLogs()
