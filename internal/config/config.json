@@ -1,7 +1,7 @@
 {
     "App": {
       "LogLevel": "debug",
-      "LogAmount": "20"
+      "LogAmount": "5"
     },
     "WindowsEventLog": {
       "Enabled": true,
