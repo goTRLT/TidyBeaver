@@ -92,13 +92,37 @@ func ProcessLogsModels(LogType any) {
 		ProcessFSLogs(&FSLogs)
 	case *models.APILogs:
 		ProcessAPILogs(&APILogs)
-	//TODO
-	// case *models.MSVLogs:
+	case *models.MSVCLogs:
+		ProcessMSVCLogs(&MSVCLogs)
 	case *models.DBLogs:
 		ProcessDBLogs(&DBLogs)
 	case *[]error:
 		ProcessErrors(&Errors)
 	}
+}
+
+func ProcessMSVCLogs(MSVCLogs *models.MSVCLogs) {
+	var transformedLogs []models.AggregatedLog
+	for _, val := range MSVCLogs.MSVCLog {
+		transformedLog := models.AggregatedLog{
+			Level:         val.Level,
+			Message:       val.Message,
+			Service:       val.Service,
+			Source:        "Microservice",
+			TimeGenerated: val.Timestamp,
+			TimeWritten:   time.Now(),
+
+			CorrelationID: val.CorrelationID,
+			Host:          val.Host,
+			TransactionID: val.RequestID,
+		}
+		transformedLogs = append(transformedLogs, transformedLog)
+	}
+
+	if transformedLogs == nil {
+		Errors = append(Errors, errors.New("error on Transforming Mocked Logs into Standard Logs"))
+	}
+	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
 }
 
 func ProcessMockedLogs(MockedLogs *models.MockedLogs) {
