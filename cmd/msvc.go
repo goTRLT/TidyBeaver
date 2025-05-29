@@ -19,7 +19,7 @@ func InitMSVC() {
 
 	serviceName := "log-generator-service"
 
-	http.HandleFunc("/log", msvc.MsvcLogHandler(serviceName, hostname))
+	http.HandleFunc("/msvc/random-response", msvc.MsvcLogHandler(serviceName, hostname))
 
 	log.Println("Starting log generator service on :", port)
 	log.Fatal(http.ListenAndServe(":9191", nil))
