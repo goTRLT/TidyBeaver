@@ -13,7 +13,7 @@ import (
 func ProcessLogs() {
 	count := CountLogTypes()
 	index := -1
-	dones := make([]chan bool, count+1)
+	dones := make([]chan bool, count)
 
 	if len(MockedLogs.MockedLog) != 0 {
 		index++
@@ -54,7 +54,7 @@ func ProcessLogs() {
 }
 
 func CountLogTypes() int {
-	count := -1
+	count := 0
 	if len(MockedLogs.MockedLog) != 0 {
 		count++
 	}
