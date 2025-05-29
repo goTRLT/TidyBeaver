@@ -8,9 +8,9 @@ import (
 	"github.com/google/uuid"
 )
 
-func randomLogEntry(serviceName string, hostname string) models.LogEntry {
-	return models.LogEntry{
-		Timestamp:     time.Now().Format(time.RFC3339),
+func CreateRandomResponse(serviceName string, hostname string) models.MSVCLog {
+	return models.MSVCLog{
+		Timestamp:     time.Now(),
 		Service:       serviceName,
 		Level:         logLevels[rand.Intn(len(logLevels))],
 		Message:       messages[rand.Intn(len(messages))],
