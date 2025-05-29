@@ -8,16 +8,16 @@ import (
 )
 
 func ResponseHandler(w http.ResponseWriter, r *http.Request) {
-	countStr := r.URL.Query().Get("count")
-	count := 1
+	var result []models.APIResponse
+	countStr := r.URL.Query().Get("amount")
+	amount := 1
 	if countStr != "" {
 		if parsed, err := strconv.Atoi(countStr); err == nil && parsed > 0 && parsed <= 100 {
-			count = parsed
+			amount = parsed
 		}
 	}
 
-	var result []models.APIResponse
-	for i := 0; i < count; i++ {
+	for range amount {
 		result = append(result, CreateRandomResponse(r.URL.Path))
 	}
 
