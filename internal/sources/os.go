@@ -29,14 +29,14 @@ func FetchOSLogs() (OSLogs models.OSLogs, err error) {
 }
 
 func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err error) {
-	cmdApp := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest 8 | ConvertTo-Json -Depth 2; ")
+	cmdApp := exec.Command("powershell", "-Command", "Get-EventLog -LogName Application -Newest 5 | ConvertTo-Json -Depth 2; ")
 	outputApp, errApp := cmdApp.Output()
 
 	if errApp != nil {
 		log.Fatal("Error running PowerShell command: ", errApp)
 		return outputApp, outputSys, outputSec, errApp
 	}
-	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest 8 | ConvertTo-Json -Depth 2; ")
+	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest 5 | ConvertTo-Json -Depth 2; ")
 	outputSys, errSys := cmdSys.Output()
 
 	if errSys != nil {
@@ -44,7 +44,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 		return outputApp, outputSys, outputSec, errSys
 	}
 
-	cmdSec := exec.Command("powershell", "-Command", "Get-EventLog -LogName Security -Newest 8 | ConvertTo-Json -Depth 2")
+	cmdSec := exec.Command("powershell", "-Command", "Get-EventLog -LogName Security -Newest 5 | ConvertTo-Json -Depth 2")
 	outputSec, errSec := cmdSec.Output()
 
 	if errSec != nil {
