@@ -23,20 +23,27 @@ func Init() {
 	fmt.Println("TidyBeaver is fetching the Logs")
 	fmt.Println("Working on it...")
 	time.Sleep(500 * time.Millisecond)
+
 	FetchSourcesLogs()
 	fmt.Println("Complete!")
 
 	fmt.Println("TidyBeaver is organizing the Logs")
 	fmt.Println("Working on it...")
 	time.Sleep(500 * time.Millisecond)
+
 	ProcessLogs()
 	fmt.Println("Complete!")
 
 	fmt.Println("TidyBeaver is stacking up the organized Logs")
 	fmt.Println("Working on it...")
 	time.Sleep(500 * time.Millisecond)
+
+	fmt.Println("All Logs: ", len(AggregatedLogs.AggregatedLog))
+
 	SaveLogs(&AggregatedLogs)
 	fmt.Println("Complete!")
+
+	Clean()
 }
 
 func FetchSourcesLogs() {
@@ -78,4 +85,15 @@ func CheckAppendError(err error) {
 	if err != nil {
 		Errors = append(Errors, err)
 	}
+}
+
+func Clean() {
+	AggregatedLogs.AggregatedLog = nil
+	MockedLogs.MockedLog = nil
+	OSLogs.OS = nil
+	FSLogs.FSLog = nil
+	APILogs.APILog = nil
+	MSVCLogs.MSVCLog = nil
+	DBLogs.DBLog = nil
+	Errors = nil
 }
