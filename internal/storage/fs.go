@@ -14,7 +14,7 @@ func JSONSaveLogs(Logs *models.AggregatedLogs) {
 		return
 	} else {
 		os.WriteFile((`.\logs\TidyBeaverAdaptedLogs.json`), encodedLogs, 0644)
-		fmt.Println("Logs saved as Json")
-		time.Sleep(1000000000)
+		fmt.Println(`Logs saved as Json: .\logs\TidyBeaverAdaptedLogs.json`)
+		time.Sleep(1 * time.Second)
 	}
 }
