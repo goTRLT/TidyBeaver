@@ -4,7 +4,6 @@ import (
 	"fmt"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
-	"tidybeaver/internal/storage/s3"
 	models "tidybeaver/pkg/models"
 	"time"
 )
@@ -36,10 +35,11 @@ func Init() {
 	SaveLogs(&AggregatedLogs)
 	fmt.Println("Complete!")
 
-	fmt.Println("Packing your Logs and send them to your bucket...")
-	time.Sleep(500 * time.Millisecond)
-	s3.InitS3()
-	fmt.Println("Complete!")
+	//TODO UnComment
+	// fmt.Println("Packing your Logs and send them to your bucket...")
+	// time.Sleep(500 * time.Millisecond)
+	// s3.InitS3()
+	// fmt.Println("Complete!")
 
 	fmt.Println("Cleaning the workbench...")
 	time.Sleep(500 * time.Millisecond)
