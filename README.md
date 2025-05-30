@@ -12,7 +12,7 @@ Development Steps
 - [X] 8. Create pluggable parsers for different log sources
 - [ ] 9. A CloudWatch logs ingester
 - [ ] 10. Push alerts to Slack
-- [ ] 11. Build a web dashboard using Go (with gin + html/template) that queries your aggregator API.
+- [X] 11. Build a web dashboard using Go (with gin + html/template) that queries your aggregator API.
 - [ ] 12. Unit testing with testing package
 - [X] 13. Logging best practices (structured logs, correlation IDs)
 - [ ] 14. Use gRPC for service-to-service log transfer
@@ -24,4 +24,4 @@ Business Rules
 - [X] 1. Get and or Receive logs from multiple sources
 - [X] 2. Save logs in a AWS S3 bucket
 - [ ] 3. Index/Parse the saved logs
-- [ ] 4. Be able to analyze logs through a UI
+- [X] 4. Be able to analyze logs through a UI
