@@ -9,9 +9,9 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func ListBuckets() {
+func ListBuckets() *s3.ListBucketsOutput {
 	newSession, err := session.NewSessionWithOptions(session.Options{
-		Profile: "default",
+		Profile: "TRLTech",
 		Config: aws.Config{
 			Region: aws.String("us-west-1"),
 		},
@@ -19,7 +19,6 @@ func ListBuckets() {
 
 	if err != nil {
 		log.Fatal(err)
-		return
 	}
 	s3Client := s3.New(newSession)
 
@@ -27,13 +26,13 @@ func ListBuckets() {
 
 	if err != nil {
 		log.Fatal(err)
-		return
 	}
 
 	fmt.Println("Buckets found in AWS: ")
 	for _, bucket := range buckets.Buckets {
 		fmt.Printf("Name: %s , Creation Date: %s\n", *bucket.Name, *bucket.CreationDate)
 	}
+	return buckets
 }
 
 func List(client *s3.S3) (*s3.ListBucketsOutput, error) {
