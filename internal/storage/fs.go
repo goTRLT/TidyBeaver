@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	models "tidybeaver/pkg/models"
 	"time"
@@ -13,8 +14,20 @@ func JSONSaveLogs(Logs *models.AggregatedLogs) {
 	if err != nil {
 		return
 	} else {
-		os.WriteFile((`.\logs\TidyBeaverAdaptedLogs.json`), encodedLogs, 0644)
-		fmt.Println(`Logs saved as Json: .\logs\TidyBeaverAdaptedLogs.json`)
-		time.Sleep(1 * time.Second)
+		path := os.Getenv("LOGS_FOLDER_PATH")
+		fileName := os.Getenv("LOGS_FILE_NAME")
+
+		err := os.Mkdir(path, 0750)
+		if err != nil && !os.IsExist(err) {
+			log.Fatal(err)
+		}
+
+		err = os.WriteFile((path + `\` + fileName), encodedLogs, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println(`Logs saved as Json: ` + path + `\` + fileName)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
