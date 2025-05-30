@@ -1,6 +1,7 @@
 package s3
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -11,7 +12,7 @@ import (
 
 func UploadLogs() {
 	newSession, err := session.NewSessionWithOptions(session.Options{
-		Profile: "default",
+		Profile: "TRLTech",
 		Config: aws.Config{
 			Region: aws.String("us-west-1"),
 		},
@@ -36,11 +37,15 @@ func UploadLogs() {
 }
 
 func Upload(uploader *s3manager.Uploader, filePath string, bucketName string, fileName string) error {
-	file, err := os.Open(filePath)
+	file, err := os.Open(filePath + fileName)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
+
+	fmt.Println("File: ", file.Name())
+	fmt.Println("Filepath: ", filePath)
+	fmt.Println("fileName: ", fileName)
 
 	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(bucketName),
