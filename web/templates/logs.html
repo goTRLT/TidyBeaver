@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/main.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Output Logs</h1>
+        <div class="filter-section">
+            <input type="text" id="filterInput" placeholder="Filter logs..." onkeyup="filterLogs()">
+            <button onclick="sortLogs('timestamp')">Sort by Timestamp</button>
+            <button onclick="sortLogs('service')">Sort by Service</button>
+            <button onclick="sortLogs('level')">Sort by Level</button>
+        </div>
+        <table id="logsTable">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Service</th>
+                    <th>Level</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody id="logTableBody">
+                {{range .AggregatedLog}}
+                    <tr>
+                    <td>{{.TimeGenerated}}</td>
+                    <td>{{.Service}}</td>
+                    <td>{{.Level}}</td>
+                    <td>{{.Message}}</td>
+                    </tr>
+                {{end}}
+                <!-- Logs here -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
