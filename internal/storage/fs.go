@@ -22,12 +22,15 @@ func JSONSaveLogs(Logs *models.AggregatedLogs) {
 			log.Fatal(err)
 		}
 
-		err = os.WriteFile((path + `\` + fileName), encodedLogs, 0644)
+		err = os.WriteFile((path + fileName), encodedLogs, 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Println(`Logs saved as Json: ` + path + `\` + fileName)
+		fmt.Println("jFilepath: ", path)
+		fmt.Println("jfileName: ", fileName)
+
+		fmt.Println(`Logs saved as Json: ` + path + fileName)
 		time.Sleep(500 * time.Millisecond)
 	}
 }
