@@ -12,7 +12,7 @@ import (
 
 func DownloadLogs() {
 	newSession, err := session.NewSessionWithOptions(session.Options{
-		Profile: "default",
+		Profile: "TRLTech",
 		Config: aws.Config{
 			Region: aws.String("us-west-1"),
 		},
