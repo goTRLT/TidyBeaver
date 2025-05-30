@@ -4,6 +4,7 @@ import (
 	"fmt"
 	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
+	"tidybeaver/internal/storage/s3"
 	models "tidybeaver/pkg/models"
 	"time"
 )
@@ -20,30 +21,31 @@ var DBLogs models.DBLogs
 var Errors []error
 
 func Init() {
-	fmt.Println("TidyBeaver is fetching the Logs")
-	fmt.Println("Working on it...")
+	fmt.Println("Fetching Logs...")
 	time.Sleep(500 * time.Millisecond)
-
 	FetchSourcesLogs()
 	fmt.Println("Complete!")
 
-	fmt.Println("TidyBeaver is organizing the Logs")
-	fmt.Println("Working on it...")
+	fmt.Println("Organizing the Logs...")
 	time.Sleep(500 * time.Millisecond)
-
 	ProcessLogs()
 	fmt.Println("Complete!")
 
-	fmt.Println("TidyBeaver is stacking up the organized Logs")
-	fmt.Println("Working on it...")
+	fmt.Println("Stacking up the organized Logs...")
 	time.Sleep(500 * time.Millisecond)
-
-	fmt.Println("All Logs: ", len(AggregatedLogs.AggregatedLog))
-
 	SaveLogs(&AggregatedLogs)
 	fmt.Println("Complete!")
 
+	fmt.Println("Packing your Logs and send them to your bucket...")
+	time.Sleep(500 * time.Millisecond)
+	s3.InitS3()
+	fmt.Println("Complete!")
+
+	fmt.Println("Cleaning the workbench...")
+	time.Sleep(500 * time.Millisecond)
 	Clean()
+	fmt.Println("Complete!")
+
 }
 
 func FetchSourcesLogs() {
@@ -72,12 +74,6 @@ func FetchSourcesLogs() {
 			OSLogs, err = source.FetchOSLogs()
 			CheckAppendError(err)
 		}
-		fmt.Println("FetchApi: ", len(APILogs.APILog))
-		fmt.Println("FetchDB: ", len(DBLogs.DBLog))
-		fmt.Println("FetchFS: ", len(FSLogs.FSLog))
-		fmt.Println("FetchMSVC: ", len(MSVCLogs.MSVCLog))
-		fmt.Println("FetchOS: ", len(OSLogs.OS))
-
 	}
 }
 
