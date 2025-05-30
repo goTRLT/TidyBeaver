@@ -6,7 +6,7 @@ Development Steps
 - [X] 2. Save structured logs (JSON) into local files
 - [X] 3. Send logs via HTTP POST and store them
 - [ ] 4. Query logs by service or severity
-- [ ] 5. Add structured logging from sample Go microservices
+- [X] 5. Add structured logging from sample Go microservices
 - [X] 6. Accept logs in multiple formats (plain text, JSON)
 - [ ] 7. Tail log files (tail lib or os/exec with tail -f)
 - [X] 8. Create pluggable parsers for different log sources
@@ -22,6 +22,6 @@ Development Steps
 
 Business Rules
 - [X] 1. Get and or Receive logs from multiple sources
-- [ ] 2. Save logs in a AWS S3 bucket
+- [X] 2. Save logs in a AWS S3 bucket
 - [ ] 3. Index/Parse the saved logs
 - [ ] 4. Be able to analyze logs through a UI
