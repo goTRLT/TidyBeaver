@@ -15,39 +15,39 @@ func ProcessLogs() {
 	index := -1
 	dones := make([]chan bool, count)
 
-	if len(MockedLogs.MockedLog) != 0 {
+	if len(ML.MockedLog) != 0 {
 		index++
-		ProcessLogsModels(&MockedLogs)
+		ProcessLogsModels(&ML)
 		dones[index] = make(chan bool)
 	}
-	if len(OSLogs.OS) != 0 {
+	if len(OSL.OS) != 0 {
 		index++
-		ProcessLogsModels(&OSLogs)
+		ProcessLogsModels(&OSL)
 		dones[index] = make(chan bool)
 	}
-	if len(FSLogs.FSLog) != 0 {
+	if len(FSL.FSLog) != 0 {
 		index++
-		ProcessLogsModels(&FSLogs)
+		ProcessLogsModels(&FSL)
 		dones[index] = make(chan bool)
 	}
-	if len(APILogs.APILog) != 0 {
+	if len(APIL.APILog) != 0 {
 		index++
-		ProcessLogsModels(&APILogs)
+		ProcessLogsModels(&APIL)
 		dones[index] = make(chan bool)
 	}
-	if len(DBLogs.DBLog) != 0 {
+	if len(DBL.DBLog) != 0 {
 		index++
-		ProcessLogsModels(&DBLogs)
+		ProcessLogsModels(&DBL)
 		dones[index] = make(chan bool)
 	}
-	if len(MSVCLogs.MSVCLog) != 0 {
+	if len(MSVCL.MSVCLog) != 0 {
 		index++
-		ProcessLogsModels(&MSVCLogs)
+		ProcessLogsModels(&MSVCL)
 		dones[index] = make(chan bool)
 	}
-	if len(Errors) != 0 {
+	if len(ERRL) != 0 {
 		index++
-		ProcessLogsModels(&Errors)
+		ProcessLogsModels(&ERRL)
 		dones[index] = make(chan bool)
 	}
 
@@ -60,25 +60,25 @@ func ProcessLogs() {
 
 func CountLogTypes() int {
 	count := 0
-	if len(MockedLogs.MockedLog) != 0 {
+	if len(ML.MockedLog) != 0 {
 		count++
 	}
-	if len(OSLogs.OS) != 0 {
+	if len(OSL.OS) != 0 {
 		count++
 	}
-	if len(FSLogs.FSLog) != 0 {
+	if len(FSL.FSLog) != 0 {
 		count++
 	}
-	if len(APILogs.APILog) != 0 {
+	if len(APIL.APILog) != 0 {
 		count++
 	}
-	if len(DBLogs.DBLog) != 0 {
+	if len(DBL.DBLog) != 0 {
 		count++
 	}
-	if len(MSVCLogs.MSVCLog) != 0 {
+	if len(MSVCL.MSVCLog) != 0 {
 		count++
 	}
-	if len(Errors) != 0 {
+	if len(ERRL) != 0 {
 		count++
 	}
 	return count
@@ -93,19 +93,19 @@ func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
 func ProcessLogsModels(LogType any) {
 	switch LogType.(type) {
 	case *models.MockedLogs:
-		ProcessMockedLogs(&MockedLogs)
+		ProcessMockedLogs(&ML)
 	case *models.OSLogs:
-		ProcessOSLogs(&OSLogs)
+		ProcessOSLogs(&OSL)
 	case *models.FSLogs:
-		ProcessFSLogs(&FSLogs)
+		ProcessFSLogs(&FSL)
 	case *models.APILogs:
-		ProcessAPILogs(&APILogs)
+		ProcessAPILogs(&APIL)
 	case *models.MSVCLogs:
-		ProcessMSVCLogs(&MSVCLogs)
+		ProcessMSVCLogs(&MSVCL)
 	case *models.DBLogs:
-		ProcessDBLogs(&DBLogs)
+		ProcessDBLogs(&DBL)
 	case *[]error:
-		ProcessErrors(&Errors)
+		ProcessErrors(&ERRL)
 	}
 }
 
@@ -127,9 +127,9 @@ func ProcessMSVCLogs(MSVCLogs *models.MSVCLogs) {
 	}
 
 	if transformedLogs == nil {
-		Errors = append(Errors, errors.New("error on Transforming Mocked Logs into Standard Logs"))
+		ERRL = append(ERRL, errors.New("error on Transforming Mocked Logs into Standard Logs"))
 	}
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
+	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
 }
 
 func ProcessMockedLogs(MockedLogs *models.MockedLogs) {
@@ -147,9 +147,9 @@ func ProcessMockedLogs(MockedLogs *models.MockedLogs) {
 	}
 
 	if transformedLogs == nil {
-		Errors = append(Errors, errors.New("error on Transforming Mocked Logs into Standard Logs"))
+		ERRL = append(ERRL, errors.New("error on Transforming Mocked Logs into Standard Logs"))
 	}
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
+	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
 }
 
 func ProcessFSLogs(FSLogs *models.FSLogs) {
@@ -209,9 +209,9 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 		transformedLogs2 = append(transformedLogs2, transformedLog)
 	}
 	if transformedLogs2 == nil {
-		Errors = append(Errors, errors.New("error on Transforming FS Logs into Standard Logs"))
+		ERRL = append(ERRL, errors.New("error on Transforming FS Logs into Standard Logs"))
 	}
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs2...)
+	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs2...)
 }
 
 func ProcessDBLogs(DBLogs *models.DBLogs) {
@@ -234,9 +234,9 @@ func ProcessDBLogs(DBLogs *models.DBLogs) {
 	}
 
 	if transformedLogs == nil {
-		Errors = append(Errors, errors.New("error on Transforming DB Logs into Standard Logs"))
+		ERRL = append(ERRL, errors.New("error on Transforming DB Logs into Standard Logs"))
 	}
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
+	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
 }
 
 func ProcessOSLogs(OSLogs *models.OSLogs) {
@@ -247,7 +247,7 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 
 		parsedTime, err := strconv.ParseInt(val.TimeWritten, 10, 64)
 		if err != nil {
-			Errors = append(Errors, err)
+			ERRL = append(ERRL, err)
 		}
 
 		seconds := parsedTime / 1000
@@ -256,7 +256,7 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 		unixTime = unixTime.Round(time.Millisecond)
 
 		if err != nil {
-			Errors = append(Errors, err)
+			ERRL = append(ERRL, err)
 		}
 
 		transformedLog := models.AggregatedLog{
@@ -281,9 +281,9 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 	}
 
 	if transformedLogs == nil {
-		Errors = append(Errors, errors.New("error on Transforming OS Logs into Standard Logs"))
+		ERRL = append(ERRL, errors.New("error on Transforming OS Logs into Standard Logs"))
 	}
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
+	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
 }
 
 func ProcessAPILogs(APILogs *models.APILogs) {
@@ -304,9 +304,9 @@ func ProcessAPILogs(APILogs *models.APILogs) {
 	}
 
 	if transformedLogs == nil {
-		Errors = append(Errors, errors.New("error on Transforming API Logs into Standard Logs"))
+		ERRL = append(ERRL, errors.New("error on Transforming API Logs into Standard Logs"))
 	}
-	AggregatedLogs.AggregatedLog = append(AggregatedLogs.AggregatedLog, transformedLogs...)
+	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
 }
 
 func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
