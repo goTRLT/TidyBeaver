@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-func GetMSVCLogs() (MSVCLogs models.MSVCLogs, err error) {
-	var MSVCLogEntry []models.MSVCLog
+func GetMSVCLogs() (msvcls models.MSVCLogs, err error) {
+	var MSVCLtemp []models.MSVCLog
 	var responses []models.MSVCLog
 
 	timeoutSecondsStr := os.Getenv("MSVC_TIMEOUTSECONDS")
@@ -38,7 +38,7 @@ func GetMSVCLogs() (MSVCLogs models.MSVCLogs, err error) {
 		log.Fatal(err)
 	}
 
-	MSVCLogs.MSVCL = append(MSVCLogEntry, responses...)
+	msvcls.MSVCL = append(MSVCLtemp, responses...)
 
-	return MSVCLogs, err
+	return msvcls, err
 }
