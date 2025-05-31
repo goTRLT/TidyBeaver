@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func GetAPILogs() (APIL models.APILogs, err error) {
+func GetAPILogs() (APILS models.APILogs, err error) {
 	var APILtemp []models.APILog
 	var responses []models.APILog
 
@@ -38,7 +38,7 @@ func GetAPILogs() (APIL models.APILogs, err error) {
 		log.Fatal(err)
 	}
 
-	APIL.APIL = append(APILtemp, responses...)
+	APILS.APIL = append(APILtemp, responses...)
 
-	return APIL, err
+	return APILS, err
 }
