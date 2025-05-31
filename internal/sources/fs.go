@@ -24,6 +24,6 @@ func GetFSLogs() (FSLogs models.FSLogs, err error) {
 		log.Printf("Error decoding file %s: %v", "InputLogs.json", err)
 	}
 
-	FSLogs.FSLog = append(FSLogs.FSLog, tempLogs.FSLog...)
+	FSLogs.FSL = append(FSLogs.FSL, tempLogs.FSL...)
 	return FSLogs, err
 }
