@@ -7,7 +7,7 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func FetchFSLogs() (FSLogs models.FSLogs, err error) {
+func GetFSLogs() (FSLogs models.FSLogs, err error) {
 	var tempLogs models.FSLogs
 	logFile, err := os.Open(`.\logs\` + "InputLogs.json")
 
