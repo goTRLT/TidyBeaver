@@ -15,32 +15,32 @@ func ProcessLogs() {
 	index := -1
 	dones := make([]chan bool, count)
 
-	if len(ML.MockedLog) != 0 {
+	if len(ML.ML) != 0 {
 		index++
 		ProcessLogsModels(&ML)
 		dones[index] = make(chan bool)
 	}
-	if len(OSL.OS) != 0 {
+	if len(OSL.OSL) != 0 {
 		index++
 		ProcessLogsModels(&OSL)
 		dones[index] = make(chan bool)
 	}
-	if len(FSL.FSLog) != 0 {
+	if len(FSL.FSL) != 0 {
 		index++
 		ProcessLogsModels(&FSL)
 		dones[index] = make(chan bool)
 	}
-	if len(APIL.APILog) != 0 {
+	if len(APIL.APIL) != 0 {
 		index++
 		ProcessLogsModels(&APIL)
 		dones[index] = make(chan bool)
 	}
-	if len(DBL.DBLog) != 0 {
+	if len(DBL.DBL) != 0 {
 		index++
 		ProcessLogsModels(&DBL)
 		dones[index] = make(chan bool)
 	}
-	if len(MSVCL.MSVCLog) != 0 {
+	if len(MSVCL.MSVCL) != 0 {
 		index++
 		ProcessLogsModels(&MSVCL)
 		dones[index] = make(chan bool)
@@ -60,22 +60,22 @@ func ProcessLogs() {
 
 func CountLogTypes() int {
 	count := 0
-	if len(ML.MockedLog) != 0 {
+	if len(ML.ML) != 0 {
 		count++
 	}
-	if len(OSL.OS) != 0 {
+	if len(OSL.OSL) != 0 {
 		count++
 	}
-	if len(FSL.FSLog) != 0 {
+	if len(FSL.FSL) != 0 {
 		count++
 	}
-	if len(APIL.APILog) != 0 {
+	if len(APIL.APIL) != 0 {
 		count++
 	}
-	if len(DBL.DBLog) != 0 {
+	if len(DBL.DBL) != 0 {
 		count++
 	}
-	if len(MSVCL.MSVCLog) != 0 {
+	if len(MSVCL.MSVCL) != 0 {
 		count++
 	}
 	if len(ERRL) != 0 {
@@ -111,7 +111,7 @@ func ProcessLogsModels(LogType any) {
 
 func ProcessMSVCLogs(MSVCLogs *models.MSVCLogs) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range MSVCLogs.MSVCLog {
+	for _, val := range MSVCLogs.MSVCL {
 		transformedLog := models.AggregatedLog{
 			Level:         val.Level,
 			Message:       val.Message,
@@ -129,12 +129,12 @@ func ProcessMSVCLogs(MSVCLogs *models.MSVCLogs) {
 	if transformedLogs == nil {
 		ERRL = append(ERRL, errors.New("error on Transforming Mocked Logs into Standard Logs"))
 	}
-	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
+	AL.AL = append(AL.AL, transformedLogs...)
 }
 
 func ProcessMockedLogs(MockedLogs *models.MockedLogs) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range MockedLogs.MockedLog {
+	for _, val := range MockedLogs.ML {
 		transformedLog := models.AggregatedLog{
 			Level:         val.Level,
 			Message:       val.Message,
@@ -149,12 +149,12 @@ func ProcessMockedLogs(MockedLogs *models.MockedLogs) {
 	if transformedLogs == nil {
 		ERRL = append(ERRL, errors.New("error on Transforming Mocked Logs into Standard Logs"))
 	}
-	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
+	AL.AL = append(AL.AL, transformedLogs...)
 }
 
 func ProcessFSLogs(FSLogs *models.FSLogs) {
 	var transformedLogs2 []models.AggregatedLog
-	for _, val := range FSLogs.FSLog {
+	for _, val := range FSLogs.FSL {
 		transformedLog := models.AggregatedLog{
 			Category:           val.Category,
 			CategoryNumber:     val.CategoryNumber,
@@ -211,12 +211,12 @@ func ProcessFSLogs(FSLogs *models.FSLogs) {
 	if transformedLogs2 == nil {
 		ERRL = append(ERRL, errors.New("error on Transforming FS Logs into Standard Logs"))
 	}
-	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs2...)
+	AL.AL = append(AL.AL, transformedLogs2...)
 }
 
 func ProcessDBLogs(DBLogs *models.DBLogs) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range DBLogs.DBLog {
+	for _, val := range DBLogs.DBL {
 		transformedLog := models.AggregatedLog{
 			Column:        val.Column,
 			CorrelationID: val.Constraint,
@@ -236,12 +236,12 @@ func ProcessDBLogs(DBLogs *models.DBLogs) {
 	if transformedLogs == nil {
 		ERRL = append(ERRL, errors.New("error on Transforming DB Logs into Standard Logs"))
 	}
-	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
+	AL.AL = append(AL.AL, transformedLogs...)
 }
 
 func ProcessOSLogs(OSLogs *models.OSLogs) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range OSLogs.OS {
+	for _, val := range OSLogs.OSL {
 		val.TimeWritten = strings.TrimPrefix(val.TimeWritten, "/Date(")
 		val.TimeWritten = strings.TrimSuffix(val.TimeWritten, ")/")
 
@@ -283,12 +283,12 @@ func ProcessOSLogs(OSLogs *models.OSLogs) {
 	if transformedLogs == nil {
 		ERRL = append(ERRL, errors.New("error on Transforming OS Logs into Standard Logs"))
 	}
-	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
+	AL.AL = append(AL.AL, transformedLogs...)
 }
 
 func ProcessAPILogs(APILogs *models.APILogs) {
 	var transformedLogs []models.AggregatedLog
-	for _, val := range APILogs.APILog {
+	for _, val := range APILogs.APIL {
 
 		transformedLog := models.AggregatedLog{
 			Message:       val.Message,
@@ -306,7 +306,7 @@ func ProcessAPILogs(APILogs *models.APILogs) {
 	if transformedLogs == nil {
 		ERRL = append(ERRL, errors.New("error on Transforming API Logs into Standard Logs"))
 	}
-	AL.AggregatedLog = append(AL.AggregatedLog, transformedLogs...)
+	AL.AL = append(AL.AL, transformedLogs...)
 }
 
 func ProcessErrors(Errors *[]error) (aggregatedLogs []models.AggregatedLog) {
