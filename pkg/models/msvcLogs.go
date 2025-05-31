@@ -3,7 +3,7 @@ package models
 import "time"
 
 type MSVCLogs struct {
-	MSVCLog []MSVCLog
+	MSVCL []MSVCLog
 }
 
 type MSVCLog struct {
