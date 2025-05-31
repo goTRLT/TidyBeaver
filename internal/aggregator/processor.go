@@ -87,7 +87,7 @@ func CountLogTypes() int {
 
 func SaveLogs(AggregatedLogs *models.AggregatedLogs) {
 	storage.JSONSaveLogs(AggregatedLogs)
-	storage.DBInsertLogs(AggregatedLogs)
+	storage.DBStoreLogs(AggregatedLogs)
 }
 
 func ProcessLogsModels(LogType any) {
