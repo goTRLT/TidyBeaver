@@ -38,7 +38,7 @@ func GetMSVCLogs() (MSVCLogs models.MSVCLogs, err error) {
 		log.Fatal(err)
 	}
 
-	MSVCLogs.MSVCLog = append(MSVCLogEntry, responses...)
+	MSVCLogs.MSVCL = append(MSVCLogEntry, responses...)
 
 	return MSVCLogs, err
 }
