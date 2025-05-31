@@ -3,21 +3,25 @@ package sources
 import (
 	"database/sql"
 	"log"
+	"os"
+	"strconv"
 	config "tidybeaver/internal/config"
 	models "tidybeaver/pkg/models"
 )
 
 var dbLogEntry models.DBLog
 
-func FetchDBLogs() (models.DBLogs, error) {
-	connStr := `host=` + config.EnvVar["DB_HOST"] + ` port=` + config.EnvVar["DB_PORT"] + ` user=` + config.EnvVar["DB_USER"] + ` password=` + config.EnvVar["DB_PW"] + ` dbname=` + config.EnvVar["DB_NAME"] + ` sslmode=` + config.EnvVar["DB_SSLMODE"]
+func GetDBLogs() (models.DBLogs, error) {
+	logAmount, _ := strconv.ParseInt(config.CFG.App.LogAmount, 0, 0)
+
+	connStr := `host=` + os.Getenv("DB_HOST") + ` port=` + os.Getenv("DB_PORT") + ` user=` + os.Getenv("DB_USER") + ` password=` + os.Getenv("DB_PW") + ` dbname=` + os.Getenv("DB_NAME") + ` sslmode=` + os.Getenv("DB_SSLMODE")
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	rows, err := db.Query(`SELECT * FROM get_random_db_events($1);`, config.LogAmountSet)
+	rows, err := db.Query(`SELECT * FROM get_random_db_events($1);`, int(logAmount))
 	if err != nil {
 		log.Println("Error fetching random db events:", err)
 	}
