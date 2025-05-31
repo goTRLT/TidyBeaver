@@ -7,7 +7,7 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func FetchOSLogs() (OSLogs models.OSLogs, err error) {
+func GetOSLogs() (OSLogs models.OSLogs, err error) {
 	output1, output2, output3, err := RunCommands()
 
 	if err != nil {
