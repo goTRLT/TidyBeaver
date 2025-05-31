@@ -3,7 +3,7 @@ package models
 import "time"
 
 type AggregatedLogs struct {
-	AggregatedLog []AggregatedLog
+	AL []AggregatedLog
 }
 
 type AggregatedLog struct {
