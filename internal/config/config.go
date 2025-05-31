@@ -4,17 +4,14 @@ import (
 	json "encoding/json"
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 // TODO
 // Refactor to switch from Global variables to arguments
-var ConfigValues Configs
-var UserInputConfigValues UserInputConfigurations
-var LogAmountSet int
-var EnvVar map[string]string
+var CFG Configs
+var UIC UserInputConfigurations
 
 type Configs struct {
 	App struct {
@@ -41,11 +38,9 @@ func Init() (Configs, UserInputConfigurations) {
 	getDefaultConfig()
 	getCustomConfig()
 	printConfigs()
-	return ConfigValues, UserInputConfigValues
+	return CFG, UIC
 }
 
-// TODO
-// Refactor to use configurable path or environment variable
 func getDefaultConfig() {
 	configFile, err := os.Open("internal/config/config.json")
 
@@ -56,9 +51,7 @@ func getDefaultConfig() {
 
 	defer configFile.Close()
 	decodedJson := json.NewDecoder(configFile)
-	decodedJson.Decode(&ConfigValues)
-	logAmount, _ := strconv.ParseInt(ConfigValues.App.LogAmount, 0, 0)
-	LogAmountSet = int(logAmount)
+	decodedJson.Decode(&CFG)
 }
 
 func getCustomConfig() {
@@ -69,32 +62,32 @@ func getCustomConfig() {
 	if !CheckAnswer() {
 		fmt.Println("Do you want to use every source available? ")
 		if CheckAnswer() {
-			UserInputConfigValues.UseAPI = true
-			UserInputConfigValues.UseDatabase = true
-			UserInputConfigValues.UseFS = true
-			UserInputConfigValues.UseMSVC = true
-			UserInputConfigValues.UseWindowsEvents = true
+			UIC.UseAPI = true
+			UIC.UseDatabase = true
+			UIC.UseFS = true
+			UIC.UseMSVC = true
+			UIC.UseWindowsEvents = true
 
 		} else if !CheckAnswer() {
 			fmt.Println("Answer Y (Yes) or N (No) wether you'd like to use each source bellow:")
 
 			fmt.Println("Local Folder? (C:Logs) ")
-			UserInputConfigValues.UseFS = CheckAnswer()
+			UIC.UseFS = CheckAnswer()
 
 			fmt.Println("TidyBeaver's Postgres Database? ")
-			UserInputConfigValues.UseDatabase = CheckAnswer()
+			UIC.UseDatabase = CheckAnswer()
 
 			fmt.Println("Windows Events? ")
-			UserInputConfigValues.UseWindowsEvents = CheckAnswer()
+			UIC.UseWindowsEvents = CheckAnswer()
 
 			fmt.Println("Mocked API? ")
-			UserInputConfigValues.UseAPI = CheckAnswer()
+			UIC.UseAPI = CheckAnswer()
 
 			fmt.Println("Mocked Microservice? ")
-			UserInputConfigValues.UseMSVC = CheckAnswer()
+			UIC.UseMSVC = CheckAnswer()
 		}
 	} else {
-		UserInputConfigValues.UseMockedLogs = true
+		UIC.UseMockedLogs = true
 	}
 }
 
@@ -122,19 +115,17 @@ func printConfigs() {
 		fmt.Println("Error loading .env file")
 	}
 
-	EnvVar, err = godotenv.Read("T:/Repo/TidyBeaver/.env")
+	// EnvVar, err = godotenv.Read("T:/Repo/TidyBeaver/.env")
 
-	if err != nil {
-		fmt.Println("Error marshalling defaultConfig:", err)
-		return
-	}
+	// if err != nil {
+	// 	fmt.Println("Error marshalling defaultConfig:", err)
+	// 	return
+	// }
 
 	fmt.Println("Environment Variables: ")
-	for val := range EnvVar {
-		fmt.Println(val, ":", (os.Getenv(val)))
-	}
+	fmt.Println(os.Environ())
 
-	defaultConfigsJSON, err := json.MarshalIndent(ConfigValues, "", "  ")
+	defaultConfigsJSON, err := json.MarshalIndent(CFG, "", "  ")
 
 	if err != nil {
 		fmt.Println("Error marshalling defaultConfig:", err)
