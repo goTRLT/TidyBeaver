@@ -7,25 +7,25 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func GetOSLogs() (OSLogs models.OSLogs, err error) {
+func GetOSLogs() (osl models.OSLogs, err error) {
 	output1, output2, output3, err := RunCommands()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	out, err := MergeJSONOutputs(output1, output2, output3)
+	out, err := MergeOutput(output1, output2, output3)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = json.Unmarshal(out, &OSLogs.OSL)
+	err = json.Unmarshal(out, &osl.OSL)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return OSLogs, err
+	return osl, err
 }
 
 func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err error) {
@@ -54,7 +54,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 	return outputApp, outputSys, outputSec, err
 }
 
-func MergeJSONOutputs(outputs ...[]byte) ([]byte, error) {
+func MergeOutput(outputs ...[]byte) ([]byte, error) {
 	var out []any
 	for _, vals := range outputs {
 		var temp []any
