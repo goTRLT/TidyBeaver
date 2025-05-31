@@ -19,7 +19,7 @@ func DBInsertLogs(logs *models.AggregatedLogs) {
 		log.Fatal(err)
 	}
 
-	for _, id := range logs.AggregatedLog {
+	for _, id := range logs.AL {
 		var userID int
 		instanceID := rand.Int63()
 
