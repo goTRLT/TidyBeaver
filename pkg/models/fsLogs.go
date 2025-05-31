@@ -3,7 +3,7 @@ package models
 import "time"
 
 type FSLogs struct {
-	FSLog []FSLog
+	FSL []FSLog
 }
 
 type FSLog struct {
