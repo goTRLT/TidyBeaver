@@ -10,14 +10,14 @@ import (
 
 // TODO
 // Change to non-global variables
-var AggregatedLogs models.AggregatedLogs
-var MockedLogs models.MockedLogs
-var OSLogs models.OSLogs
-var FSLogs models.FSLogs
-var APILogs models.APILogs
-var MSVCLogs models.MSVCLogs
-var DBLogs models.DBLogs
-var Errors []error
+var AL models.AggregatedLogs
+var ML models.MockedLogs
+var OSL models.OSLogs
+var FSL models.FSLogs
+var APIL models.APILogs
+var MSVCL models.MSVCLogs
+var DBL models.DBLogs
+var ERRL []error
 
 func Init() {
 	fmt.Println("Fetching Logs...")
@@ -32,7 +32,7 @@ func Init() {
 
 	fmt.Println("Stacking up the organized Logs...")
 	time.Sleep(500 * time.Millisecond)
-	SaveLogs(&AggregatedLogs)
+	SaveLogs(&AL)
 	fmt.Println("Complete!")
 
 	//TODO UnComment
@@ -50,46 +50,52 @@ func Init() {
 
 func FetchSourcesLogs() {
 	var err error
-	if config.UserInputConfigValues.UseMockedLogs {
-		MockedLogs, err = source.CreateMockedLogs()
-		CheckAppendError(err)
+	if config.UIC.UseMockedLogs {
+		ML, err = source.CreateMockedLogs()
+		if err != nil {
+			ERRL = append(ERRL, err)
+		}
 	} else {
-		if config.UserInputConfigValues.UseAPI {
-			APILogs, err = source.GetAPILogs()
-			CheckAppendError(err)
+		if config.UIC.UseAPI {
+			APIL, err = source.GetAPILogs()
+			if err != nil {
+				ERRL = append(ERRL, err)
+			}
 		}
-		if config.UserInputConfigValues.UseDatabase {
-			DBLogs, err = source.FetchDBLogs()
-			CheckAppendError(err)
+		if config.UIC.UseDatabase {
+			DBL, err = source.GetDBLogs()
+			if err != nil {
+				ERRL = append(ERRL, err)
+			}
 		}
-		if config.UserInputConfigValues.UseFS {
-			FSLogs, err = source.FetchFSLogs()
-			CheckAppendError(err)
+		if config.UIC.UseFS {
+			FSL, err = source.GetFSLogs()
+			if err != nil {
+				ERRL = append(ERRL, err)
+			}
 		}
-		if config.UserInputConfigValues.UseMSVC {
-			MSVCLogs, err = source.GetMSVCLogs()
-			CheckAppendError(err)
+		if config.UIC.UseMSVC {
+			MSVCL, err = source.GetMSVCLogs()
+			if err != nil {
+				ERRL = append(ERRL, err)
+			}
 		}
-		if config.UserInputConfigValues.UseWindowsEvents {
-			OSLogs, err = source.FetchOSLogs()
-			CheckAppendError(err)
+		if config.UIC.UseWindowsEvents {
+			OSL, err = source.GetOSLogs()
+			if err != nil {
+				ERRL = append(ERRL, err)
+			}
 		}
-	}
-}
-
-func CheckAppendError(err error) {
-	if err != nil {
-		Errors = append(Errors, err)
 	}
 }
 
 func Clean() {
-	AggregatedLogs.AggregatedLog = nil
-	MockedLogs.MockedLog = nil
-	OSLogs.OS = nil
-	FSLogs.FSLog = nil
-	APILogs.APILog = nil
-	MSVCLogs.MSVCLog = nil
-	DBLogs.DBLog = nil
-	Errors = nil
+	AL.AggregatedLog = nil
+	ML.MockedLog = nil
+	OSL.OS = nil
+	FSL.FSLog = nil
+	APIL.APILog = nil
+	MSVCL.MSVCLog = nil
+	DBL.DBLog = nil
+	ERRL = nil
 }
