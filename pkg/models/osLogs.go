@@ -1,7 +1,7 @@
 package models
 
 type OSLogs struct {
-	OS []OS
+	OSL []OS
 }
 
 type OS struct {
