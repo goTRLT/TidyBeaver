@@ -11,7 +11,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func DBInsertLogs(logs *models.AggregatedLogs) {
+func DBStoreLogs(als *models.AggregatedLogs) {
 	connStr := `host=` + os.Getenv("DB_HOST") + ` port=` + os.Getenv("DB_PORT") + ` user=` + os.Getenv("DB_USER") + ` password=` + os.Getenv("DB_PW") + ` dbname=` + os.Getenv("DB_NAME") + ` sslmode=` + os.Getenv("DB_SSLMODE")
 	db, err := sql.Open("postgres", connStr)
 
@@ -19,7 +19,7 @@ func DBInsertLogs(logs *models.AggregatedLogs) {
 		log.Fatal(err)
 	}
 
-	for _, id := range logs.AL {
+	for _, id := range als.AL {
 		var userID int
 		instanceID := rand.Int63()
 
