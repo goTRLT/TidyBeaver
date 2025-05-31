@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	config "tidybeaver/internal/config"
 	models "tidybeaver/pkg/models"
@@ -14,7 +15,7 @@ func GetMSVCLogs() (MSVCLogs models.MSVCLogs, err error) {
 	var MSVCLogEntry []models.MSVCLog
 	var responses []models.MSVCLog
 
-	timeoutSecondsStr := config.EnvVar["MSVC_TIMEOUTSECONDS"]
+	timeoutSecondsStr := os.Getenv("MSVC_TIMEOUTSECONDS")
 	timeoutSeconds, err := strconv.Atoi(timeoutSecondsStr)
 
 	if err != nil {
@@ -25,7 +26,7 @@ func GetMSVCLogs() (MSVCLogs models.MSVCLogs, err error) {
 		Timeout: -time.Duration(timeoutSeconds) * time.Second,
 	}
 
-	resp, err := client.Get(config.EnvVar["MSVC_BASEURL"] + config.ConfigValues.App.LogAmount)
+	resp, err := client.Get(os.Getenv("MSVC_BASEURL") + config.CFG.App.LogAmount)
 
 	if err != nil {
 		log.Fatal(err)
