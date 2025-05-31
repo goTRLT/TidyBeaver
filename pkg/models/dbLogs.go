@@ -1,7 +1,7 @@
 package models
 
 type DBLogs struct {
-	DBLog []DBLog
+	DBL []DBLog
 }
 
 type DBLog struct {
