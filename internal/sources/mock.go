@@ -10,10 +10,9 @@ import (
 	"time"
 )
 
-var mls models.MockedLogs
 var ml models.MockedLog
 
-func CreateMockedLogs() (model models.MockedLogs, err error) {
+func CreateMockedLogs() (mls models.MockedLogs, err error) {
 	logAmount, _ := strconv.ParseInt(config.CFG.App.LogAmount, 0, 0)
 
 	rand.Seed(time.Now().UnixNano())
@@ -55,12 +54,12 @@ func randomTime() time.Time {
 	return now.Add(-time.Duration(randomizedOffset) * time.Second)
 }
 
-func selectMockedMessage(MockedLevel string) string {
-	var MockedMessage string
-	if MockedLevel == "WARN" || MockedLevel == "ERROR" {
-		MockedMessage = randomChoice(models.MockedErrorMessages)
-	} else if MockedLevel == "INFO" || MockedLevel == "DEBUG" {
-		MockedMessage = randomChoice(models.MockedInfoMessages)
+func selectMockedMessage(ml string) string {
+	var mockedMessage string
+	if ml == "WARN" || ml == "ERROR" {
+		mockedMessage = randomChoice(models.MockedErrorMessages)
+	} else if ml == "INFO" || ml == "DEBUG" {
+		mockedMessage = randomChoice(models.MockedInfoMessages)
 	}
-	return MockedMessage
+	return mockedMessage
 }
