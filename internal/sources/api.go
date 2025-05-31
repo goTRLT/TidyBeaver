@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	config "tidybeaver/internal/config"
 	models "tidybeaver/pkg/models"
@@ -14,7 +15,7 @@ func GetAPILogs() (APILogs models.APILogs, err error) {
 	var APILogEntry []models.APILog
 	var responses []models.APILog
 
-	timeoutSecondsStr := config.EnvVar["API_TIMEOUTSECONDS"]
+	timeoutSecondsStr := os.Getenv("API_TIMEOUTSECONDS")
 	timeoutSeconds, err := strconv.Atoi(timeoutSecondsStr)
 
 	if err != nil {
@@ -25,7 +26,7 @@ func GetAPILogs() (APILogs models.APILogs, err error) {
 		Timeout: -time.Duration(timeoutSeconds) * time.Second,
 	}
 
-	resp, err := client.Get(config.EnvVar["API_BASEURL"] + config.ConfigValues.App.LogAmount)
+	resp, err := client.Get(os.Getenv("API_BASEURL") + config.CFG.App.LogAmount)
 
 	if err != nil {
 		log.Fatal(err)
