@@ -5,7 +5,7 @@ import (
 )
 
 type MockedLogs struct {
-	ML []MockedLog
+	MockedLog []MockedLog
 }
 
 type MockedLog struct {
