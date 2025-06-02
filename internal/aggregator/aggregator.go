@@ -90,12 +90,12 @@ func FetchSourcesLogs() {
 }
 
 func Clean() {
-	AL.AL = nil
-	ML.ML = nil
-	OSL.OSL = nil
-	FSL.FSL = nil
-	APIL.APIL = nil
-	MSVCL.MSVCL = nil
-	DBL.DBL = nil
+	AL.AggregatedLog = nil
+	ML.MockedLog = nil
+	OSL.OSLog = nil
+	FSL.FSLog = nil
+	APIL.APILog = nil
+	MSVCL.MSVCLog = nil
+	DBL.DBLog = nil
 	ERRL = nil
 }
