@@ -18,7 +18,7 @@ func CreateMockedLogs() (mls models.MockedLogs, err error) {
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < int(logAmount); i++ {
 		ml, err = GenerateLog()
-		mls.ML = append(mls.ML, ml)
+		mls.MockedLog = append(mls.MockedLog, ml)
 	}
 
 	if err != nil {
