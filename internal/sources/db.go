@@ -46,7 +46,7 @@ func GetDBLogs() (models.DBLogs, error) {
 			continue
 		}
 
-		dbLogs.DBL = append(dbLogs.DBL, dbLogEntry)
+		dbLogs.DBLog = append(dbLogs.DBLog, dbLogEntry)
 	}
 	return dbLogs, rows.Err()
 }
