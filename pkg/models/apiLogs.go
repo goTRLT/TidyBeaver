@@ -3,7 +3,7 @@ package models
 import "time"
 
 type APILogs struct {
-	APIL []APILog
+	APILog []APILog
 }
 
 type APILog struct {
