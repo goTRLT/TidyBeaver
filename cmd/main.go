@@ -4,7 +4,6 @@ import (
 	"fmt"
 	aggregator "tidybeaver/internal/aggregator"
 	config "tidybeaver/internal/config"
-	web "tidybeaver/web"
 	"time"
 )
 
@@ -39,7 +38,7 @@ func main() {
 	time.Sleep(500 * time.Millisecond)
 
 	fmt.Println("Structuring HTML Template")
-	go web.InitHtml()
+	go InitElk()
 	time.Sleep(500 * time.Millisecond)
 
 	fmt.Println("TidyBeaver will rest for a minute before resuming it's work")
