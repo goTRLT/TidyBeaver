@@ -1,10 +1,10 @@
 package models
 
 type OSLogs struct {
-	OSL []OS
+	OSLog []OSLog
 }
 
-type OS struct {
+type OSLog struct {
 	Category           string   `json:"Category"`
 	CategoryNumber     int      `json:"CategoryNumber"`
 	Container          string   `json:"Container"`
