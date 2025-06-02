@@ -19,7 +19,7 @@ func GetOSLogs() (osl models.OSLogs, err error) {
 		log.Fatal(err)
 	}
 
-	err = json.Unmarshal(out, &osl.OSL)
+	err = json.Unmarshal(out, &osl.OSLog)
 
 	if err != nil {
 		log.Fatal(err)
