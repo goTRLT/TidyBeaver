@@ -38,7 +38,7 @@ func GetAPILogs() (APILS models.APILogs, err error) {
 		log.Fatal(err)
 	}
 
-	APILS.APIL = append(APILtemp, responses...)
+	APILS.APILog = append(APILtemp, responses...)
 
 	return APILS, err
 }
