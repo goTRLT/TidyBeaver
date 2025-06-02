@@ -19,7 +19,7 @@ func DBStoreLogs(als *models.AggregatedLogs) {
 		log.Fatal(err)
 	}
 
-	for _, id := range als.AL {
+	for _, id := range als.AggregatedLog {
 		var userID int
 		instanceID := rand.Int63()
 
