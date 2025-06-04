@@ -2,7 +2,6 @@ package aggregator
 
 import (
 	"fmt"
-	config "tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
 	models "tidybeaver/pkg/models"
 	"time"
@@ -50,42 +49,30 @@ func Init() {
 
 func FetchSourcesLogs() {
 	var err error
-	if config.UIC.UseMockedLogs {
-		ML, err = source.CreateMockedLogs()
-		if err != nil {
-			ERRL = append(ERRL, err)
-		}
-	} else {
-		if config.UIC.UseAPI {
-			APIL, err = source.GetAPILogs()
-			if err != nil {
-				ERRL = append(ERRL, err)
-			}
-		}
-		if config.UIC.UseDatabase {
-			DBL, err = source.GetDBLogs()
-			if err != nil {
-				ERRL = append(ERRL, err)
-			}
-		}
-		if config.UIC.UseFS {
-			FSL, err = source.GetFSLogs()
-			if err != nil {
-				ERRL = append(ERRL, err)
-			}
-		}
-		if config.UIC.UseMSVC {
-			MSVCL, err = source.GetMSVCLogs()
-			if err != nil {
-				ERRL = append(ERRL, err)
-			}
-		}
-		if config.UIC.UseWindowsEvents {
-			OSL, err = source.GetOSLogs()
-			if err != nil {
-				ERRL = append(ERRL, err)
-			}
-		}
+
+	APIL, err = source.GetAPILogs()
+	if err != nil {
+		ERRL = append(ERRL, err)
+	}
+
+	DBL, err = source.GetDBLogs()
+	if err != nil {
+		ERRL = append(ERRL, err)
+	}
+
+	FSL, err = source.GetFSLogs()
+	if err != nil {
+		ERRL = append(ERRL, err)
+	}
+
+	MSVCL, err = source.GetMSVCLogs()
+	if err != nil {
+		ERRL = append(ERRL, err)
+	}
+
+	OSL, err = source.GetOSLogs()
+	if err != nil {
+		ERRL = append(ERRL, err)
 	}
 }
 
