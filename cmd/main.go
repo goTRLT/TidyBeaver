@@ -8,7 +8,6 @@ import (
 )
 
 var Configurations config.Configs
-var UserInputConfigurations config.UserInputConfigurations
 
 func main() {
 	fmt.Println("Welcome to the TidyBeaver Log aggregator!")
