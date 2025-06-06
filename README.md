@@ -113,21 +113,21 @@ cp .env.example .env
 Update .env and config/config.json with your desired environment variables and connection settings.
 
 # Build and run the app
-go build -o bin/main ./cmd/main.go
-./bin/main
+	go build -o bin/main ./cmd/main.go
+	./bin/main
 
 Or use Docker:
 
-docker-compose up --build
+	docker-compose up --build
 
 Filebeat + ELK (Optional)
 Start Filebeat + ELK stack (configured in filebeat/filebeat.yml):
 
-docker-compose -f docker-compose.yml up -d filebeat elk
+	docker-compose -f docker-compose.yml up -d filebeat elk
 
 🧪 Running Tests
 
-go test ./test/...
+	go test ./test/...
 
 🛠️ SQL Scripts
 create_logs_table.sql - Creates required schema
