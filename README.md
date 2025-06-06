@@ -5,38 +5,37 @@ TidyBeaver is a modular log aggregation system written in Go. It collects logs f
 ## 📦 Project Structure
 
 TidyBeaver/
-│
-├── bin/ # Binary output folder
+├── bin/ # Compiled binaries
 ├── cmd/ # Entry points
 │ ├── api.go
 │ ├── elk.go
 │ └── main.go
 ├── internal/
-│ ├── aggregator/ # Core log aggregation logic
+│ ├── aggregator/ # Core logic for aggregation
 │ │ ├── aggregator.go
 │ │ └── processor.go
-│ ├── api/ # REST API handlers
+│ ├── api/ # RESTful API handlers
 │ │ ├── handler.go
 │ │ └── response.go
-│ ├── config/ # Application config
+│ ├── config/
 │ │ ├── config.go
 │ │ └── config.json
-│ ├── elk/ # ELK-specific routing and controllers
+│ ├── elk/ # ELK-specific routing
 │ │ ├── controller/
 │ │ │ └── base.go
 │ │ └── router/
 │ │ └── router.go
-│ ├── msvc/ # Microservice log logic
+│ ├── msvc/ # Microservice log handlers
 │ │ ├── handler.go
 │ │ └── response.go
-│ ├── sources/ # Source interfaces for logs
+│ ├── sources/ # Various log source interfaces
 │ │ ├── api.go
 │ │ ├── db.go
 │ │ ├── fs.go
 │ │ ├── mock.go
 │ │ ├── msvc.go
 │ │ └── os.go
-│ ├── storage/ # Storage handlers
+│ ├── storage/ # Log storage handlers
 │ │ ├── db.go
 │ │ ├── fs.go
 │ │ └── s3/
@@ -45,8 +44,7 @@ TidyBeaver/
 │ │ ├── listBuckets.go
 │ │ ├── s3.go
 │ │ └── uploadLogs.go
-│ └── logs/ # Log processing (empty or WIP)
-│
+│ └── logs/ # (Reserved / WIP)
 ├── pkg/
 │ └── models/ # Domain models for logs
 │ ├── aggregatedLogs.go
@@ -57,39 +55,39 @@ TidyBeaver/
 │ ├── mockedLogs.go
 │ ├── msvcLogs.go
 │ └── osLogs.go
-│
-├── filebeat/ # Filebeat integration
+├── filebeat/
 │ ├── Dockerfile
 │ └── filebeat.yml
-├── scripts/ # SQL scripts
+├── scripts/
 │ ├── create_logs_table.sql
 │ ├── get_random_db_events.sql
 │ └── insert_logs_table.sql
-├── test/ # Unit and integration tests
+├── test/
 │ ├── aggregator_test.go
 │ └── api_test.go
-│
-├── .env
+├── tidybeaver-logs/ # Local logs output (optional)
 ├── Dockerfile
 ├── docker-compose.yml
+├── .env
+├── .gitignore
 ├── go.mod
 ├── go.sum
-├── tidybeaver-logs/ # Local log output (?)
-├── .gitignore
-└── README.md # You're here :)
+└── README.md
 
 
 ## 🧱 Architecture
 
-+-------------+ +--------------+ +----------------+
-| Sources |-----> | Aggregator | ---> | Storage (S3) |
-| (API, DB, | | Processor | | or Local FS) |
-| OS, MSVC) | +------+-------+ +----------------+
-+-------------+ |
++-------------+ +----------------+ +--------------------+
+| | | | | |
+| Sources +----->+ Aggregator +------>+ Storage |
+| (API, DB, | | Processor | | (S3 / FileSystem) |
+| OS, MSVC) | | | | |
++-------------+ +--------+-------+ +--------------------+
+|
 v
-+---------------+
-| Filebeat + ELK|
-+---------------+
++----------------------+
+| Filebeat + ELK Stack|
++----------------------+
 
 
 - **Sources**: Plugins or connectors to log-producing systems.
