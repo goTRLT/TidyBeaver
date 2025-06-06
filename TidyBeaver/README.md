@@ -14,7 +14,7 @@ Development Steps
 - [X] 11. Build a web dashboard using Go (with gin + html/template) that queries your aggregator API.
 - [ ] 12. Unit testing with testing package
 - [X] 13. Logging best practices (structured logs, correlation IDs)
-- [ ] 16. Add to README: architecture, instructions and screenshots
+- [X] 16. Add to README: architecture, instructions and screenshots
 - [X] 17. Deploy on docker container
 
 Business Rules
