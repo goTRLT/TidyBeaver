@@ -75,13 +75,12 @@ TidyBeaver/
 └── README.md
 
 
+
 ## 🧱 Architecture
 
 +-------------+ +----------------+ +--------------------+
-| | | | | |
-| Sources +----->+ Aggregator +------>+ Storage |
-| (API, DB, | | Processor | | (S3 / FileSystem) |
-| OS, MSVC) | | | | |
+| Sources | | | | | | | | | | Aggregator | | Storage           |
+| (API, DB, OS, FS, MSVC) | | Processor  | | (S3 / FileSystem) |
 +-------------+ +--------+-------+ +--------------------+
 |
 v
