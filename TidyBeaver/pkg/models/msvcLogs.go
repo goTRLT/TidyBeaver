@@ -15,3 +15,17 @@ type MSVCLog struct {
 	RequestID     string    `json:"request_id"`
 	Host          string    `json:"host"`
 }
+
+func (v MSVCLog) ToAggregatedLog() AggregatedLog {
+	return AggregatedLog{
+		Level:         v.Level,
+		Message:       v.Message,
+		Service:       v.Service,
+		Source:        "Microservice",
+		TimeGenerated: v.Timestamp,
+		TimeWritten:   time.Now(),
+		CorrelationID: v.CorrelationID,
+		Host:          v.Host,
+		TransactionID: v.RequestID,
+	}
+}
