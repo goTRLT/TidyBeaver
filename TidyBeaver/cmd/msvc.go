@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -9,9 +10,12 @@ import (
 	"time"
 )
 
+const (
+	msvcPort = 9191
+)
+
 func InitMSVC() {
 	rand.Seed(time.Now().UnixNano())
-	port := 9191
 	hostname, err := os.Hostname()
 	if err != nil {
 		hostname = "unknown-host"
@@ -21,6 +25,6 @@ func InitMSVC() {
 
 	http.HandleFunc("/msvc/random-response", msvc.MsvcLogHandler(serviceName, hostname))
 
-	log.Println("Starting log generator service on :", port)
-	log.Fatal(http.ListenAndServe(":9191", nil))
+	log.Println("Starting log generator service on :", msvcPort)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", msvcPort), nil))
 }
