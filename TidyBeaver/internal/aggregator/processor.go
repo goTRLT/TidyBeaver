@@ -7,6 +7,7 @@ import (
 	"strings"
 	storage "tidybeaver/internal/storage"
 	models "tidybeaver/pkg/models"
+	utils "tidybeaver/utils"
 	"time"
 )
 
@@ -153,65 +154,11 @@ func (a *Aggregator) ProcessMockedLogs(MockedLogs *models.MockedLogs) {
 }
 
 func (a *Aggregator) ProcessFSLogs(FSLogs *models.FSLogs) {
-	var transformedLogs2 []models.AggregatedLog
-	for _, val := range FSLogs.FSLog {
-		transformedLog := models.AggregatedLog{
-			Category:           val.Category,
-			CategoryNumber:     val.CategoryNumber,
-			Checksum:           val.Checksum,
-			ClientIP:           val.ClientIP,
-			Column:             val.Column,
-			Component:          val.Component,
-			ComputerName:       val.ComputerName,
-			Constraint:         val.Constraint,
-			Container:          val.Container,
-			CorrelationID:      val.CorrelationID,
-			Data:               val.Data,
-			Datatype:           val.Datatype,
-			Detail:             val.Detail,
-			Endpoint:           val.Endpoint,
-			EntryType:          val.EntryType,
-			Environment:        val.Environment,
-			Errcode:            val.Errcode,
-			EventID:            val.EventID,
-			EventType:          val.EventType,
-			Path:               val.Path,
-			FileSize:           val.FileSize,
-			Host:               val.Host,
-			HTTPMethod:         val.HTTPMethod,
-			Index:              val.Index,
-			InstanceID:         val.InstanceID,
-			LatencyMs:          val.LatencyMs,
-			Level:              val.Level,
-			LineNumber:         val.LineNumber,
-			LogName:            val.LogName,
-			MachineName:        val.MachineName,
-			Message:            val.Message,
-			RequestBody:        val.RequestBody,
-			ReplacementStrings: val.ReplacementStrings,
-			ResponseBody:       val.ResponseBody,
-			RowsAffected:       val.RowsAffected,
-			Schema:             val.Schema,
-			Service:            val.Service,
-			Source:             "FileSystem: " + val.Source,
-			SplitLines:         val.SplitLines,
-			SpanID:             val.SpanID,
-			StatusCode:         val.StatusCode,
-			TableName:          val.TableName,
-			TimeGenerated:      val.TimeGenerated,
-			TimeWritten:        time.Now(),
-			TransactionID:      val.TransactionID,
-			UserAgent:          val.UserAgent,
-			UserID:             val.UserID,
-			UserName:           val.UserName,
-			Query:              val.Query,
-		}
-		transformedLogs2 = append(transformedLogs2, transformedLog)
-	}
-	if transformedLogs2 == nil {
+	transformed := utils.TransformSlice(FSLogs.FSLog)
+	if len(transformed) == 0 {
 		a.ERRL = append(a.ERRL, errors.New("error on Transforming FS Logs into Standard Logs"))
 	}
-	a.AL.AggregatedLog = append(a.AL.AggregatedLog, transformedLogs2...)
+	a.AL.AggregatedLog = append(a.AL.AggregatedLog, transformed...)
 }
 
 func (a *Aggregator) ProcessDBLogs(DBLogs *models.DBLogs) {
