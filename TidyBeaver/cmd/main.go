@@ -33,7 +33,8 @@ func main() {
 	time.Sleep(500 * time.Millisecond)
 
 	fmt.Println("TidyBeaver's Log Aggregator starts working")
-	aggregator.Init()
+	agg := &aggregator.Aggregator{}
+	agg.Init()
 	time.Sleep(500 * time.Millisecond)
 
 	fmt.Println("Structuring HTML Template")
@@ -45,7 +46,7 @@ func main() {
 
 	fmt.Println("TidyBeaver's Log Aggregator starts working")
 	for 1 != 2 {
-		aggregator.Init()
+		agg.Init()
 		fmt.Println("TidyBeaver will rest for a minute before resuming it's work")
 		time.Sleep(1 * time.Minute)
 	}
