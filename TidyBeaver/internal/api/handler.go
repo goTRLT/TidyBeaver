@@ -7,12 +7,17 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
+const (
+	MaxAmount     = 100
+	DefaultAmount = 1
+)
+
 func ResponseHandler(w http.ResponseWriter, r *http.Request) {
 	var result []models.APIResponse
 	countStr := r.URL.Query().Get("amount")
-	amount := 1
+	amount := DefaultAmount
 	if countStr != "" {
-		if parsed, err := strconv.Atoi(countStr); err == nil && parsed > 0 && parsed <= 100 {
+		if parsed, err := strconv.Atoi(countStr); err == nil && parsed > 0 && parsed <= MaxAmount {
 			amount = parsed
 		}
 	}
