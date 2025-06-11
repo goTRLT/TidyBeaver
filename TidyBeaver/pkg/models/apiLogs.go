@@ -14,3 +14,16 @@ type APILog struct {
 	Path       string    `json:"path"`
 	RequestID  string    `json:"request_id"`
 }
+
+func (v APILog) ToAggregatedLog() AggregatedLog {
+	return AggregatedLog{
+		Message:       v.Message,
+		StatusCode:    v.StatusCode,
+		TransactionID: v.RequestID,
+		Path:          v.Path,
+		Detail:        v.Status,
+		TimeGenerated: v.Timestamp,
+		Source:        "API",
+		TimeWritten:   time.Now(),
+	}
+}
