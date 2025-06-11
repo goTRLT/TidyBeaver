@@ -26,3 +26,14 @@ var MockedInfoMessages = []string{
 	"Operation completed successfully",
 	"Success!",
 }
+
+func (v MockedLog) ToAggregatedLog() AggregatedLog {
+	return AggregatedLog{
+		Level:         v.Level,
+		Message:       v.Message,
+		Service:       v.Service,
+		Source:        "Mocked Log",
+		TimeGenerated: v.Time,
+		TimeWritten:   time.Now(),
+	}
+}
