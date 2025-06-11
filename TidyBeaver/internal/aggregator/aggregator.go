@@ -7,36 +7,36 @@ import (
 	"time"
 )
 
-// TODO
-// Change to non-global variables
-var AL models.AggregatedLogs
-var ML models.MockedLogs
-var OSL models.OSLogs
-var FSL models.FSLogs
-var APIL models.APILogs
-var MSVCL models.MSVCLogs
-var DBL models.DBLogs
-var ERRL []error
-
 const (
 	ShortSleep = 500 * time.Millisecond
 	LongSleep  = 1 * time.Minute
 )
 
-func Init() {
+type Aggregator struct {
+	AL    models.AggregatedLogs
+	ML    models.MockedLogs
+	OSL   models.OSLogs
+	FSL   models.FSLogs
+	APIL  models.APILogs
+	MSVCL models.MSVCLogs
+	DBL   models.DBLogs
+	ERRL  []error
+}
+
+func (a *Aggregator) Init() {
 	fmt.Println("Fetching Logs...")
 	time.Sleep(ShortSleep * time.Millisecond)
-	FetchSourcesLogs()
+	a.FetchSourcesLogs()
 	fmt.Println("Complete!")
 
 	fmt.Println("Organizing the Logs...")
 	time.Sleep(ShortSleep * time.Millisecond)
-	ProcessLogs()
+	a.ProcessLogs()
 	fmt.Println("Complete!")
 
 	fmt.Println("Stacking up the organized Logs...")
 	time.Sleep(ShortSleep * time.Millisecond)
-	SaveLogs(&AL)
+	SaveLogs(&a.AL)
 	fmt.Println("Complete!")
 
 	//TODO UnComment
@@ -47,47 +47,47 @@ func Init() {
 
 	fmt.Println("Cleaning the workbench...")
 	time.Sleep(ShortSleep * time.Millisecond)
-	Clean()
+	a.Clean()
 	fmt.Println("Complete!")
 
 }
 
-func FetchSourcesLogs() {
+func (a Aggregator) FetchSourcesLogs() {
 	var err error
 
-	APIL, err = source.GetAPILogs()
+	a.APIL, err = source.GetAPILogs()
 	if err != nil {
-		ERRL = append(ERRL, err)
+		a.ERRL = append(a.ERRL, err)
 	}
 
-	DBL, err = source.GetDBLogs()
+	a.DBL, err = source.GetDBLogs()
 	if err != nil {
-		ERRL = append(ERRL, err)
+		a.ERRL = append(a.ERRL, err)
 	}
 
-	FSL, err = source.GetFSLogs()
+	a.FSL, err = source.GetFSLogs()
 	if err != nil {
-		ERRL = append(ERRL, err)
+		a.ERRL = append(a.ERRL, err)
 	}
 
-	MSVCL, err = source.GetMSVCLogs()
+	a.MSVCL, err = source.GetMSVCLogs()
 	if err != nil {
-		ERRL = append(ERRL, err)
+		a.ERRL = append(a.ERRL, err)
 	}
 
-	OSL, err = source.GetOSLogs()
+	a.OSL, err = source.GetOSLogs()
 	if err != nil {
-		ERRL = append(ERRL, err)
+		a.ERRL = append(a.ERRL, err)
 	}
 }
 
-func Clean() {
-	AL.AggregatedLog = nil
-	ML.MockedLog = nil
-	OSL.OSLog = nil
-	FSL.FSLog = nil
-	APIL.APILog = nil
-	MSVCL.MSVCLog = nil
-	DBL.DBLog = nil
-	ERRL = nil
+func (a Aggregator) Clean() {
+	a.AL.AggregatedLog = nil
+	a.ML.MockedLog = nil
+	a.OSL.OSLog = nil
+	a.FSL.FSLog = nil
+	a.APIL.APILog = nil
+	a.MSVCL.MSVCLog = nil
+	a.DBL.DBLog = nil
+	a.ERRL = nil
 }
