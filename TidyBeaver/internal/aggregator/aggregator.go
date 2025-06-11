@@ -18,19 +18,24 @@ var MSVCL models.MSVCLogs
 var DBL models.DBLogs
 var ERRL []error
 
+const (
+	ShortSleep = 500 * time.Millisecond
+	LongSleep  = 1 * time.Minute
+)
+
 func Init() {
 	fmt.Println("Fetching Logs...")
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(ShortSleep * time.Millisecond)
 	FetchSourcesLogs()
 	fmt.Println("Complete!")
 
 	fmt.Println("Organizing the Logs...")
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(ShortSleep * time.Millisecond)
 	ProcessLogs()
 	fmt.Println("Complete!")
 
 	fmt.Println("Stacking up the organized Logs...")
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(ShortSleep * time.Millisecond)
 	SaveLogs(&AL)
 	fmt.Println("Complete!")
 
@@ -41,7 +46,7 @@ func Init() {
 	// fmt.Println("Complete!")
 
 	fmt.Println("Cleaning the workbench...")
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(ShortSleep * time.Millisecond)
 	Clean()
 	fmt.Println("Complete!")
 
