@@ -1,7 +1,7 @@
 package sources
 
 import (
-	"encoding/json"
+	"context"
 	"log"
 	"net/http"
 	"os"
@@ -22,21 +22,20 @@ func GetAPILogs() (APILS models.APILogs, err error) {
 		log.Fatal(err)
 	}
 
-	client := &http.Client{
-		Timeout: -time.Duration(timeoutSeconds) * time.Second,
-	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
+	defer cancel()
 
-	resp, err := client.Get(os.Getenv("API_BASEURL") + config.CFG.App.LogAmount)
-
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, os.Getenv("API_BASEURL")+config.CFG.App.LogAmount, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	defer resp.Body.Close()
-
-	if err := json.NewDecoder(resp.Body).Decode(&responses); err != nil {
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
 		log.Fatal(err)
 	}
+	defer resp.Body.Close()
 
 	APILS.APILog = append(APILtemp, responses...)
 
