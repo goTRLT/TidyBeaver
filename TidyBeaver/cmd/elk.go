@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"tidybeaver/internal/elk/router"
 
@@ -10,9 +11,9 @@ import (
 func InitElk() {
 
 	routes := router.NewRouter()
-
+	const elkPort = 9999
 	server := &http.Server{
-		Addr:           ":9999",
+		Addr:           fmt.Sprintf(":%d", elkPort),
 		Handler:        routes,
 		ReadTimeout:    10,
 		WriteTimeout:   10,
