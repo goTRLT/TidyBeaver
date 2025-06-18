@@ -1,4 +1,4 @@
-# TidyBeaver - Log Aggregator
+# TidyBeaver - Log Aggregator - Work In Progress
 
 TidyBeaver is a modular log aggregation system written in Go. It collects logs from multiple sources (API, database, OS, microservices), processes and stores them in S3, and supports integration with the ELK stack via Filebeat.
 
