@@ -8,13 +8,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// TODO
-// Refactor to switch from Global variables to arguments
 var CFG Configs
 
 type Configs struct {
 	App struct {
-		LogLevel  string `json:"LogLevel"`
+		Debug     bool `json:"Debug"`
 		LogAmount string `json:"LogAmount"`
 	} `json:"App"`
 	WindowsEventLog struct {
@@ -24,9 +22,13 @@ type Configs struct {
 	} `json:"WindowsEventLog"`
 }
 
-func Init() (Configs) {
+func Init() Configs {
 	getDefaultConfig()
-	printConfigs()
+
+	if CFG.App.Debug{
+		printConfigs()
+	}
+
 	return CFG
 }
 
