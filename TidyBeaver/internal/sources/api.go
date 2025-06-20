@@ -15,8 +15,7 @@ func GetAPILogs() (APILS models.APILogs, err error) {
 	var APILtemp []models.APILog
 	var responses []models.APILog
 
-	timeoutSecondsStr := os.Getenv("API_TIMEOUTSECONDS")
-	timeoutSeconds, err := strconv.Atoi(timeoutSecondsStr)
+	timeoutSeconds, err := strconv.Atoi(os.Getenv("API_TIMEOUTSECONDS"))
 
 	if err != nil {
 		log.Fatal(err)
