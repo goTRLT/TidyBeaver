@@ -6,15 +6,17 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	msvc "tidybeaver/internal/msvc"
 	"time"
 )
 
-const (
-	msvcPort = 9191
-)
-
 func InitMSVC() {
+	msvcPort, err := strconv.Atoi(os.Getenv("MSVC_PORT"))
+	if err != nil {
+		fmt.Println("Error on getting API Config: ", err)
+	}
+
 	rand.Seed(time.Now().UnixNano())
 	hostname, err := os.Hostname()
 	if err != nil {
