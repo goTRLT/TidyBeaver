@@ -153,6 +153,8 @@ func (a *Aggregator) ProcessMockedLogs(MockedLogs *models.MockedLogs) {
 	a.AL.AggregatedLog = append(a.AL.AggregatedLog, transformedLogs...)
 }
 
+// TODO
+// REFACTOR to all Log Models
 func (a *Aggregator) ProcessFSLogs(FSLogs *models.FSLogs) {
 	transformed := utils.TransformSlice(FSLogs.FSLog)
 	if len(transformed) == 0 {
