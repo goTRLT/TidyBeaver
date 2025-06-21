@@ -5,12 +5,14 @@ services:
       - "9200:9200"
     environment:
       - discovery.type=single-node
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.15.0
     ports:
       - "5601:5601"
     depends_on:
       - elasticsearch
+
   filebeat:
     build:
       context: ./filebeat
@@ -21,6 +23,7 @@ services:
     depends_on:
       - elasticsearch
       - kibana
+
   tidybeaver:
     build:
       context: ./tidybeaver
@@ -32,6 +35,25 @@ services:
       - elasticsearch
     volumes:
       - ./tidybeaver-logs:/logs
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1m
+      timeout: 30s
+      retries: 10
+
+  adminer:
+    image: adminer
+    restart: always
+    ports: 5432:5432
+
 volumes:
   elasticsearch_data:
     driver: local
