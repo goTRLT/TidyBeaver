@@ -2,17 +2,17 @@ package config
 
 import (
 	json "encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
+	log "github.com/sirupsen/logrus"
 )
 
 var CFG Configs
 
 type Configs struct {
 	App struct {
-		Debug     bool `json:"Debug"`
+		Debug     bool   `json:"Debug"`
 		LogAmount string `json:"LogAmount"`
 	} `json:"App"`
 	WindowsEventLog struct {
@@ -23,12 +23,28 @@ type Configs struct {
 }
 
 func Init() Configs {
+	log.Println("Configurations being set up")
 	getDefaultConfig()
 
-	if CFG.App.Debug{
-		printConfigs()
-	}
+	if CFG.App.Debug {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Error(err)
+			panic("Error loading .env file")
+		}
 
+		defaultConfigsJSON, err := json.MarshalIndent(CFG, "", "  ")
+
+		if err != nil {
+			log.Error(err)
+			panic("Error marshalling defaultConfig:")
+		}
+
+		log.Info("Environment Variables: ")
+		log.Info(os.Environ())
+		log.Info("Configuration set: ", string(defaultConfigsJSON))
+	}
+	log.Println("Configuration setup complete")
 	return CFG
 }
 
@@ -36,6 +52,7 @@ func getDefaultConfig() {
 	configFile, err := os.Open("internal/config/config.json")
 
 	if err != nil {
+		log.Error(err)
 		panic(`Error getting default configuration for TidyBeaver!!!
 		TidyBeaver stopped working.`)
 	}
@@ -43,24 +60,4 @@ func getDefaultConfig() {
 	defer configFile.Close()
 	decodedJson := json.NewDecoder(configFile)
 	decodedJson.Decode(&CFG)
-}
-
-func printConfigs() {
-
-	err := godotenv.Load("T:/Repo/TidyBeaver/.env")
-	if err != nil {
-		fmt.Println("Error loading .env file")
-	}
-
-	fmt.Println("Environment Variables: ")
-	fmt.Println(os.Environ())
-
-	defaultConfigsJSON, err := json.MarshalIndent(CFG, "", "  ")
-
-	if err != nil {
-		fmt.Println("Error marshalling defaultConfig:", err)
-		return
-	}
-
-	fmt.Println("Configuration set: ", string(defaultConfigsJSON))
 }
