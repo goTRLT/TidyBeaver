@@ -1,7 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"os"
+	"strconv"
 	aggregator "tidybeaver/internal/aggregator"
 	config "tidybeaver/internal/config"
 	"time"
@@ -10,44 +12,24 @@ import (
 var Configurations config.Configs
 
 func main() {
-	fmt.Println("Welcome to the TidyBeaver Log aggregator!")
-
-	time.Sleep(500 * time.Millisecond)
-
-	fmt.Println("API is now being built")
+	log.Println("TidyBeaver Starts")
 	go InitAPI()
-	fmt.Println("Complete!")
-
-	time.Sleep(500 * time.Millisecond)
-
-	fmt.Println("Microservice now is being built")
 	go InitMSVC()
-	fmt.Println("Complete!")
 
-	time.Sleep(500 * time.Millisecond)
-
-	fmt.Println("Configurations being set up")
 	config.Init()
-	fmt.Println("Complete!")
+	loopInterval, err := strconv.Atoi(os.Getenv("APP_LOOPINTERVALSECONDS"))
+	if err != nil {
+		log.Println("Error getting TidyBeaver's loop interval", err)
+	}
 
-	time.Sleep(500 * time.Millisecond)
-
-	fmt.Println("TidyBeaver's Log Aggregator starts working")
 	agg := &aggregator.Aggregator{}
 	agg.Init()
-	time.Sleep(500 * time.Millisecond)
 
-	fmt.Println("Structuring HTML Template")
 	go InitElk()
-	time.Sleep(500 * time.Millisecond)
 
-	fmt.Println("TidyBeaver will rest for a minute before resuming it's work")
-	time.Sleep(1 * time.Minute)
-
-	fmt.Println("TidyBeaver's Log Aggregator starts working")
 	for 1 != 2 {
 		agg.Init()
-		fmt.Println("TidyBeaver will rest for a minute before resuming it's work")
-		time.Sleep(1 * time.Minute)
+		log.Println("The Log Aggregator will loop in: ", (time.Duration(loopInterval) * time.Second))
+		time.Sleep((time.Duration(loopInterval) * time.Second))
 	}
 }
