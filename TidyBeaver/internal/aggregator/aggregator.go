@@ -1,93 +1,83 @@
 package aggregator
 
 import (
-	"fmt"
+	"log"
 	source "tidybeaver/internal/sources"
 	models "tidybeaver/pkg/models"
-	"time"
-)
-
-const (
-	ShortSleep = 500 * time.Millisecond
-	LongSleep  = 1 * time.Minute
 )
 
 type Aggregator struct {
-	AL    models.AggregatedLogs
-	ML    models.MockedLogs
-	OSL   models.OSLogs
-	FSL   models.FSLogs
-	APIL  models.APILogs
-	MSVCL models.MSVCLogs
-	DBL   models.DBLogs
-	ERRL  []error
+	AggregatedLogs models.AggregatedLogs
+	MLogs          models.MockedLogs
+	OSLogs         models.OSLogs
+	FSLogs         models.FSLogs
+	APILogs        models.APILogs
+	MSVCLogs       models.MSVCLogs
+	DBLogs         models.DBLogs
+	ErrorLogs      []error
 }
 
 func (a *Aggregator) Init() {
-	fmt.Println("Fetching Logs...")
-	time.Sleep(ShortSleep * time.Millisecond)
+	log.Println("Log Aggregator starts")
+	log.Println("Fetching logs")
 	a.FetchSourcesLogs()
-	fmt.Println("Complete!")
+	log.Println("Logs fetched")
 
-	fmt.Println("Organizing the Logs...")
-	time.Sleep(ShortSleep * time.Millisecond)
+	log.Println("Processing logs")
 	a.ProcessLogs()
-	fmt.Println("Complete!")
+	log.Println("Logs processed")
 
-	fmt.Println("Stacking up the organized Logs...")
-	time.Sleep(ShortSleep * time.Millisecond)
-	SaveLogs(&a.AL)
-	fmt.Println("Complete!")
+	log.Println("Storing logs")
+	StoreLogs(&a.AggregatedLogs)
+	log.Println("Logs stored")
 
-	//TODO UnComment
-	// fmt.Println("Packing your Logs and send them to your bucket...")
-	// time.Sleep(500 * time.Millisecond)
+	// UnComment when use of the AWS S3 Bucket is needed
+	// log.Println("Sending logs to the AWS bucket")
 	// s3.InitS3()
-	// fmt.Println("Complete!")
+	// log.Println("Logs sent")
 
-	fmt.Println("Cleaning the workbench...")
-	time.Sleep(ShortSleep * time.Millisecond)
+	log.Println("Cleaning old logs")
 	a.Clean()
-	fmt.Println("Complete!")
+	log.Println("Logs clean")
 
 }
 
 func (a Aggregator) FetchSourcesLogs() {
 	var err error
 
-	a.APIL, err = source.GetAPILogs()
+	a.APILogs, err = source.GetAPILogs()
 	if err != nil {
-		a.ERRL = append(a.ERRL, err)
+		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
 
-	a.DBL, err = source.GetDBLogs()
+	a.DBLogs, err = source.GetDBLogs()
 	if err != nil {
-		a.ERRL = append(a.ERRL, err)
+		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
 
-	a.FSL, err = source.GetFSLogs()
+	a.FSLogs, err = source.GetFSLogs()
 	if err != nil {
-		a.ERRL = append(a.ERRL, err)
+		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
 
-	a.MSVCL, err = source.GetMSVCLogs()
+	a.MSVCLogs, err = source.GetMSVCLogs()
 	if err != nil {
-		a.ERRL = append(a.ERRL, err)
+		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
 
-	a.OSL, err = source.GetOSLogs()
+	a.OSLogs, err = source.GetOSLogs()
 	if err != nil {
-		a.ERRL = append(a.ERRL, err)
+		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
 }
 
 func (a Aggregator) Clean() {
-	a.AL.AggregatedLog = nil
-	a.ML.MockedLog = nil
-	a.OSL.OSLog = nil
-	a.FSL.FSLog = nil
-	a.APIL.APILog = nil
-	a.MSVCL.MSVCLog = nil
-	a.DBL.DBLog = nil
-	a.ERRL = nil
+	a.AggregatedLogs.AggregatedLog = nil
+	a.MLogs.MockedLog = nil
+	a.OSLogs.OSLog = nil
+	a.FSLogs.FSLog = nil
+	a.APILogs.APILog = nil
+	a.MSVCLogs.MSVCLog = nil
+	a.DBLogs.DBLog = nil
+	a.ErrorLogs = nil
 }
