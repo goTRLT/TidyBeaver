@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"net/http"
 	"tidybeaver/internal/elk/controller"
 
@@ -14,7 +13,6 @@ func NewRouter() *httprouter.Router {
 
 	router.GET("/", func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		log.Info("Welcome Home Log")
-		fmt.Fprint(w, "Welcome Home")
 	})
 
 	router.GET("/api/base", controller.Base)
