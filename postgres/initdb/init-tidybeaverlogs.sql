@@ -1,4 +1,4 @@
-CREATE USER tidybeaver WITH PASSWORD 'tidybeaver';
+-- CREATE USER tidybeaver WITH PASSWORD 'tidybeaver';
 CREATE DATABASE "TidyBeaverLogs"
     WITH
     OWNER = tidybeaver
@@ -9,4 +9,4 @@ CREATE DATABASE "TidyBeaverLogs"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1
     IS_TEMPLATE = False;
-GRANT ALL ON DATABASE "TidyBeaverLogs" TO tidybeaver WITH GRANT OPTION;
+--GRANT ALL ON DATABASE "TidyBeaverLogs" TO tidybeaver WITH GRANT OPTION;
