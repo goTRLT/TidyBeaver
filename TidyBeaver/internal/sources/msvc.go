@@ -26,7 +26,7 @@ func GetMSVCLogs() (msvcls models.MSVCLogs, err error) {
 		Timeout: -time.Duration(timeoutSeconds) * time.Second,
 	}
 
-	resp, err := client.Get(os.Getenv("MSVC_BASEURL") + config.CFG.App.LogAmount)
+	resp, err := client.Get(os.Getenv("MSVC_BASEURL") + os.Getenv("MSVC_PORT") + os.Getenv("MSVC_REQUESTURL") + config.CFG.App.LogAmount)
 
 	if err != nil {
 		log.Fatal(err)
