@@ -19,6 +19,6 @@ func InitAPI() {
 	}
 
 	http.HandleFunc(urlPath, api.ResponseHandler)
-	log.Println("API Server running at: ", baseUrl, apiPort)
+	log.Println("API Server running at: "+baseUrl, apiPort)
 	http.ListenAndServe(fmt.Sprintf(":%d", apiPort), nil)
 }
