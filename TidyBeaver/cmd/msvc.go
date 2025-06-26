@@ -26,10 +26,10 @@ func InitMSVC() {
 		hostname = "unknown-host"
 	}
 
-	serviceName := "log-generator-microservice"
+	serviceName := "log-generator-service"
 
 	http.HandleFunc(urlPath, msvc.MsvcLogHandler(serviceName, hostname))
 
-	log.Println("Microservice running at: ", baseUrl, msvcPort)
+	log.Println("Microservice running at: "+baseUrl, msvcPort)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", msvcPort), nil))
 }
