@@ -36,5 +36,5 @@ func InitElk() {
 	if err != nil {
 		log.Println("Error upon creating the ELK Server: ", err)
 	}
-	log.Println("ELK initialized")
+	log.Println("ELK running at:", elkPort)
 }
