@@ -24,7 +24,7 @@ func GetAPILogs() (APILS models.APILogs, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, os.Getenv("API_BASEURL")+config.CFG.App.LogAmount, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, os.Getenv("API_BASEURL")+os.Getenv("API_PORT")+os.Getenv("API_REQUESTURL")+config.CFG.App.LogAmount, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
