@@ -2,6 +2,7 @@ package aggregator
 
 import (
 	"log"
+	"tidybeaver/internal/config"
 	source "tidybeaver/internal/sources"
 	models "tidybeaver/pkg/models"
 )
@@ -68,6 +69,24 @@ func (a Aggregator) FetchSourcesLogs() {
 	a.OSLogs, err = source.GetOSLogs()
 	if err != nil {
 		a.ErrorLogs = append(a.ErrorLogs, err)
+	}
+
+	if config.CFG.App.Debug {
+
+		log.Println("APILogs")
+		log.Println(a.APILogs)
+
+		log.Println("DBLogs")
+		log.Println(a.DBLogs)
+
+		log.Println("FSLogs")
+		log.Println(a.FSLogs)
+
+		log.Println("MSVCLogs")
+		log.Println(a.MSVCLogs)
+
+		log.Println("OSLogs")
+		log.Println(a.OSLogs)
 	}
 }
 
