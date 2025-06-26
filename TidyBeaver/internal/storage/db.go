@@ -14,7 +14,7 @@ import (
 )
 
 func DBStoreLogs(als *models.AggregatedLogs) {
-	timeoutSecondsStr := os.Getenv("API_TIMEOUTSECONDS")
+	timeoutSecondsStr := os.Getenv("DB_TIMEOUTSECONDS")
 	timeoutSeconds, err := strconv.Atoi(timeoutSecondsStr)
 	if err != nil {
 		log.Fatal(err)
@@ -31,6 +31,9 @@ func DBStoreLogs(als *models.AggregatedLogs) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds*int(time.Second)))
 	defer cancel()
+	if ctx == nil {
+		log.Println("Error on setting Database context")
+	}
 
 	for _, id := range als.AggregatedLog {
 		var userID int
