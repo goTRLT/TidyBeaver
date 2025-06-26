@@ -3,8 +3,10 @@ package aggregator
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
+	config "tidybeaver/internal/config"
 	storage "tidybeaver/internal/storage"
 	models "tidybeaver/pkg/models"
 	"time"
@@ -54,6 +56,11 @@ func (a *Aggregator) ProcessLogsModels(LogType any) {
 }
 
 func StoreLogs(AggregatedLogs *models.AggregatedLogs) {
+	if config.CFG.App.Debug {
+		log.Println("Logs to be saved on the Json file and the Database:")
+		log.Println(AggregatedLogs)
+	}
+
 	storage.JSONSaveLogs(AggregatedLogs)
 	storage.DBStoreLogs(AggregatedLogs)
 }
