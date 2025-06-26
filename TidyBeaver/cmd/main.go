@@ -13,19 +13,20 @@ var Configurations config.Configs
 
 func main() {
 	log.Println("TidyBeaver Starts")
-	go InitAPI()
-	go InitMSVC()
-
 	config.Init()
 	loopInterval, err := strconv.Atoi(os.Getenv("APP_LOOPINTERVALSECONDS"))
 	if err != nil {
 		log.Println("Error getting TidyBeaver's loop interval", err)
 	}
 
+	go InitAPI()
+	go InitMSVC()
+	go InitElk()
+
+	time.Sleep(10 * time.Second)
+
 	agg := &aggregator.Aggregator{}
 	agg.Init()
-
-	go InitElk()
 
 	for 1 != 2 {
 		agg.Init()
