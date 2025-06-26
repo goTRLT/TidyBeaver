@@ -11,83 +11,27 @@ import (
 )
 
 func (a *Aggregator) ProcessLogs() {
-	count := a.CountLogTypes()
-	index := -1
-	dones := make([]chan bool, count)
-
 	if len(a.MLogs.MockedLog) != 0 {
-		index++
 		a.ProcessLogsModels(&a.MLogs)
-		dones[index] = make(chan bool)
 	}
 	if len(a.OSLogs.OSLog) != 0 {
-		index++
 		a.ProcessLogsModels(&a.OSLogs)
-		dones[index] = make(chan bool)
 	}
 	if len(a.FSLogs.FSLog) != 0 {
-		index++
 		a.ProcessLogsModels(&a.FSLogs)
-		dones[index] = make(chan bool)
 	}
 	if len(a.APILogs.APILog) != 0 {
-		index++
 		a.ProcessLogsModels(&a.APILogs)
-		dones[index] = make(chan bool)
 	}
 	if len(a.DBLogs.DBLog) != 0 {
-		index++
 		a.ProcessLogsModels(&a.DBLogs)
-		dones[index] = make(chan bool)
 	}
 	if len(a.MSVCLogs.MSVCLog) != 0 {
-		index++
 		a.ProcessLogsModels(&a.MSVCLogs)
-		dones[index] = make(chan bool)
 	}
 	if len(a.ErrorLogs) != 0 {
-		index++
 		a.ProcessLogsModels(&a.ErrorLogs)
-		dones[index] = make(chan bool)
 	}
-
-	for _, done := range dones {
-		if len(dones) == len(done) {
-			continue
-		}
-	}
-}
-
-func (a *Aggregator) CountLogTypes() int {
-	count := 0
-	if len(a.MLogs.MockedLog) != 0 {
-		count++
-	}
-	if len(a.OSLogs.OSLog) != 0 {
-		count++
-	}
-	if len(a.FSLogs.FSLog) != 0 {
-		count++
-	}
-	if len(a.APILogs.APILog) != 0 {
-		count++
-	}
-	if len(a.DBLogs.DBLog) != 0 {
-		count++
-	}
-	if len(a.MSVCLogs.MSVCLog) != 0 {
-		count++
-	}
-	if len(a.ErrorLogs) != 0 {
-		count++
-	}
-	return count
-
-}
-
-func StoreLogs(AggregatedLogs *models.AggregatedLogs) {
-	storage.JSONSaveLogs(AggregatedLogs)
-	storage.DBStoreLogs(AggregatedLogs)
 }
 
 func (a *Aggregator) ProcessLogsModels(LogType any) {
@@ -107,6 +51,11 @@ func (a *Aggregator) ProcessLogsModels(LogType any) {
 	case *[]error:
 		a.ProcessErrors(&a.ErrorLogs)
 	}
+}
+
+func StoreLogs(AggregatedLogs *models.AggregatedLogs) {
+	storage.JSONSaveLogs(AggregatedLogs)
+	storage.DBStoreLogs(AggregatedLogs)
 }
 
 func (a *Aggregator) ProcessMSVCLogs(MSVCLogs *models.MSVCLogs) {
