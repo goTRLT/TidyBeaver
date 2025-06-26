@@ -26,7 +26,6 @@ func main() {
 	time.Sleep(10 * time.Second)
 
 	agg := &aggregator.Aggregator{}
-	agg.Init()
 
 	for 1 != 2 {
 		agg.Init()
