@@ -15,7 +15,8 @@ func GetFSLogs() (fsLogs *models.FSLogs, err error) {
 	logFile, err := os.Open(path + fileName)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return fsLogs, err
 	}
 
 	defer logFile.Close()
@@ -25,6 +26,7 @@ func GetFSLogs() (fsLogs *models.FSLogs, err error) {
 
 	if err != nil {
 		log.Printf("Error decoding file %s: %v", "InputLogs.json", err)
+		return fsLogs, err
 	}
 
 	fsLogs.FSLog = append(fsLogs.FSLog, tempLogs.FSLog...)
