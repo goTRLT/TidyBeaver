@@ -7,7 +7,8 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func GetOSLogs() (osl models.OSLogs, err error) {
+func GetOSLogs() (osl *models.OSLogs, err error) {
+	osl = &models.OSLogs{}
 	output1, output2, output3, err := RunCommands()
 
 	if err != nil {
@@ -19,6 +20,7 @@ func GetOSLogs() (osl models.OSLogs, err error) {
 		log.Fatal(err)
 	}
 
+	osl = &models.OSLogs{}
 	err = json.Unmarshal(out, &osl.OSLog)
 
 	if err != nil {
