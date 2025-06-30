@@ -11,7 +11,8 @@ import (
 
 var dbLogEntry models.DBLog
 
-func GetDBLogs() (models.DBLogs, error) {
+func GetDBLogs() (dbLogs *models.DBLogs, err error) {
+	dbLogs = &models.DBLogs{}
 	logAmount, _ := strconv.ParseInt(config.CFG.App.LogAmount, 0, 0)
 
 	connStr := `host=` + os.Getenv("DB_HOST") + ` port=` + os.Getenv("DB_PORT") + ` user=` + os.Getenv("DB_USER") + ` password=` + os.Getenv("DB_PW") + ` dbname=` + os.Getenv("DB_NAME") + ` sslmode=` + os.Getenv("DB_SSLMODE")
@@ -27,7 +28,6 @@ func GetDBLogs() (models.DBLogs, error) {
 	}
 
 	defer rows.Close()
-	var dbLogs models.DBLogs
 
 	for rows.Next() {
 		err := rows.Scan(
