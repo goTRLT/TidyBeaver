@@ -19,12 +19,15 @@ func GetDBLogs() (dbLogs *models.DBLogs, err error) {
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return dbLogs, err
+
 	}
 
 	rows, err := db.Query(`SELECT * FROM get_random_db_events($1);`, int(logAmount))
 	if err != nil {
 		log.Println("Error fetching random db events:", err)
+		return dbLogs, err
 	}
 
 	defer rows.Close()
@@ -42,7 +45,7 @@ func GetDBLogs() (dbLogs *models.DBLogs, err error) {
 		)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			continue
 		}
 
