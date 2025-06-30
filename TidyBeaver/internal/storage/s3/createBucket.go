@@ -17,7 +17,7 @@ func CreateBucket() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 	s3Client := s3.New(newSession)
@@ -26,7 +26,7 @@ func CreateBucket() {
 	err = Create(s3Client, bucketName)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 }
