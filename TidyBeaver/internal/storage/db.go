@@ -17,14 +17,16 @@ func DBStoreLogs(als *models.AggregatedLogs) {
 	timeoutSecondsStr := os.Getenv("DB_TIMEOUTSECONDS")
 	timeoutSeconds, err := strconv.Atoi(timeoutSecondsStr)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	connStr := `host=` + os.Getenv("DB_HOST") + ` port=` + os.Getenv("DB_PORT") + ` user=` + os.Getenv("DB_USER") + ` password=` + os.Getenv("DB_PW") + ` dbname=` + os.Getenv("DB_NAME") + ` sslmode=` + os.Getenv("DB_SSLMODE")
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	defer db.Close()
