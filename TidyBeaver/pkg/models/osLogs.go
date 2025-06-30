@@ -41,7 +41,7 @@ func (v OSLog) ToAggregatedLog() AggregatedLog {
 	unixTime = unixTime.Round(time.Millisecond)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 	}
 
 	return AggregatedLog{
