@@ -43,33 +43,37 @@ func (a *Aggregator) Init() {
 
 }
 
-func (a Aggregator) FetchSourcesLogs() {
-	var err error
+func (a *Aggregator) FetchSourcesLogs() {
 
-	a.APILogs, err = source.GetAPILogs()
+	apiLogs, err := source.GetAPILogs()
 	if err != nil {
 		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
+	a.APILogs = *apiLogs
 
-	a.DBLogs, err = source.GetDBLogs()
+	dbLogs, err := source.GetDBLogs()
 	if err != nil {
 		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
+	a.DBLogs = *dbLogs
 
-	a.FSLogs, err = source.GetFSLogs()
+	fsLogs, err := source.GetFSLogs()
 	if err != nil {
 		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
+	a.FSLogs = *fsLogs
 
-	a.MSVCLogs, err = source.GetMSVCLogs()
+	msvcLogs, err := source.GetMSVCLogs()
 	if err != nil {
 		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
+	a.MSVCLogs = *msvcLogs
 
-	a.OSLogs, err = source.GetOSLogs()
+	osLogs, err := source.GetOSLogs()
 	if err != nil {
 		a.ErrorLogs = append(a.ErrorLogs, err)
 	}
+	a.OSLogs = *osLogs
 
 	if config.CFG.App.Debug {
 
@@ -90,7 +94,7 @@ func (a Aggregator) FetchSourcesLogs() {
 	}
 }
 
-func (a Aggregator) Clean() {
+func (a *Aggregator) Clean() {
 	a.AggregatedLogs.AggregatedLog = nil
 	a.MLogs.MockedLog = nil
 	a.OSLogs.OSLog = nil
