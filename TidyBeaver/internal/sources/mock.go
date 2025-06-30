@@ -22,7 +22,8 @@ func CreateMockedLogs() (mls models.MockedLogs, err error) {
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return mls, err
 	}
 
 	return mls, err
@@ -36,7 +37,7 @@ func GenerateLog() (ml models.MockedLog, err error) {
 
 	if ml.Level == "" || ml.Service == "" || ml.Message == "" {
 		err = errors.New("error while setting level, service or message for the Mocked log")
-		log.Fatal(err)
+		log.Println(err)
 		return ml, err
 	}
 
