@@ -12,19 +12,22 @@ func GetOSLogs() (osl *models.OSLogs, err error) {
 	output1, output2, output3, err := RunCommands()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return osl, err
 	}
 
 	out, err := MergeOutput(output1, output2, output3)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return osl, err
 	}
 
 	osl = &models.OSLogs{}
 	err = json.Unmarshal(out, &osl.OSLog)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return osl, err
 	}
 
 	return osl, err
@@ -35,14 +38,14 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 	outputApp, errApp := cmdApp.Output()
 
 	if errApp != nil {
-		log.Fatal("Error running PowerShell command: ", errApp)
+		log.Println("Error running PowerShell command: ", errApp)
 		return outputApp, outputSys, outputSec, errApp
 	}
 	cmdSys := exec.Command("powershell", "-Command", "Get-EventLog -LogName System -Newest 5 | ConvertTo-Json -Depth 2; ")
 	outputSys, errSys := cmdSys.Output()
 
 	if errSys != nil {
-		log.Fatal("Error running PowerShell command: ", errSys)
+		log.Println("Error running PowerShell command: ", errSys)
 		return outputApp, outputSys, outputSec, errSys
 	}
 
@@ -50,7 +53,7 @@ func RunCommands() (outputApp []byte, outputSys []byte, outputSec []byte, err er
 	outputSec, errSec := cmdSec.Output()
 
 	if errSec != nil {
-		log.Fatal("Error running PowerShell command: ", errSec)
+		log.Println("Error running PowerShell command: ", errSec)
 		return outputApp, outputSys, outputSec, errSec
 	}
 	return outputApp, outputSys, outputSec, err
@@ -63,7 +66,7 @@ func MergeOutput(outputs ...[]byte) ([]byte, error) {
 		err := json.Unmarshal(vals, &temp)
 
 		if err != nil {
-			log.Fatal("Error unmarshaling JSON: ", err)
+			log.Println("Error unmarshaling JSON: ", err)
 			return vals, err
 		}
 		out = append(out, temp...)
