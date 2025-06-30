@@ -10,7 +10,7 @@ filebeat.inputs:
   scan_frequency: 1s
   enabled: true
   paths:
-  - /logs/*.log
+  - ./tidybeaver-logs:/logs/output/*.log
   fields:
   - service: tidybeaver
   fields under root: true
