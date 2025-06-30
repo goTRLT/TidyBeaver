@@ -10,7 +10,9 @@ import (
 func GetFSLogs() (fsLogs *models.FSLogs, err error) {
 	fsLogs = &models.FSLogs{}
 	var tempLogs models.FSLogs
-	logFile, err := os.Open(`.\logs\` + "InputLogs.json")
+	path := os.Getenv("INPUT_FOLDER_PATH")
+	fileName := os.Getenv("INPUT_FILE_NAME")
+	logFile, err := os.Open(path + fileName)
 
 	if err != nil {
 		log.Fatal(err)
