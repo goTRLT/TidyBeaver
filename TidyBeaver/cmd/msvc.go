@@ -31,5 +31,5 @@ func InitMSVC() {
 	http.HandleFunc(urlPath, msvc.MsvcLogHandler(serviceName, hostname))
 
 	log.Println("Microservice running at: "+baseUrl, msvcPort)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", msvcPort), nil))
+	log.Println(http.ListenAndServe(fmt.Sprintf(":%d", msvcPort), nil))
 }
