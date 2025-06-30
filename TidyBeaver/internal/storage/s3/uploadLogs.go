@@ -19,7 +19,7 @@ func UploadLogs() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 
@@ -31,7 +31,7 @@ func UploadLogs() {
 	err = Upload(uploader, filePath, bucketName, fileName)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 }
