@@ -18,7 +18,8 @@ func GetAPILogs() (apiLogs *models.APILogs, err error) {
 	timeoutSeconds, err := strconv.Atoi(os.Getenv("API_TIMEOUTSECONDS"))
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return apiLogs, err
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutSeconds)*time.Second)
@@ -26,13 +27,15 @@ func GetAPILogs() (apiLogs *models.APILogs, err error) {
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, os.Getenv("API_BASEURL")+os.Getenv("API_PORT")+os.Getenv("API_REQUESTURL")+config.CFG.App.LogAmount, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return apiLogs, err
 	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return apiLogs, err
 	}
 	defer resp.Body.Close()
 
