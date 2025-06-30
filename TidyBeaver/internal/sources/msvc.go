@@ -19,7 +19,8 @@ func GetMSVCLogs() (msvcLogs *models.MSVCLogs, err error) {
 	timeoutSeconds, err := strconv.Atoi(timeoutSecondsStr)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return msvcLogs, err
 	}
 
 	client := &http.Client{
@@ -29,13 +30,15 @@ func GetMSVCLogs() (msvcLogs *models.MSVCLogs, err error) {
 	resp, err := client.Get(os.Getenv("MSVC_BASEURL") + os.Getenv("MSVC_PORT") + os.Getenv("MSVC_REQUESTURL") + config.CFG.App.LogAmount)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return msvcLogs, err
 	}
 
 	defer resp.Body.Close()
 
 	if err := json.NewDecoder(resp.Body).Decode(&responses); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return msvcLogs, err
 	}
 
 	msvcLogs.MSVCLog = append(msvcLogs.MSVCLog, responses...)
