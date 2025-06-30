@@ -19,7 +19,7 @@ func DownloadLogs() {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 
@@ -30,7 +30,7 @@ func DownloadLogs() {
 	err = Download(downloader, bucketName, key)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return
 	}
 }
