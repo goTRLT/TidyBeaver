@@ -18,14 +18,15 @@ func ListBuckets() *s3.ListBucketsOutput {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	s3Client := s3.New(newSession)
 
 	buckets, err := List(s3Client)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+	return buckets
 	}
 
 	fmt.Println("Buckets found in AWS: ")
