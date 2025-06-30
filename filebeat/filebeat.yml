@@ -19,6 +19,5 @@ filebeat.inputs:
     overwrite keys: true
     message_key: 'message'
 
-output. elasticsearch:
+output.elasticsearch:
   hosts: ["elasticsearch:9200"]
-  index : "tidybeaver"
