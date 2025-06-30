@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-func GetAPILogs() (APILS models.APILogs, err error) {
-	var APILtemp []models.APILog
+func GetAPILogs() (apiLogs *models.APILogs, err error) {
+	apiLogs = &models.APILogs{}
 	var responses []models.APILog
 
 	timeoutSeconds, err := strconv.Atoi(os.Getenv("API_TIMEOUTSECONDS"))
@@ -36,7 +36,7 @@ func GetAPILogs() (APILS models.APILogs, err error) {
 	}
 	defer resp.Body.Close()
 
-	APILS.APILog = append(APILtemp, responses...)
+	apiLogs.APILog = append(apiLogs.APILog, responses...)
 
-	return APILS, err
+	return apiLogs, err
 }
