@@ -10,8 +10,8 @@ import (
 )
 
 func JSONSaveLogs(Logs *models.AggregatedLogs) {
-	path := os.Getenv("LOGS_FOLDER_PATH")
-	fileName := os.Getenv("LOGS_FILE_NAME")
+	path := os.Getenv("OUTPUT_FOLDER_PATH")
+	fileName := os.Getenv("OUTPUT_FILE_NAME")
 
 	err := os.Mkdir(path, 0750)
 	if err != nil && !os.IsExist(err) {
