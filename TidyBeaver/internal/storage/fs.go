@@ -15,12 +15,14 @@ func JSONSaveLogs(Logs *models.AggregatedLogs) {
 
 	err := os.Mkdir(path, 0750)
 	if err != nil && !os.IsExist(err) {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
 	file, err := os.Create(path + fileName)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	defer file.Close()
 
