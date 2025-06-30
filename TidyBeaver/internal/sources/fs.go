@@ -7,7 +7,8 @@ import (
 	models "tidybeaver/pkg/models"
 )
 
-func GetFSLogs() (FSLogs models.FSLogs, err error) {
+func GetFSLogs() (fsLogs *models.FSLogs, err error) {
+	fsLogs = &models.FSLogs{}
 	var tempLogs models.FSLogs
 	logFile, err := os.Open(`.\logs\` + "InputLogs.json")
 
@@ -24,6 +25,6 @@ func GetFSLogs() (FSLogs models.FSLogs, err error) {
 		log.Printf("Error decoding file %s: %v", "InputLogs.json", err)
 	}
 
-	FSLogs.FSLog = append(FSLogs.FSLog, tempLogs.FSLog...)
-	return FSLogs, err
+	fsLogs.FSLog = append(fsLogs.FSLog, tempLogs.FSLog...)
+	return fsLogs, err
 }
