@@ -21,7 +21,7 @@ services:
     command: filebeat -e --strict.perms=false
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./tidybeaver:/logs
+      - ./tidybeaver:/logs/output/
     depends_on:
       - elasticsearch
       - kibana
@@ -38,26 +38,26 @@ services:
     volumes:
       - ./tidybeaver-logs:/logs
 
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: TidyBeaverLogs
-      POSTGRES_USER: tidybeaver
-      POSTGRES_PASSWORD: tidybeaver
-    volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./postgres/initdb:/docker-entrypoint-initdb.d
-    ports: 
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
-      interval: 1m
-      timeout: 30s
-      retries: 10
+#  db:
+#    image: postgres
+#    restart: always
+#    environment:
+#      POSTGRES_DB: TidyBeaverLogs
+#      POSTGRES_USER: tidybeaver
+#      POSTGRES_PASSWORD: tidybeaver
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+#      - ./postgres/initdb:/docker-entrypoint-initdb.d
+#    ports: 
+#      - "5432:5432"
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER"]
+#      interval: 1m
+#      timeout: 30s
+#      retries: 10
 
 volumes:
   elasticsearch_data:
     driver: local
-  db_data: 
-    driver: local
+#  db_data: 
+#    driver: local
