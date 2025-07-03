@@ -15,13 +15,28 @@ services:
     depends_on:
       - elasticsearch
 
+  es-template-setup:
+    image: curlimages/curl:latest
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./filebeat/filebeat-index-template.json:/filebeat-index-template.json:ro
+    entrypoint: >
+      sh -c "
+        until curl -s http://elasticsearch:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"'; do
+          echo 'Waiting for elasticsearch...';
+          sleep 5;
+        done;
+        curl -X PUT http://elasticsearch:9200/_template/filebeat-template -H 'Content-Type: application/json' -d @/filebeat-index-template.json
+      "
+
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.15.0
     container_name: filebeat
     command: filebeat -e --strict.perms=false
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./tidybeaver:/logs/output/
+      - ./tidybeaver:/logs/
     depends_on:
       - elasticsearch
       - kibana
@@ -36,7 +51,7 @@ services:
     depends_on:
       - elasticsearch
     volumes:
-      - ./tidybeaver-logs:/logs
+      - ./tidybeaver:/logs
 
 #  db:
 #    image: postgres
@@ -55,6 +70,19 @@ services:
 #      interval: 1m
 #      timeout: 30s
 #      retries: 10
+
+  kibana-setup:
+    image: curlimages/curl:latest
+    depends_on:
+      - kibana
+    entrypoint: >
+      sh -c "
+        until curl -s http://kibana:5601/api/status | grep -q '\"state\":\"green\"'; do
+          echo 'Waiting for kibana...';
+          sleep 5;
+        done;
+        curl -X POST http://kibana:5601/api/saved_objects/index-pattern -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d '{\"attributes\":{\"title\":\"tidybeaver\",\"timeFieldName\":\"@timestamp\"}}'
+      "
 
 volumes:
   elasticsearch_data:
