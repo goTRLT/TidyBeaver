@@ -56,4 +56,5 @@ type AggregatedLog struct {
 	UserID             string    `json:"user_id,omitempty"`
 	UserName           string    `json:"user_name,omitempty"`
 	Query              string    `json:"query,omitempty"`
+	Timestamp          time.Time `json:"@timestamp,omitempty"`
 }
