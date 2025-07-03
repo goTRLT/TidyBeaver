@@ -1,0 +1,94 @@
+{
+  "index_patterns": ["tidybeaver"],
+  "mappings": {
+    "_meta": {
+      "created_by": "file-data-visualizer"
+    },
+    "properties": {
+      "Data": { "type": "long" },
+      "MachineName": { "type": "keyword" },
+      "SplitLines": { "type": "keyword" },
+      "category": { "type": "keyword" },
+      "category_number": { "type": "long" },
+      "checksum": { "type": "keyword" },
+      "client_ip": { "type": "ip" },
+      "column": { "type": "keyword" },
+      "component": { "type": "keyword" },
+      "computer_name": { "type": "keyword" },
+      "constraint": { "type": "keyword" },
+      "container": { "type": "keyword" },
+      "correlation_id": { "type": "keyword" },
+      "datatype": { "type": "keyword" },
+      "detail": { "type": "text" },
+      "endpoint": { "type": "keyword" },
+      "entry_type": { "type": "long" },
+      "environment": { "type": "keyword" },
+      "errcode": { "type": "keyword" },
+      "event_id": { "type": "long" },
+      "event_type": { "type": "keyword" },
+      "file_path": { "type": "keyword" },
+      "file_size": { "type": "long" },
+      "http_method": { "type": "keyword" },
+      "index": { "type": "long" },
+      "instance_id": { "type": "long" },
+      "latency_ms": { "type": "long" },
+      "level": { "type": "keyword" },
+      "line_number": { "type": "long" },
+      "log_name": { "type": "keyword" },
+      "message": { "type": "text" },
+      "query": { "type": "keyword" },
+      "replacement_strings": { "type": "text" },
+      "request_body": { "type": "keyword" },
+      "response_body": { "type": "keyword" },
+      "rows_affected": { "type": "long" },
+      "schema": { "type": "keyword" },
+      "service": { "type": "keyword" },
+      "source": { "type": "keyword" },
+      "span_id": { "type": "keyword" },
+      "status_code": { "type": "long" },
+      "table_name": { "type": "keyword" },
+      "time_generated": { "type": "date_nanos" },
+      "time_written": { "type": "date_nanos"},
+      "transaction_id": { "type": "keyword" },
+      "user_agent": { "type": "keyword" },
+      "user_id": { "type": "keyword" },
+      "user_name": { "type": "keyword" },
+      "@timestamp": { "type": "date_nanos" },
+      "agent": {
+        "properties": {
+          "ephemeral_id": { "type": "keyword" },
+          "hostname": { "type": "keyword" },
+          "id": { "type": "keyword" },
+          "name": { "type": "keyword" },
+          "type": { "type": "keyword" },
+          "version": { "type": "keyword" }
+        }
+      },
+      "ecs": {
+        "properties": {
+          "version": { "type": "keyword" }
+        }
+      },
+      "host": {
+        "properties": {
+          "name": { "type": "keyword" }
+        }
+      },
+      "input": {
+        "properties": {
+          "type": { "type": "keyword" }
+        }
+      },
+      "log": {
+        "properties": {
+          "file": {
+            "properties": {
+              "path": { "type": "keyword" }
+            }
+          },
+          "offset": { "type": "long" }
+        }
+      }
+    }
+  }
+}
