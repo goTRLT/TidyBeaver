@@ -1,4 +1,4 @@
-name: "tidybeaver-filebeat"
+name: "filebeat"
 logging.metrics.enabled: false
 xpack.security.enabled: false
 xpack.monitorirg.enabled: false
@@ -7,17 +7,12 @@ setup.template.enabled: false
 
 filebeat.inputs:
 - type: log
-  scan_frequency: 1s
   enabled: true
   paths:
-  - ./tidybeaver-logs:/logs/output/*.log
-  fields:
-  - service: tidybeaver
-  fields under root: true
-  json:
-    keys_under_root: true
-    overwrite keys: true
-    message_key: 'message'
+    - /logs/output/OutputLogs.json
+  parsers:
+    - ndjson
 
 output.elasticsearch:
+  index: "tidybeaver"
   hosts: ["elasticsearch:9200"]
